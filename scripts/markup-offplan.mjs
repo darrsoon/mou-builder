@@ -9,7 +9,7 @@ import { OFFPLAN } from "./markup/offplan-deals.mjs";
 import { runMarkup } from "./markup/run.mjs";
 
 await runMarkup({
-  sourceId: "1LLMqzZ1xeSPzVOhVahG4B8l9bQx0KggFBvZUynOY8bU",
+  sourceId: "1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k",
   draftName: "РАЗМЕТКА — off-plan (черновик)",
   edits: buildEdits(OFFPLAN),
   toOriginal: process.argv.includes("--original"),

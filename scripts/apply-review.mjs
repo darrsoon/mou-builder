@@ -7,15 +7,15 @@ import { applyEdits } from "./docs-edit.mjs";
 const APPLY = process.argv.includes("--apply");
 
 const T = {
-  "1":    "1LLMqzZ1xeSPzVOhVahG4B8l9bQx0KggFBvZUynOY8bU",
-  "1.2":  "1vftXIyFV32PKyFoCg-2J5b_58V94e5TFXJgXSIbIvWM",
-  "2":    "1RjrVeLZG65Fyzc5h0TFR0sks8D--jJocEXyF2H9fg9g",
-  "3":    "1d-bXwKBO9J8fUQ35vqKWw5KzADJ6lB6fmD4hxeSjy3k",
-  "4":    "1slUJ8aQCw8nKIhlKBHWvhUFkLWnLH3k_N_OtwH5sm3Y",
-  "5":    "1RDNBmgnI3V-1o-Nk--g4XJUpwvHP0sC2IrGY7R_hhw0",
-  "6":    "1tRz59MGjnZKQpAZv0q_QMU4W6UPFLDBLr8uKPZYWP3w",
-  "C3-1": "1SFLGotwOKOibBCT3iMiflfBWS9vjLkl8r7UuxpA8gW8",
-  "C3-2": "1NngXRZMAxI1oK41vAsAh2KpXfkqIpSP1gCgKt9HLM14",
+  "1":    "1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k",
+  "1.2":  "1BsYaITx4_FvELewiKx4yquzPwkAjDYpb1SoV4bToYIo",
+  "2":    "1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0",
+  "3":    "1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk",
+  "4":    "1fsVQKEKGYNng0ND1kkensdIqUOOQ7h_KgobDCoKwN-E",
+  "5":    "1hhruVEiqBbNhib4NNmtTX-gNvGwpCw6rsMJ76Iqhk1g",
+  "6":    "1qdoj3EIr_RdTCjoC1v12aijgX26LXJKowcPyjncIY3c",
+  "C3-1": "1LQ44RjVSj0QrY8sp2IdHpfLyJoXqFInK5CmZCS4v6nY",
+  "C3-2": "1erVDJoIJPa_2Wj5SFT5HcGZSOBhww2GwfAaa5HfktbI",
 };
 
 const A = "’"; // ’

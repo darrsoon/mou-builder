@@ -8,11 +8,11 @@ import { READY_CASH, READY_MORTGAGE, READY_MORTGAGE_CASH } from "./ready-deals.m
 import { OFFPLAN, OFFPLAN_MORTGAGE } from "./offplan-deals.mjs";
 
 const DEALS = {
-  offplan: ["1LLMqzZ1xeSPzVOhVahG4B8l9bQx0KggFBvZUynOY8bU", OFFPLAN],
-  mortgage: ["1RjrVeLZG65Fyzc5h0TFR0sks8D--jJocEXyF2H9fg9g", OFFPLAN_MORTGAGE],
-  ready: ["1d-bXwKBO9J8fUQ35vqKWw5KzADJ6lB6fmD4hxeSjy3k", READY_CASH],
-  "ready-mortgage": ["1slUJ8aQCw8nKIhlKBHWvhUFkLWnLH3k_N_OtwH5sm3Y", READY_MORTGAGE],
-  "ready-mortgage-cash": ["1RDNBmgnI3V-1o-Nk--g4XJUpwvHP0sC2IrGY7R_hhw0", READY_MORTGAGE_CASH],
+  offplan: ["1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k", OFFPLAN],
+  mortgage: ["1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0", OFFPLAN_MORTGAGE],
+  ready: ["1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk", READY_CASH],
+  "ready-mortgage": ["1fsVQKEKGYNng0ND1kkensdIqUOOQ7h_KgobDCoKwN-E", READY_MORTGAGE],
+  "ready-mortgage-cash": ["1hhruVEiqBbNhib4NNmtTX-gNvGwpCw6rsMJ76Iqhk1g", READY_MORTGAGE_CASH],
 };
 
 const key = process.argv[2] || "ready";

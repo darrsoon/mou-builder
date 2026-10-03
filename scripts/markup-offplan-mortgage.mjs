@@ -10,7 +10,7 @@ import { OFFPLAN_MORTGAGE, THRESHOLD_ROW } from "./markup/offplan-deals.mjs";
 import { runMarkup } from "./markup/run.mjs";
 
 await runMarkup({
-  sourceId: "1RjrVeLZG65Fyzc5h0TFR0sks8D--jJocEXyF2H9fg9g",
+  sourceId: "1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0",
   draftName: "РАЗМЕТКА — off-plan ипотека (черновик)",
   edits: buildEdits(OFFPLAN_MORTGAGE),
   rows: [THRESHOLD_ROW],

@@ -7,7 +7,7 @@ import { buildConditionalPlan, buildRowPlan } from "../lib/google/template-engin
 import { normalizeForm, calculate, buildFlags, buildReplacementsV2 } from "../lib/mou/core.js";
 import { buildArticleNumbers, ARTICLE_DEFS_OFFPLAN_V2 } from "../lib/mou/articles.js";
 
-const NO_DEPOSIT_TEMPLATE = "1vftXIyFV32PKyFoCg-2J5b_58V94e5TFXJgXSIbIvWM";
+const NO_DEPOSIT_TEMPLATE = "1BsYaITx4_FvELewiKx4yquzPwkAjDYpb1SoV4bToYIo";
 // абзацы, которые заказчик удаляет из №1.2 — воспроизводить их не нужно
 const CLIENT_REMOVES = [/financing bank/i, /Late Payment Charges/i];
 

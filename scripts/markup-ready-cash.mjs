@@ -9,7 +9,7 @@ import { READY_CASH } from "./markup/ready-deals.mjs";
 import { runMarkup } from "./markup/run.mjs";
 
 await runMarkup({
-  sourceId: "1d-bXwKBO9J8fUQ35vqKWw5KzADJ6lB6fmD4hxeSjy3k",
+  sourceId: "1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk",
   draftName: "РАЗМЕТКА — ready cash to cash (черновик)",
   edits: buildEdits(READY_CASH),
   // дата в шапке: табы убраны правкой, абзац прижимаем к правому краю

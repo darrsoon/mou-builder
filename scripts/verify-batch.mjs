@@ -22,8 +22,8 @@ const CASES = READY ? [...SCENARIOS, ...READY_SCENARIOS, ...(SELLER_MORTGAGE ? S
 const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 const folderId = positional[0];
 const templateId = positional[1] || (MORTGAGE
-  ? "1RjrVeLZG65Fyzc5h0TFR0sks8D--jJocEXyF2H9fg9g"
-  : "1LLMqzZ1xeSPzVOhVahG4B8l9bQx0KggFBvZUynOY8bU");
+  ? "1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0"
+  : "1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k");
 if (!folderId) throw new Error("укажи ID папки с тестовыми договорами");
 
 const { docs, drive } = getBotClients();
