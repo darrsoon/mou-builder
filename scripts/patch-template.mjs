@@ -194,6 +194,15 @@ const PATCHES = {
     { within: "Both Parties agree to comply", find: "KYC", bold: true, note: "AML: KYC" },
     { find: "other than may be required by law", replace: "other than as may be required by law", note: "конфиденциальность: as may be" },
   ],
+  // 03.10 (ночь), вёрстка подписей по редакции Даши: пустая строка перед THE SELLER,
+  // «SELLER’S AGENCY» отдельным абзацем, пустая строка между блоками агентств
+  // (внутри условия — уходит вместе с блоком, если агентства Продавца нет)
+  "signatures-layout": [
+    { find: "THE SELLER", insertBefore: "\n", note: "пустая строка перед THE SELLER" },
+    { find: "SELLER’S AGENCY\u000b\u000bCompany:", replace: "SELLER’S AGENCY\nCompany:", note: "SELLER’S AGENCY отдельным абзацем" },
+    // отдельный абзац с одной {{/if}} движок удаляет — пустую строку даёт перенос внутри абзаца
+    { find: "Company Stamp{{/if}}", replace: "Company Stamp\u000b{{/if}}", note: "пустая строка после блока агентства Продавца" },
+  ],
 };
 
 const [documentId, key] = process.argv.slice(2);
