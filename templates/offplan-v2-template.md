@@ -78,17 +78,17 @@ The Seller and the **Buyer** are hereafter collectively referred to as the **"Pa
 {{#if seller_agent}}
 **{{seller_agent_name}}**, represented by the {{seller_agent_position}} **{{seller_agent_representative}}**, authorized by the Economic license #{{seller_agent_license}}, located at {{seller_agent_address}}
 
-(hereinafter referred to as the **"Seller's Agent"**)
+(hereinafter referred to as the **"Seller's Agency"**)
 {{/if}}
 
 {{#if buyer_agent}}
 **{{buyer_agent_name}}**, represented by the {{buyer_agent_position}} **{{buyer_agent_representative}}**, authorized by the Economic license #{{buyer_agent_license}}, located at {{buyer_agent_address}}
 
-(hereinafter referred to as the **"Buyer's Agent"**)
+(hereinafter referred to as the **"Buyer's Agency"**)
 {{/if}}
 
 {{#if both_agents}}
-The Seller's Agent and the Buyer's Agent are hereafter collectively referred to as the **"Agencies/Agency."**
+The Seller's Agency and the Buyer's Agency are hereafter collectively referred to as the **"Agencies/Agency."**
 {{/if}}
 
 **Terms and conditions:**
@@ -119,7 +119,7 @@ In consideration of the foregoing recitals and of the terms and conditions herea
 
 **WHEREAS:**
 
-A. The Seller confirms that it is the legal owner of the property described in Article {{article_property_details_number}} of this Agreement (the "Property") and has the full right, authority, and capacity to sell and transfer the Property to the Buyer.
+A. The Seller confirms that it is the legal owner of the Property described in Article {{article_property_details_number}} of this Agreement (the "Property") and has the full right, authority, and capacity to sell and transfer the Property to the Buyer.
 
 B. The Seller agrees to sell, and the Buyer agrees to purchase, the Property for the Selling Price set out in Article {{article_payment_table_number}} of this Agreement.
 
@@ -157,7 +157,7 @@ If this MOU is not signed by either Party within two (2) business days from the 
 | {{transfer_fee_label}}: | **AED {{transfer_fee}}** / to be paid by the Buyer to {{developer_legal_name}} on the Transfer Date by Card |
 | ADM Electronic Fee: | **AED {{adm_fee}}** / (2% from the Selling Price + AED {{adm_admin_fee}}) to be paid by the Buyer to {{adm_fee_payee}} on the transfer date by a Manager's Cheque |
 | `{{#row any_deposit}}` Security deposit: | {{buyer_security_deposit_table_line}}{{seller_security_deposit_table_line}} |
-| `{{#row any_agent_fee}}` Agency Fee: | {{#if buyer_agent_fee}}**AED {{agency_fee_buyer}} (VAT inclusive)** / to be paid by the Buyer to The Buyer's Agent on the Transfer Date{{/if}}{{#if seller_agent_fee}}**AED {{agency_fee_seller}} (VAT inclusive)** / to be paid by the Seller to The Seller's Agent on the Transfer Date{{/if}} |
+| `{{#row any_agent_fee}}` Agency Fee: | {{#if buyer_agent_fee}}**AED {{agency_fee_buyer}} (VAT inclusive)** / to be paid by the Buyer to The Buyer's Agency on the Transfer Date{{/if}}{{#if seller_agent_fee}}**AED {{agency_fee_seller}} (VAT inclusive)** / to be paid by the Seller to The Seller's Agency on the Transfer Date{{/if}} |
 
 The Selling Price, the amount payable to the Seller, and the Agency Fee set out in the Payment Table are final and binding, unless otherwise agreed in writing by the Parties or in a separate Commission Agreement.
 
@@ -202,13 +202,13 @@ Upon Buyer Default, the Buyer shall pay **AED {{buyer_liquidated_damages_amount}
 {{#if seller_agent}}
 a) **80% (AED {{buyer_deposit_80_percent_amount}})** to the Seller; and
 
-b) **20% (AED {{buyer_deposit_20_percent_amount}})** to the Seller's Agent
+b) **20% (AED {{buyer_deposit_20_percent_amount}})** to the Seller's Agency
 {{/if}}
 {{#if !seller_agent}}
 a) **100% (AED {{buyer_deposit_80_percent_amount}})** to the Seller
 {{/if}}
 
-The Buyer shall have no further claim against the Seller{{#if seller_agent}} or the Seller's Agent{{/if}} arising from such termination, save for fraud or wilful misconduct.
+The Buyer shall have no further claim against the Seller{{#if seller_agent}} or the Seller's Agency{{/if}} arising from such termination, save for fraud or wilful misconduct.
 
 **Article {{article_seller_default_number}}**
 
@@ -221,25 +221,25 @@ Upon Seller Default, the Seller shall pay **AED {{seller_liquidated_damages_amou
 {{#if buyer_agent}}
 a) **80% (AED {{seller_deposit_80_percent_amount}})** to the Buyer; and
 
-b) **20% (AED {{seller_deposit_20_percent_amount}})** to the Buyer's Agent
+b) **20% (AED {{seller_deposit_20_percent_amount}})** to the Buyer's Agency
 {{/if}}
 {{#if !buyer_agent}}
 a) **100% (AED {{seller_deposit_80_percent_amount}})** to the Buyer
 {{/if}}
 
-The Seller shall have no further claim against the Buyer{{#if buyer_agent}} or the Buyer's Agent{{/if}} arising from such termination, save for fraud or wilful misconduct.
+The Seller shall have no further claim against the Buyer{{#if buyer_agent}} or the Buyer's Agency{{/if}} arising from such termination, save for fraud or wilful misconduct.
 
 **Article {{article_deposit_release_number}}**
 
-If Article {{article_buyer_default_number}} or Article {{article_seller_default_number}} applies, the Security Deposit shall be released by {{#if any_agent}}the Agent{{/if}}{{#if !any_agent}}the Parties{{/if}} strictly in accordance with the relevant Article.
+If Article {{article_buyer_default_number}} or Article {{article_seller_default_number}} applies, the Security Deposit shall be released by {{#if any_agent}}the Agency{{/if}}{{#if !any_agent}}the Parties{{/if}} strictly in accordance with the relevant Article.
 
-If a dispute arises between the Parties regarding this MOU, the Security Deposit shall remain held by {{#if any_agent}}the Agent{{/if}}{{#if !any_agent}}the respective Parties{{/if}} until either:
+If a dispute arises between the Parties regarding this MOU, the Security Deposit shall remain held by {{#if any_agent}}the Agency{{/if}}{{#if !any_agent}}the respective Parties{{/if}} until either:
 
 both Parties provide joint written instructions (including a signed Termination Agreement); or
 
 a final and binding judgment is issued by the competent courts of the Emirate of Abu Dhabi.
 
-{{#if any_agent}}The Agent shall act solely as a neutral stakeholder and shall not be liable for withholding or releasing the Security Deposit in accordance with this Article. {{/if}}No unilateral instruction from either Party shall authorize its release.
+{{#if any_agent}}The Agency shall act solely as a neutral stakeholder and shall not be liable for withholding or releasing the Security Deposit in accordance with this Article. {{/if}}No unilateral instruction from either Party shall authorize its release.
 
 **Article {{article_buyer_own_funds_number}}**
 

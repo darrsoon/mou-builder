@@ -70,6 +70,54 @@ const PATCHES = {
       replace: "Security Deposit cheque{{#if both_deposits}}s{{/if}} shall be returned to {{deposit_return_parties}}",
       note: "ст.6 возврат чеков" },
   ],
+  // 03.10, новая редакция №1 от Даши (docx 1aX_h4yUCAgWBJb4cZs2lwcayXZOw-VEn):
+  // агентства называются Agency / Agencies вместо Agent / Agents, «property»
+  // в ст.1 A — с заглавной. Меняется только само слово внутри абзаца-якоря,
+  // маркеры и начертание вокруг не трогаются
+  "agent-to-agency": [
+    { within: "(hereinafter referred to as the “Seller’s Agent”)", find: "Agent", replace: "Agency", note: "стороны: Seller’s Agency" },
+    { within: "(hereinafter referred to as the “Buyer’s Agent”)", find: "Agent", replace: "Agency", note: "стороны: Buyer’s Agency" },
+    { within: "are hereafter collectively referred to as the “Agencies/Agency.”", find: "Agent", replace: "Agency", note: "стороны: Seller’s Agency and…" },
+    { within: "are hereafter collectively referred to as the “Agencies/Agency.”", find: "Agent", replace: "Agency", note: "стороны: …the Buyer’s Agency" },
+    { within: "is the legal owner of the property described", find: "property", replace: "Property", note: "ст.1 A: Property с заглавной" },
+    { within: "to be paid by the Buyer to The Buyer’s Agent on the Transfer Date", find: "Agent", replace: "Agency", note: "ст.4: комиссия Покупателя" },
+    { within: "to be paid by the Seller to The Seller’s Agent on the Transfer Date", find: "Agent", replace: "Agency", note: "ст.4: комиссия Продавца" },
+    { find: "the Agent and {{/if}}the Parties", replace: "the Agency and {{/if}}the Parties", note: "ст.6: чек от третьего лица, Покупатель" },
+    { find: "the Agent and {{/if}}the Parties", replace: "the Agency and {{/if}}the Parties", note: "ст.6: чек от третьего лица, Продавец" },
+    { within: "{{buyer_deposit_20_percent_amount}}) to the Seller’s Agent", find: "Agent", replace: "Agency", note: "ст.7: 20% агентству Продавца" },
+    { within: "or the Seller’s Agent{{/if}} arising from such termination", find: "Agent", replace: "Agency", note: "ст.7: претензии к агентству Продавца" },
+    { within: "{{seller_deposit_20_percent_amount}}) to the Buyer’s agent", find: "agent", replace: "Agency", note: "ст.8: 20% агентству Покупателя" },
+    { within: "or the Buyer’s Agent{{/if}} arising from such termination", find: "Agent", replace: "Agency", note: "ст.8: претензии к агентству Покупателя" },
+    { within: "the Security Deposit shall be released by", find: "the Agent{{/if}}", replace: "the Agency{{/if}}", note: "депозит: released by the Agency" },
+    { within: "the Security Deposit shall remain held by", find: "the Agent{{/if}}", replace: "the Agency{{/if}}", note: "депозит: held by the Agency" },
+    { find: "The Agent shall act solely as a neutral stakeholder", replace: "The Agency shall act solely as a neutral stakeholder", note: "депозит: neutral stakeholder" },
+    { find: "with their respective Agents by providing", replace: "with their respective Agencies by providing", note: "AML: respective Agencies" },
+    { find: "{{#if any_agent}}agents’ {{/if}}email", replace: "{{#if any_agent}}agency {{/if}}email", note: "споры: agency email" },
+  ],
+  // 03.10, жирный в ст.6 по той же редакции. Держатель чека и стороны возврата
+  // теперь сами несут <<жирное>> (depositHolder, deposit_return_parties), поэтому
+  // их плейсхолдеры — обычным. Абзац Продавца без реквизитов чека был совсем без
+  // жирного, в абзаце с реквизитами жирной была фраза о третьем лице
+  "article6-bold": [
+    { within: "{{#if !buyer_cheque_details}}Upon signing", find: "{{buyer_deposit_holder}}", bold: false, note: "Покупатель без реквизитов: держатель" },
+    { within: "{{#if buyer_cheque_details}}Upon signing", find: "{{buyer_deposit_holder}}", bold: false, note: "Покупатель с реквизитами: держатель" },
+    { within: "{{#if buyer_cheque_details}}Upon signing", find: "Agency", bold: true, note: "Покупатель: Agency" },
+    { within: "{{#if buyer_cheque_details}}Upon signing", find: "Parties", bold: true, note: "Покупатель: Parties" },
+    { within: "{{#if !seller_cheque_details}}{{seller_deposit_intro}}", find: "Seller", bold: true, note: "Продавец без реквизитов: Seller" },
+    { within: "{{#if !seller_cheque_details}}{{seller_deposit_intro}}", find: "AED {{seller_deposit_amount}}", bold: true, note: "…сумма" },
+    { within: "{{#if !seller_cheque_details}}{{seller_deposit_intro}}", find: "Security Deposit", bold: true, note: "…Security Deposit" },
+    { within: "{{#if !seller_cheque_details}}{{seller_deposit_intro}}", find: "Property", bold: true, note: "…Property" },
+    { within: "{{#if !seller_cheque_details}}{{seller_deposit_intro}}", find: "Transfer Date", bold: true, note: "…Transfer Date" },
+    { within: "{{#if !seller_cheque_details}}{{seller_deposit_intro}}", find: "MOU", bold: true, note: "…MOU" },
+    { within: "{{#if seller_cheque_details}}{{seller_deposit_intro}}", find: ", on behalf of the Seller, provided that such third party", bold: false, note: "Продавец с реквизитами: фраза о третьем лице" },
+    { within: "{{#if seller_cheque_details}}{{seller_deposit_intro}}", find: "Seller", nth: 1, bold: true, note: "…on behalf of the Seller," },
+    { within: "{{#if seller_cheque_details}}{{seller_deposit_intro}}", find: "Seller", nth: 2, bold: true, note: "…on behalf of the Seller." },
+    { within: "{{#if seller_cheque_details}}{{seller_deposit_intro}}", find: "Agency", bold: true, note: "…Agency" },
+    { within: "{{#if seller_cheque_details}}{{seller_deposit_intro}}", find: "Parties", bold: true, note: "…Parties" },
+    { within: "{{#if seller_cheque_details}}{{seller_deposit_intro}}", find: "{{seller_deposit_holder}}", bold: false, note: "…держатель" },
+    { within: "{{#if seller_cheque_details}}{{seller_deposit_intro}}", find: "MOU", bold: true, note: "…MOU" },
+    { find: " cheque{{#if both_deposits}}s{{/if}} shall be returned to {{deposit_return_parties}}", bold: false, note: "возврат чеков: жирное только Security Deposit" },
+  ],
 };
 
 const [documentId, key] = process.argv.slice(2);

@@ -20,7 +20,7 @@ import { IMaskInput } from "react-imask";
 
 const hd = new Holidays("AE", { languages: ["en"] });
 
-const DEFAULT_AGENT = "PRIME BRIDGE REAL ESTATE BROKERAGE L.L.C";
+const DEFAULT_AGENT = "PRIME BRIDGE REAL ESTATE BROKERAGE - L.L.C - S.P.C";
 const REQUIRED_FIELDS_BLOCKING = false;
 const legacyArticleFields = {
   article_security_deposit_number: "includeArticle6",
@@ -367,6 +367,31 @@ function partySectionStatus(parties) {
   return makeSectionStatus(missing);
 }
 
+function findAgent(agents, name) {
+  const key = (v) => String(v || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  return (agents || []).find((a) => key(a.name) === key(name));
+}
+
+// Пустые реквизиты агентств — из справочника AGENTS; заполненные руками не трогаем
+function fillAgentDetails(form, agents) {
+  const next = { ...form };
+  for (const side of ["seller", "buyer"]) {
+    const record = findAgent(agents, form[`${side}AgentName`]);
+    if (!record) continue;
+    for (const [field, value] of [["Representative", record.representative], ["Position", record.position],
+      ["License", record.license], ["Address", record.address]]) {
+      if (!String(next[`${side}Agent${field}`] || "").trim() && value) next[`${side}Agent${field}`] = value;
+    }
+  }
+  return next;
+}
+
+// чека пока нет: Later — без срока, Delayed — через N дней; реквизиты не нужны
+function chequeLater(form, side) {
+  const v = String(form[`${side}ChequeTiming`] || "").toLowerCase();
+  return v.includes("delayed") || v.includes("later");
+}
+
 function depositSectionStatus(form, side) {
   const enabled = form[`${side}DepositEnabled`] === "Yes";
   if (!enabled) return makeSectionStatus([]);
@@ -381,7 +406,7 @@ function depositSectionStatus(form, side) {
     missing.push("Deposit %");
   }
 
-  [
+  if (!chequeLater(form, side)) [
     [`${side}ChequeNumber`, "Cheque No."],
     [`${side}ChequeDate`, "Cheque Date"],
     [`${side}ChequeBank`, "Cheque Bank"],
@@ -632,6 +657,8 @@ export default function HomePage() {
     try {
       const data = await api("/api/init");
       setInit(data);
+      // агентство по умолчанию выбрано до загрузки справочника — дозаполняем его реквизиты
+      setForm((current) => fillAgentDetails(current, data.agents));
       setMessage("");
     } catch (error) {
       setMessage(error.message);
@@ -724,9 +751,7 @@ export default function HomePage() {
 
   // Выбор агентства: подставляем реквизиты из справочника AGENTS (вкладка в Sheets)
   function patchAgentName(sideKey, value) {
-    const record = (init.agents || []).find(
-      (a) => a.name.trim().toLowerCase() === String(value || "").trim().toLowerCase(),
-    );
+    const record = findAgent(init.agents, value);
     setForm((current) => ({
       ...current,
       [`${sideKey}AgentName`]: value,
@@ -1693,9 +1718,9 @@ function DepositSection({ side, title, form, patch, lists, status, preview }) {
           {!fixed && <Field id={`${side}DepositPercent`} label="Deposit %" tip={tips.depositPercent} value={form[`${side}DepositPercent`]} onChange={patch} />}
           {fixed && <AutoMoneyField id={`${side}DepositFixedAmount`} label="Fixed Amount" tip={tips.depositFixedAmount} value={form[`${side}DepositFixedAmount`]} onChange={patch} />}
           <Field id={`${side}DepositCalculated`} label="Calculated Deposit Amount" tip="Автоматически посчитанная сумма deposit (депозита), которая попадет в MOU." value={depositAutoValue ? `AED ${depositAutoValue}` : ""} onChange={() => {}} placeholder="Посчитается автоматически" readOnly />
-          <SelectField id={`${side}ChequeTiming`} label="Cheque Timing" tip="Когда должен быть передан чек" value={form[`${side}ChequeTiming`] || "Upon signing"} onChange={patch} options={["Upon signing", "Delayed (within X days)"]} />
+          <SelectField id={`${side}ChequeTiming`} label="Cheque Timing" tip="Когда должен быть передан чек. Later — чека пока нет, будет позже: в договоре абзац без реквизитов чека" value={form[`${side}ChequeTiming`] || "Upon signing"} onChange={patch} options={["Upon signing", "Later", "Delayed (within X days)"]} />
           {form[`${side}ChequeTiming`] === "Delayed (within X days)" && <Field id={`${side}ChequeDays`} label="Days" tip="Количество дней на передачу чека (например, 5)" value={form[`${side}ChequeDays`]} onChange={patch} placeholder="5" />}
-          {form[`${side}ChequeTiming`] !== "Delayed (within X days)" && (
+          {!chequeLater(form, side) && (
             <>
               <Field id={`${side}ChequeNumber`} label="Cheque No." tip={tips.chequeNumber} value={form[`${side}ChequeNumber`]} onChange={patch} />
               <DateField id={`${side}ChequeDate`} label="Cheque Date" tip={tips.chequeDate} value={form[`${side}ChequeDate`]} onChange={patch} />

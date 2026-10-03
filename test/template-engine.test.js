@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { buildConditionalPlan, buildRowPlan, findResidualMarkers } from "../lib/google/template-engine.js";
-import { buildFlags, buildReplacementsV2, calculate, depositHolder, normalizeForm } from "../lib/mou/core.js";
+import { buildFlags, buildReplacementsV2, calculate, depositHolder, normalizeForm, validateMou } from "../lib/mou/core.js";
 
 // ---------- helpers: синтетический документ в форме Google Docs ----------
 
@@ -295,8 +295,8 @@ test("liquidated damages: без агента другой стороны 80% с
 test("depositHolder: матрица держателей", () => {
   // каждая сторона отдаёт чек своему агентству
   const both = v2Form();
-  assert.equal(depositHolder("Buyer", both), "The Buyer’s Agency as stakeholder");
-  assert.equal(depositHolder("Seller", both), "The Seller’s Agency as stakeholder");
+  assert.equal(depositHolder("Buyer", both), "<<The Buyer’s Agency>> as stakeholder");
+  assert.equal(depositHolder("Seller", both), "<<The Seller’s Agency>> as stakeholder");
 
   // держатель не зависит от того, вписаны ли реквизиты чека
   const delayed = v2Form({ buyerChequeTiming: "Delayed (within X days)" });
@@ -304,16 +304,16 @@ test("depositHolder: матрица держателей", () => {
 
   // своего агентства нет — чек берёт второе
   const buyerAgentOnly = v2Form({ sellerAgentEnabled: "No" });
-  assert.equal(depositHolder("Buyer", buyerAgentOnly), "The Buyer’s Agency as stakeholder");
-  assert.equal(depositHolder("Seller", buyerAgentOnly), "The Buyer’s Agency as stakeholder");
+  assert.equal(depositHolder("Buyer", buyerAgentOnly), "<<The Buyer’s Agency>> as stakeholder");
+  assert.equal(depositHolder("Seller", buyerAgentOnly), "<<The Buyer’s Agency>> as stakeholder");
 
   const sellerAgentOnly = v2Form({ buyerAgentEnabled: "No" });
-  assert.equal(depositHolder("Buyer", sellerAgentOnly), "The Seller’s Agency as stakeholder");
-  assert.equal(depositHolder("Seller", sellerAgentOnly), "The Seller’s Agency as stakeholder");
+  assert.equal(depositHolder("Buyer", sellerAgentOnly), "<<The Seller’s Agency>> as stakeholder");
+  assert.equal(depositHolder("Seller", sellerAgentOnly), "<<The Seller’s Agency>> as stakeholder");
 
   const noAgents = v2Form({ sellerAgentEnabled: "No", buyerAgentEnabled: "No" });
-  assert.equal(depositHolder("Buyer", noAgents), "the Seller");
-  assert.equal(depositHolder("Seller", noAgents), "the Buyer");
+  assert.equal(depositHolder("Buyer", noAgents), "the <<Seller>>");
+  assert.equal(depositHolder("Seller", noAgents), "the <<Buyer>>");
 });
 
 test("buildReplacementsV2: agencies_word, intro, return parties, подписи", () => {
@@ -325,7 +325,7 @@ test("buildReplacementsV2: agencies_word, intro, return parties, подписи"
   const r = buildReplacementsV2(data, calculate(data), {});
   assert.equal(r.agencies_word, "Agencies");
   assert.equal(r.seller_deposit_intro, "Similarly, upon signing this agreement,");
-  assert.equal(r.deposit_return_parties, "the Buyer and to the Seller");
+  assert.equal(r.deposit_return_parties, "the <<Buyer>> and to the <<Seller>>");
   assert.ok(r.buyer_signature_block.includes("Name: Petr Petrov"));
   assert.ok(r.buyer_signature_block.includes("Name: Anna Petrova"));
   assert.equal(r.buyer_liquidated_damages_amount, "100,000.00");
@@ -334,7 +334,7 @@ test("buildReplacementsV2: agencies_word, intro, return parties, подписи"
   const r2 = buildReplacementsV2(singleAgent, calculate(singleAgent), {});
   assert.equal(r2.agencies_word, "the Agency");
   assert.equal(r2.seller_deposit_intro, "Upon signing this agreement,");
-  assert.equal(r2.deposit_return_parties, "the Seller");
+  assert.equal(r2.deposit_return_parties, "the <<Seller>>");
 });
 
 test("normalizeForm: новые поля v2 с дефолтами", () => {
@@ -372,4 +372,16 @@ test("диапазоны разных сегментов не склеивают
   // подвал удаляется целиком одним диапазоном, тело — только маркеры
   assert.equal(bySeg.f1.length, 1);
   assert.equal(plan.errors.length, 0);
+});
+
+test("Cheque Timing «Later»: абзац без реквизитов, реквизиты не обязательны", () => {
+  const later = v2Form({ buyerChequeTiming: "Later", buyerChequeNumber: "", buyerChequeDate: "", buyerChequeBank: "" });
+  const data = later;
+  assert.equal(data.buyerDepositEnabled, true);
+  const flags = buildFlags(data, calculate(data));
+  assert.equal(flags.buyer_cheque_details, false);
+  assert.equal(validateMou(data).errors.some((e) => e.startsWith("Buyer Security Deposit: заполните")), false);
+  // при «Upon signing» без реквизитов — ошибка, как и раньше
+  const onSigning = v2Form({ buyerChequeNumber: "" });
+  assert.equal(validateMou(onSigning).errors.some((e) => e.startsWith("Buyer Security Deposit: заполните")), true);
 });

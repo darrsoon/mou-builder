@@ -39,6 +39,22 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 берётся только из `lib/mou/config.js`. Не заводить их снова — старое значение в них
 молча вернуло бы сайт на старые копии шаблонов.
 
+## Правки 03.10 — новая редакция №1 от Даши
+
+Источник — docx `1aX_h4yUCAgWBJb4cZs2lwcayXZOw-VEn` (не менять). Бэкап шаблона №1 до правок —
+«Копия 1. DRAFT Off-plan…» `1UueFOjh4uwaW-ACwcJaVkSBKCUODyt3nsUFtqbqcF8o`.
+- `patch-template.mjs … agent-to-agency` — Agent/Agents → Agency/Agencies по всему №1 (18 мест), «Property» в ст.1 A.
+- `patch-template.mjs … article6-bold` — жирный в ст.6 как в редакции; держатель чека и стороны возврата
+  несут `<<жирное>>` из кода (`depositHolder`, `deposit_return_parties`).
+- Строка Security deposit в таблице (код, все шаблоны): «(10% of the Selling Price, Security Deposit cheque
+  issued by the Buyer in favour of the Seller)».
+- Cheque Timing: новый вариант «Later» — чека пока нет, абзац ст.6 без реквизитов; при Later/Delayed
+  реквизиты чека больше не обязательны.
+- Агентства: по умолчанию выбирается PRIME BRIDGE ровно как в AGENTS, реквизиты подставляются сразу;
+  ячейки AGENTS чистятся (`cleanAgent`: «#» у лицензии, переносы, должность в ячейке имени).
+Проверки №1: check-markup, check-scenarios, check-combinations (9216) — 0; №2–№4 — 0.
+Шаблоны №2–№4 по-прежнему с «Agent» — редакция пришла только для №1.
+
 ## Шаблоны на движке v2
 
 | # | Шаблон | Размечен | Бэкап до разметки | Правок |
