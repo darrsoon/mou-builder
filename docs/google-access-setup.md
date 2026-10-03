@@ -198,7 +198,7 @@ console.log(r.data.files.map((f) => f.name));
 ```js
 import { getBotClients } from "./scripts/google-bot.mjs";
 const { sheets } = getBotClients();
-const spreadsheetId = "1cDlPWsD4gmmbzdaV0spVxLNSAedEXZruizYYtnn7CsQ";
+const spreadsheetId = "168OI2_TjSLZSUpxWIkaXcCoGfgpiWa_hVh2QrN-Fzb8";
 
 const r = await sheets.spreadsheets.values.get({ spreadsheetId, range: "AGENTS!A1:F50" });
 console.log(r.data.values); // массив массивов; хвостовые пустые ячейки просто отсутствуют

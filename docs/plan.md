@@ -4,9 +4,9 @@
 
 ## Где что лежит
 
-- Все шаблоны и таблица — папка [«MOU»](https://drive.google.com/drive/folders/1wAOozC2ofCV3Hsm16wdJoywK6_jvjZpm). Она основная, всё вне её устарело.
-- Готовые договоры — папка [«Готовые MOU»](https://drive.google.com/drive/folders/1hENNhxCor6GO0SX8Psedc3gPmyq_eIaL).
-- Таблица [«MOU Builder»](https://docs.google.com/spreadsheets/d/1cDlPWsD4gmmbzdaV0spVxLNSAedEXZruizYYtnn7CsQ/edit) — данные проектов, агентств и согласование правок.
+- Все шаблоны и таблица — папка [«MOU (Prime Bridge)»](https://drive.google.com/drive/folders/1aj_s4joYlP-8QnEn8fLRTSHdFtjDs2MG) на d.kim@primebridge.estate (с 03.10.2026). Она основная, всё вне её устарело.
+- Готовые договоры — папка [«Готовые MOU»](https://drive.google.com/drive/folders/1-gkMgBa_BQAlRC11tDacdSPElZj9vXiH).
+- Таблица [«MOU Builder»](https://docs.google.com/spreadsheets/d/168OI2_TjSLZSUpxWIkaXcCoGfgpiWa_hVh2QrN-Fzb8/edit) — данные проектов, агентств и согласование правок.
 - Отчёт по шаблонам — [templates-audit-2026-08.md](templates-audit-2026-08.md).
 - Правила и решения — [project-memory.md](project-memory.md).
 - Введение для GPT (второй эксперт) — [gpt-brief.md](gpt-brief.md).
@@ -29,7 +29,7 @@
 
 ### 4. ⬜ Алина проходит вкладку REVIEW
 
-**[Открыть REVIEW](https://docs.google.com/spreadsheets/d/1cDlPWsD4gmmbzdaV0spVxLNSAedEXZruizYYtnn7CsQ/edit#gid=1533725448)** — 22 строки.
+**[Открыть REVIEW](https://docs.google.com/spreadsheets/d/168OI2_TjSLZSUpxWIkaXcCoGfgpiWa_hVh2QrN-Fzb8/edit#gid=1533725448)** — 22 строки.
 В колонке «Применить» ставишь галочку там, где согласна. Номера шаблонов кликабельные.
 
 Дополнительно решить (разделы C, D, F аудита):
