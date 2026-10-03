@@ -64,8 +64,9 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
   in favour of the Seller)», оформление как в №1 (при разметке C3 искать уже этот текст).
 - Обновлённая редакция №1 (docx 1aX_h4yU…, вечер 03.10): `patch-template … redaction-1003` (20 правок текста
   и жирного), в коде — «Mr(s).» у представителя по POA, держатель «the **Buyer’s Agency** as **stakeholder**»,
-  «upon signing this **Agreement**». Не перенесён абзац про банк Покупателя (комментарий «Только off plan cash») —
-  ждём ответа, в какой шаблон.
+  «upon signing this **Agreement**». Абзац про банк Покупателя Даша из №1 убрала — шаблон №1 совпадает с docx.
+- 1.2 (no deposit cheques) `1BsYaITx…` — содержимое обновлено из docx Даши `1lXf-lodo…` (ID тот же, на сайте не
+  используется). Отличия 1.2 от №1 вне депозитов: «by Credit Card» в Transfer Fee, абзац LPC с датой, «third party».
 - Имена файлов: «<docTitle> <юнит>» (docTitle в реестре `lib/mou/config.js`), «Commission Agreement <юнит>».
 
 ## Commission Agreement (03.10)
