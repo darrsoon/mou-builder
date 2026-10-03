@@ -69,6 +69,14 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 - Подписи — блок как в конце MOU (FIRST/SECOND/THIRD PARTY, Company, Represented by, Signature, Date, Company Stamp).
 - Ждём текст для договора только между агентствами (до трёх) — шаблона нет.
 
+## Отложено: Property с платформы (03.10)
+
+Идея — по номеру юнита подтягивать в Property данные с app.primebridge.estate (проект, тип, спальни,
+площадь, локация, при наличии цены). API у платформы нет, данные только со страниц после входа; учётку
+блокируют за частые входы. Варианты: через AutoPost (`primebridge-estate/pb-autopost`, `lib/platform.ts`)
+или напрямую с отдельной учёткой в env Vercel. Для работы нужны: доступ к app.primebridge.estate в сети
+облачной среды и доступ сессии к репозиторию pb-autopost. Title Deed, аренда, Additional Information — руками.
+
 ## Шаблоны на движке v2
 
 | # | Шаблон | Размечен | Бэкап до разметки | Правок |
