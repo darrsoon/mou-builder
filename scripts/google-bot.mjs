@@ -6,9 +6,11 @@ import { google } from "googleapis";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 
+// Ключи берутся из .env.local, а без него — из переменных окружения
+// (облачные сессии Claude: ключи заданы в настройках окружения).
 function readEnv() {
   const file = path.join(ROOT, ".env.local");
-  if (!fs.existsSync(file)) throw new Error("Нет .env.local");
+  if (!fs.existsSync(file)) return process.env;
   return Object.fromEntries(
     fs
       .readFileSync(file, "utf8")
@@ -25,7 +27,7 @@ export function getBotClients() {
   const env = readEnv();
   const { GOOGLE_BOT_CLIENT_ID, GOOGLE_BOT_CLIENT_SECRET, GOOGLE_BOT_REFRESH_TOKEN } = env;
   if (!GOOGLE_BOT_REFRESH_TOKEN) {
-    throw new Error("Нет GOOGLE_BOT_REFRESH_TOKEN — запусти node scripts/google-auth.mjs");
+    throw new Error("Нет GOOGLE_BOT_REFRESH_TOKEN ни в .env.local, ни в переменных окружения — запусти node scripts/google-auth.mjs");
   }
   const auth = new google.auth.OAuth2(GOOGLE_BOT_CLIENT_ID, GOOGLE_BOT_CLIENT_SECRET);
   auth.setCredentials({ refresh_token: GOOGLE_BOT_REFRESH_TOKEN });
