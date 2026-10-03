@@ -2,7 +2,7 @@
 import { getBotClients } from "../google-bot.mjs";
 import { applyEdits } from "../docs-edit.mjs";
 
-const FOLDER = "1wAOozC2ofCV3Hsm16wdJoywK6_jvjZpm";
+const FOLDER = "1aj_s4joYlP-8QnEn8fLRTSHdFtjDs2MG";
 
 // В подвале таблица подписей: под строкой подписей агентств идёт отдельная строка
 // с печатями. Добавляем её строкой таблицы, а не абзацем в ячейке — абзац налезает

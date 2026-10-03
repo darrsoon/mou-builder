@@ -11,8 +11,9 @@
   подстановка значений → готовый MOU в папку «Готовые MOU».
 - Данные: Google Таблица «MOU Builder» (вкладки PROJECTS, LISTS, AGENTS, DRAFTS_LOG;
   план — добавить TEMPLATES). Базы данных нет и пока не нужна.
-- Шаблоны: папка «MOU» на Google Диске `tsokuraline@gmail.com`
-  ([«MOU»](https://drive.google.com/drive/folders/1wAOozC2ofCV3Hsm16wdJoywK6_jvjZpm), `1wAOozC2ofCV3Hsm16wdJoywK6_jvjZpm`). Коннектор Claude подключён к аккаунту
+- Шаблоны: папка «MOU (Prime Bridge)» на Google Диске `d.kim@primebridge.estate`
+  ([«MOU (Prime Bridge)»](https://drive.google.com/drive/folders/1aj_s4joYlP-8QnEn8fLRTSHdFtjDs2MG), `1aj_s4joYlP-8QnEn8fLRTSHdFtjDs2MG`).
+  С 03.10.2026 — рабочие копии после переезда; правки шаблонов делаем только в них. Коннектор Claude подключён к аккаунту
   `kkorobkova84@gmail.com` — папка расшарена на него как редактору.
 - Переезд на рабочий аккаунт позже = копирование файлов + замена 3-4 ID (spreadsheetId,
   outputFolderId, ID шаблонов). Ничего в коде к аккаунту не привязано.
@@ -79,20 +80,20 @@
 
 | # | Файл (ссылка) | Группа | Статей | Google Doc ID |
 |---|------|--------|--------|-----|
-| 1 | [Off-plan](https://docs.google.com/document/d/1LLMqzZ1xeSPzVOhVahG4B8l9bQx0KggFBvZUynOY8bU/edit) | Off-plan | 17 | `1LLMqzZ1xeSPzVOhVahG4B8l9bQx0KggFBvZUynOY8bU` |
-| 1.2 | [Off-plan NO DEPOSIT CHEQUES](https://docs.google.com/document/d/1vftXIyFV32PKyFoCg-2J5b_58V94e5TFXJgXSIbIvWM/edit) | Off-plan | 15 | `1vftXIyFV32PKyFoCg-2J5b_58V94e5TFXJgXSIbIvWM` |
-| 2 | [Off-plan–mortgage](https://docs.google.com/document/d/1RjrVeLZG65Fyzc5h0TFR0sks8D--jJocEXyF2H9fg9g/edit) | Off-plan | 18 | `1RjrVeLZG65Fyzc5h0TFR0sks8D--jJocEXyF2H9fg9g` |
-| 3 | [Cash to cash READY](https://docs.google.com/document/d/1d-bXwKBO9J8fUQ35vqKWw5KzADJ6lB6fmD4hxeSjy3k/edit) — **размечен, v2** (08.09, бэкап `121Mwvo-6GlqkEJ3fMZ52DsdF4XrvdTVm9UpcY6L_0o4`) | Ready | 18 | `1d-bXwKBO9J8fUQ35vqKWw5KzADJ6lB6fmD4hxeSjy3k` |
-| 4 | [Cash to Mortgage READY](https://docs.google.com/document/d/1slUJ8aQCw8nKIhlKBHWvhUFkLWnLH3k_N_OtwH5sm3Y/edit) — **размечен, v2** (13.09, бэкап `1HxLbN1-SpgGVej2avkZLFkDMgMM6i2d_hoylOJyPWEA`) | Ready | 19 | `1slUJ8aQCw8nKIhlKBHWvhUFkLWnLH3k_N_OtwH5sm3Y` |
-| 5 | [Mortgage to cash READY](https://docs.google.com/document/d/1RDNBmgnI3V-1o-Nk--g4XJUpwvHP0sC2IrGY7R_hhw0/edit) | Ready | 18 | `1RDNBmgnI3V-1o-Nk--g4XJUpwvHP0sC2IrGY7R_hhw0` |
-| 6 | [Mortgage to mortgage READY](https://docs.google.com/document/d/1tRz59MGjnZKQpAZv0q_QMU4W6UPFLDBLr8uKPZYWP3w/edit) | Ready | 20 | `1tRz59MGjnZKQpAZv0q_QMU4W6UPFLDBLr8uKPZYWP3w` |
-| C3-1 | [С3 Cash](https://docs.google.com/document/d/1SFLGotwOKOibBCT3iMiflfBWS9vjLkl8r7UuxpA8gW8/edit) | C3 | 18 | `1SFLGotwOKOibBCT3iMiflfBWS9vjLkl8r7UuxpA8gW8` |
-| C3-2 | [С3 Mortgage](https://docs.google.com/document/d/1NngXRZMAxI1oK41vAsAh2KpXfkqIpSP1gCgKt9HLM14/edit) | C3 | 19 | `1NngXRZMAxI1oK41vAsAh2KpXfkqIpSP1gCgKt9HLM14` |
+| 1 | [Off-plan](https://docs.google.com/document/d/1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k/edit) | Off-plan | 17 | `1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k` |
+| 1.2 | [Off-plan NO DEPOSIT CHEQUES](https://docs.google.com/document/d/1BsYaITx4_FvELewiKx4yquzPwkAjDYpb1SoV4bToYIo/edit) | Off-plan | 15 | `1BsYaITx4_FvELewiKx4yquzPwkAjDYpb1SoV4bToYIo` |
+| 2 | [Off-plan–mortgage](https://docs.google.com/document/d/1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0/edit) | Off-plan | 18 | `1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0` |
+| 3 | [Cash to cash READY](https://docs.google.com/document/d/1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk/edit) — **размечен, v2** (08.09, бэкап `121Mwvo-6GlqkEJ3fMZ52DsdF4XrvdTVm9UpcY6L_0o4`) | Ready | 18 | `1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk` |
+| 4 | [Cash to Mortgage READY](https://docs.google.com/document/d/1fsVQKEKGYNng0ND1kkensdIqUOOQ7h_KgobDCoKwN-E/edit) — **размечен, v2** (13.09, бэкап `1HxLbN1-SpgGVej2avkZLFkDMgMM6i2d_hoylOJyPWEA`) | Ready | 19 | `1fsVQKEKGYNng0ND1kkensdIqUOOQ7h_KgobDCoKwN-E` |
+| 5 | [Mortgage to cash READY](https://docs.google.com/document/d/1hhruVEiqBbNhib4NNmtTX-gNvGwpCw6rsMJ76Iqhk1g/edit) | Ready | 18 | `1hhruVEiqBbNhib4NNmtTX-gNvGwpCw6rsMJ76Iqhk1g` |
+| 6 | [Mortgage to mortgage READY](https://docs.google.com/document/d/1qdoj3EIr_RdTCjoC1v12aijgX26LXJKowcPyjncIY3c/edit) | Ready | 20 | `1qdoj3EIr_RdTCjoC1v12aijgX26LXJKowcPyjncIY3c` |
+| C3-1 | [С3 Cash](https://docs.google.com/document/d/1LQ44RjVSj0QrY8sp2IdHpfLyJoXqFInK5CmZCS4v6nY/edit) | C3 | 18 | `1LQ44RjVSj0QrY8sp2IdHpfLyJoXqFInK5CmZCS4v6nY` |
+| C3-2 | [С3 Mortgage](https://docs.google.com/document/d/1erVDJoIJPa_2Wj5SFT5HcGZSOBhww2GwfAaa5HfktbI/edit) | C3 | 19 | `1erVDJoIJPa_2Wj5SFT5HcGZSOBhww2GwfAaa5HfktbI` |
 
 Все шаблоны заново загружены Алиной 22.08.2026 — ID изменились, старые недействительны.
 Актуальный аудит: `docs/templates-audit-2026-08.md` (версия 2).
 Папка «Готовые MOU» удалена 22.08.2026 — создать заново, в конфиге мёртвый ID.
-Таблица [«MOU Builder»](https://docs.google.com/spreadsheets/d/1cDlPWsD4gmmbzdaV0spVxLNSAedEXZruizYYtnn7CsQ/edit) — `1cDlPWsD4gmmbzdaV0spVxLNSAedEXZruizYYtnn7CsQ`,
+Таблица [«MOU Builder»](https://docs.google.com/spreadsheets/d/168OI2_TjSLZSUpxWIkaXcCoGfgpiWa_hVh2QrN-Fzb8/edit) — `168OI2_TjSLZSUpxWIkaXcCoGfgpiWa_hVh2QrN-Fzb8`,
 копия Алины с правом записи. Та, что прописана в конфиге (`1rI2ePSq…`), принадлежит другому
 аккаунту, у Алины там только просмотр — надо переключить `MOU_SPREADSHEET_ID`.
 Вкладка REVIEW в этой таблице — согласование правок шаблонов галочками.
@@ -158,21 +159,23 @@
   оттуда, если нет `.env.local`.
 - `invalid_client` — ID и секрет не от одного клиента или вставлены с ошибкой;
   `invalid_grant` — токен отозван, получить новый в Playground.
-- ID шаблонов, таблицы и папки сменились 03.10 — актуальные в `lib/mou/config.js`;
-  ID в разделах 4 и 10 ниже устарели.
+- ID шаблонов, таблицы и папки сменились 03.10 (переезд на d.kim@primebridge.estate);
+  в разделах 4 и 10 ниже уже новые ID, источник правды — `lib/mou/config.js`.
+  Бэкапы и черновики разметки (БЭКАП…, РАЗМЕТКА…) не копировались — их ID прежние,
+  файлы лежат в старой папке «MOU» `1wAOozC2ofCV3Hsm16wdJoywK6_jvjZpm` у tsokuraline@gmail.com.
 
-## 10. Актуальные адреса (22.08.2026)
+## 10. Актуальные адреса (03.10.2026)
 
-Папка [«MOU»](https://drive.google.com/drive/folders/1wAOozC2ofCV3Hsm16wdJoywK6_jvjZpm)
+Папка [«MOU (Prime Bridge)»](https://drive.google.com/drive/folders/1aj_s4joYlP-8QnEn8fLRTSHdFtjDs2MG)
 — основная. Всё, что вне её, считаем устаревшим.
 
-- Таблица «MOU Builder»: `1cDlPWsD4gmmbzdaV0spVxLNSAedEXZruizYYtnn7CsQ` (лежит в папке).
+- Таблица «MOU Builder»: `168OI2_TjSLZSUpxWIkaXcCoGfgpiWa_hVh2QrN-Fzb8` (лежит в папке).
   Старая `1rI2ePSq…` принадлежит другому аккаунту, у Алины там только просмотр — не использовать.
-- Папка [«Готовые MOU»](https://drive.google.com/drive/folders/1hENNhxCor6GO0SX8Psedc3gPmyq_eIaL):
-  `1hENNhxCor6GO0SX8Psedc3gPmyq_eIaL`, создана заново внутри «Автоматизации».
+- Папка [«Готовые MOU»](https://drive.google.com/drive/folders/1-gkMgBa_BQAlRC11tDacdSPElZj9vXiH):
+  `1-gkMgBa_BQAlRC11tDacdSPElZj9vXiH`, создана заново внутри «Автоматизации».
 - Реестр всех 9 шаблонов — в `MOU_TEMPLATES` (Vercel, Production) и в дефолтах `lib/mou/config.js`.
 - Вкладка REVIEW в таблице — согласование правок шаблонов галочками.
 
 Env в Vercel обновлены только для Production: preview-ветками не пользуемся, пушим в `main`.
 
-Позже всё переезжает на рабочую почту — при переезде поменять эти ID ещё раз.
+Переезд на рабочую почту сделан 03.10.2026 — ID выше уже новые.

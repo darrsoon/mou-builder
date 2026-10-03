@@ -15,19 +15,19 @@ Google `a.tsokur@primebridge.estate`), **новый владелец** — Да�
 | Код | GitHub `darrsoon/mou-builder`, ветка `main` | ✅ передан 03.10 |
 | Сайт | Vercel, проект `mou-builder`, https://mou-builder-rho.vercel.app | передать проект |
 | Вход на сайт | OAuth-клиент в Google Cloud | создать новый у нового владельца |
-| Шаблоны договоров | Google Docs, 4 документа (ID ниже) | передать владение |
-| Справочники и журнал | Google Таблица `1cDlPWsD4gmmbzdaV0spVxLNSAedEXZruizYYtnn7CsQ` | передать владение |
-| Готовые договоры | Папка Диска `1hENNhxCor6GO0SX8Psedc3gPmyq_eIaL` | передать владение |
+| Шаблоны договоров | Google Docs, 4 документа (ID ниже) | ✅ копии у d.kim@primebridge.estate, 03.10 |
+| Справочники и журнал | Google Таблица `168OI2_TjSLZSUpxWIkaXcCoGfgpiWa_hVh2QrN-Fzb8` | ✅ копии у d.kim@primebridge.estate, 03.10 |
+| Готовые договоры | Папка Диска `1-gkMgBa_BQAlRC11tDacdSPElZj9vXiH` | ✅ копии у d.kim@primebridge.estate, 03.10 |
 | Разметка шаблонов | Скрипты в репозитории + токен бота в `.env.local` | выпустить свой токен |
 
 Боевые шаблоны:
 
 | № | Шаблон | ID документа |
 |---|---|---|
-| 1 | Off-plan | `1LLMqzZ1xeSPzVOhVahG4B8l9bQx0KggFBvZUynOY8bU` |
-| 2 | Off-plan ипотека | `1RjrVeLZG65Fyzc5h0TFR0sks8D--jJocEXyF2H9fg9g` |
-| 3 | Ready cash to cash | `1d-bXwKBO9J8fUQ35vqKWw5KzADJ6lB6fmD4hxeSjy3k` |
-| 4 | Ready cash to mortgage | `1slUJ8aQCw8nKIhlKBHWvhUFkLWnLH3k_N_OtwH5sm3Y` |
+| 1 | Off-plan | `1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k` |
+| 2 | Off-plan ипотека | `1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0` |
+| 3 | Ready cash to cash | `1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk` |
+| 4 | Ready cash to mortgage | `1fsVQKEKGYNng0ND1kkensdIqUOOQ7h_KgobDCoKwN-E` |
 
 Остальные шаблоны, бэкапы и папки с тестовыми договорами — в `docs/state.md`.
 
@@ -35,8 +35,8 @@ Google `a.tsokur@primebridge.estate`), **новый владелец** — Да�
 
 ### 1. Google: документы и доступ
 
-1. Открыть доступ новому владельцу к папке «MOU» (`1wAOozC2ofCV3Hsm16wdJoywK6_jvjZpm`),
-   папке «Готовые MOU» (`1hENNhxCor6GO0SX8Psedc3gPmyq_eIaL`) и таблице.
+1. Открыть доступ новому владельцу к папке «MOU (Prime Bridge)» (`1aj_s4joYlP-8QnEn8fLRTSHdFtjDs2MG`),
+   папке «Готовые MOU» (`1-gkMgBa_BQAlRC11tDacdSPElZj9vXiH`) и таблице.
 2. Передать владение каждым объектом: правой кнопкой → «Открыть доступ» → у нужного
    человека выбрать «Передать права владельца».
    **Важно:** передать владение можно только внутри одной организации. Если у нового

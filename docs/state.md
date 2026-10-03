@@ -30,18 +30,20 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 Передача проекта новому владельцу: `handover.md`. GitHub передан 03.10 —
 репозиторий `darrsoon/mou-builder`, локальный remote переключён. Vercel — создан код
 передачи `c860d6dc-5a97-46b8-a5b9-f6e4657ce9e4` (действует 24 ч с 03.10 ~07:52),
-ждём, пока Даша примет его под своим аккаунтом. Владение Google-документами осталось
-за tsokuraline@gmail.com: передача владения работает только внутри одной организации,
-на личную почту — лишь вручную через Диск с согласием получателя.
+ждём, пока Даша примет его под своим аккаунтом. Google-документы переехали 03.10:
+шаблоны, таблица «MOU Builder» и папка «Готовые MOU» скопированы на d.kim@primebridge.estate
+в папку «MOU (Prime Bridge)» `1aj_s4joYlP-8QnEn8fLRTSHdFtjDs2MG`; ID в коде и документах —
+новые, правки шаблонов делаем только в новых копиях. Бэкапы и черновики разметки
+(БЭКАП…, РАЗМЕТКА…) не копировались — их ID ниже прежние, они в старой папке у tsokuraline@gmail.com.
 
 ## Шаблоны на движке v2
 
 | # | Шаблон | Размечен | Бэкап до разметки | Правок |
 |---|--------|----------|-------------------|--------|
-| 1 | Off-plan `1LLMqzZ1xeSPzVOhVahG4B8l9bQx0KggFBvZUynOY8bU` | 30.08 | `1KThc8Zq0G50zppR_cRGech6nhyyZSsTwzdw2_uM2RTo` | 170 |
-| 2 | Off-plan ипотека `1RjrVeLZG65Fyzc5h0TFR0sks8D--jJocEXyF2H9fg9g` | 05.09 | `12Zcp4G28uLcBEh0XtF1ulgAotC8uju6UV6oPBRMCcU8` | 179 |
-| 3 | Ready cash to cash `1d-bXwKBO9J8fUQ35vqKWw5KzADJ6lB6fmD4hxeSjy3k` | 08.09 | `121Mwvo-6GlqkEJ3fMZ52DsdF4XrvdTVm9UpcY6L_0o4` | 178 |
-| 4 | Ready cash to mortgage `1slUJ8aQCw8nKIhlKBHWvhUFkLWnLH3k_N_OtwH5sm3Y` | 13.09 | `1HxLbN1-SpgGVej2avkZLFkDMgMM6i2d_hoylOJyPWEA` | 182 |
+| 1 | Off-plan `1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k` | 30.08 | `1KThc8Zq0G50zppR_cRGech6nhyyZSsTwzdw2_uM2RTo` | 170 |
+| 2 | Off-plan ипотека `1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0` | 05.09 | `12Zcp4G28uLcBEh0XtF1ulgAotC8uju6UV6oPBRMCcU8` | 179 |
+| 3 | Ready cash to cash `1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk` | 08.09 | `121Mwvo-6GlqkEJ3fMZ52DsdF4XrvdTVm9UpcY6L_0o4` | 178 |
+| 4 | Ready cash to mortgage `1fsVQKEKGYNng0ND1kkensdIqUOOQ7h_KgobDCoKwN-E` | 13.09 | `1HxLbN1-SpgGVej2avkZLFkDMgMM6i2d_hoylOJyPWEA` | 182 |
 
 Чинить начертание после разметки: `fix-bold.mjs <шаблон> <бэкап>`, для шаблонов
 с ипотечной раскладкой ст.7–8 (№2, №4) — с флагом `--mortgage`.
@@ -113,9 +115,9 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 
 ## Дальше
 
-1. №5 Ready mortgage to cash `1RDNBmgnI3V-1o-Nk--g4XJUpwvHP0sC2IrGY7R_hhw0` — черновик и пакет
+1. №5 Ready mortgage to cash `1hhruVEiqBbNhib4NNmtTX-gNvGwpCw6rsMJ76Iqhk1g` — черновик и пакет
    готовы (см. выше), ждём «да» на разметку оригинала.
-2. №6 Ready mortgage to mortgage `1tRz59MGjnZKQpAZv0q_QMU4W6UPFLDBLr8uKPZYWP3w` — 20 статей,
+2. №6 Ready mortgage to mortgage `1qdoj3EIr_RdTCjoC1v12aijgX26LXJKowcPyjncIY3c` — 20 статей,
    ADM Electronic 1,392, строка Unit Verification есть.
 3. C3-1 и C3-2 — нужен блок стороны-юрлица, его ещё нет.
 

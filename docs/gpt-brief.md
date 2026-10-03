@@ -114,24 +114,24 @@
 
 ## Ссылки
 
-- Папка проекта: https://drive.google.com/drive/folders/1wAOozC2ofCV3Hsm16wdJoywK6_jvjZpm
+- Папка проекта: https://drive.google.com/drive/folders/1aj_s4joYlP-8QnEn8fLRTSHdFtjDs2MG
 - Таблица «MOU Builder» (данные + вкладка REVIEW со статусом правок):
-  https://docs.google.com/spreadsheets/d/1cDlPWsD4gmmbzdaV0spVxLNSAedEXZruizYYtnn7CsQ/edit
-- Готовые договоры: https://drive.google.com/drive/folders/1hENNhxCor6GO0SX8Psedc3gPmyq_eIaL
+  https://docs.google.com/spreadsheets/d/168OI2_TjSLZSUpxWIkaXcCoGfgpiWa_hVh2QrN-Fzb8/edit
+- Готовые договоры: https://drive.google.com/drive/folders/1-gkMgBa_BQAlRC11tDacdSPElZj9vXiH
 
 Шаблоны:
 
 | № | Ссылка |
 |---|--------|
-| 1 | https://docs.google.com/document/d/1LLMqzZ1xeSPzVOhVahG4B8l9bQx0KggFBvZUynOY8bU/edit |
-| 1.2 | https://docs.google.com/document/d/1vftXIyFV32PKyFoCg-2J5b_58V94e5TFXJgXSIbIvWM/edit |
-| 2 | https://docs.google.com/document/d/1RjrVeLZG65Fyzc5h0TFR0sks8D--jJocEXyF2H9fg9g/edit |
-| 3 | https://docs.google.com/document/d/1d-bXwKBO9J8fUQ35vqKWw5KzADJ6lB6fmD4hxeSjy3k/edit |
-| 4 | https://docs.google.com/document/d/1slUJ8aQCw8nKIhlKBHWvhUFkLWnLH3k_N_OtwH5sm3Y/edit |
-| 5 | https://docs.google.com/document/d/1RDNBmgnI3V-1o-Nk--g4XJUpwvHP0sC2IrGY7R_hhw0/edit |
-| 6 | https://docs.google.com/document/d/1tRz59MGjnZKQpAZv0q_QMU4W6UPFLDBLr8uKPZYWP3w/edit |
-| C3-1 | https://docs.google.com/document/d/1SFLGotwOKOibBCT3iMiflfBWS9vjLkl8r7UuxpA8gW8/edit |
-| C3-2 | https://docs.google.com/document/d/1NngXRZMAxI1oK41vAsAh2KpXfkqIpSP1gCgKt9HLM14/edit |
+| 1 | https://docs.google.com/document/d/1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k/edit |
+| 1.2 | https://docs.google.com/document/d/1BsYaITx4_FvELewiKx4yquzPwkAjDYpb1SoV4bToYIo/edit |
+| 2 | https://docs.google.com/document/d/1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0/edit |
+| 3 | https://docs.google.com/document/d/1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk/edit |
+| 4 | https://docs.google.com/document/d/1fsVQKEKGYNng0ND1kkensdIqUOOQ7h_KgobDCoKwN-E/edit |
+| 5 | https://docs.google.com/document/d/1hhruVEiqBbNhib4NNmtTX-gNvGwpCw6rsMJ76Iqhk1g/edit |
+| 6 | https://docs.google.com/document/d/1qdoj3EIr_RdTCjoC1v12aijgX26LXJKowcPyjncIY3c/edit |
+| C3-1 | https://docs.google.com/document/d/1LQ44RjVSj0QrY8sp2IdHpfLyJoXqFInK5CmZCS4v6nY/edit |
+| C3-2 | https://docs.google.com/document/d/1erVDJoIJPa_2Wj5SFT5HcGZSOBhww2GwfAaa5HfktbI/edit |
 
 ## Первый вопрос к тебе
 

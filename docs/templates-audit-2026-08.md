@@ -1,20 +1,20 @@
 # Аудит шаблонов MOU — 22.08.2026 (версия 2)
 
-Сверка 9 шаблонов из папки [«MOU»](https://drive.google.com/drive/folders/1wAOozC2ofCV3Hsm16wdJoywK6_jvjZpm)
+Сверка 9 шаблонов из папки [«MOU»](https://drive.google.com/drive/folders/1aj_s4joYlP-8QnEn8fLRTSHdFtjDs2MG)
 после полной замены документов. Прочитаны напрямую через Google Docs API — вместе
 с форматированием и всеми 57 комментариями с привязкой к тексту.
 
 | # | Шаблон | Статей | Комм. |
 |---|--------|--------|-------|
-| 1 | [Off-plan](https://docs.google.com/document/d/1LLMqzZ1xeSPzVOhVahG4B8l9bQx0KggFBvZUynOY8bU/edit) | 17 | 18 |
-| 1.2 | [Off-plan NO DEPOSIT CHEQUES](https://docs.google.com/document/d/1vftXIyFV32PKyFoCg-2J5b_58V94e5TFXJgXSIbIvWM/edit) | 15 | 0 |
-| 2 | [Off-plan–mortgage](https://docs.google.com/document/d/1RjrVeLZG65Fyzc5h0TFR0sks8D--jJocEXyF2H9fg9g/edit) | 18 | 1 |
-| 3 | [Cash to cash READY](https://docs.google.com/document/d/1d-bXwKBO9J8fUQ35vqKWw5KzADJ6lB6fmD4hxeSjy3k/edit) | 18 | 5 |
-| 4 | [Cash to Mortgage READY](https://docs.google.com/document/d/1slUJ8aQCw8nKIhlKBHWvhUFkLWnLH3k_N_OtwH5sm3Y/edit) | 19 | 2 |
-| 5 | [Mortgage to cash READY](https://docs.google.com/document/d/1RDNBmgnI3V-1o-Nk--g4XJUpwvHP0sC2IrGY7R_hhw0/edit) | 18 | 7 |
-| 6 | [Mortgage to mortgage READY](https://docs.google.com/document/d/1tRz59MGjnZKQpAZv0q_QMU4W6UPFLDBLr8uKPZYWP3w/edit) | 20 | 5 |
-| C3-1 | [С3 Cash](https://docs.google.com/document/d/1SFLGotwOKOibBCT3iMiflfBWS9vjLkl8r7UuxpA8gW8/edit) | 18 | 10 |
-| C3-2 | [С3 Mortgage](https://docs.google.com/document/d/1NngXRZMAxI1oK41vAsAh2KpXfkqIpSP1gCgKt9HLM14/edit) | 19 | 9 |
+| 1 | [Off-plan](https://docs.google.com/document/d/1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k/edit) | 17 | 18 |
+| 1.2 | [Off-plan NO DEPOSIT CHEQUES](https://docs.google.com/document/d/1BsYaITx4_FvELewiKx4yquzPwkAjDYpb1SoV4bToYIo/edit) | 15 | 0 |
+| 2 | [Off-plan–mortgage](https://docs.google.com/document/d/1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0/edit) | 18 | 1 |
+| 3 | [Cash to cash READY](https://docs.google.com/document/d/1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk/edit) | 18 | 5 |
+| 4 | [Cash to Mortgage READY](https://docs.google.com/document/d/1fsVQKEKGYNng0ND1kkensdIqUOOQ7h_KgobDCoKwN-E/edit) | 19 | 2 |
+| 5 | [Mortgage to cash READY](https://docs.google.com/document/d/1hhruVEiqBbNhib4NNmtTX-gNvGwpCw6rsMJ76Iqhk1g/edit) | 18 | 7 |
+| 6 | [Mortgage to mortgage READY](https://docs.google.com/document/d/1qdoj3EIr_RdTCjoC1v12aijgX26LXJKowcPyjncIY3c/edit) | 20 | 5 |
+| C3-1 | [С3 Cash](https://docs.google.com/document/d/1LQ44RjVSj0QrY8sp2IdHpfLyJoXqFInK5CmZCS4v6nY/edit) | 18 | 10 |
+| C3-2 | [С3 Mortgage](https://docs.google.com/document/d/1erVDJoIJPa_2Wj5SFT5HcGZSOBhww2GwfAaa5HfktbI/edit) | 19 | 9 |
 
 ---
 
@@ -296,6 +296,6 @@ AED 960.00 (Mortgage Release), AED 525.00 (Admin Fee C3), AED 103.50 (Unit Verif
 5. Две одинаковые копии таблицы «MOU Builder»: приложение читает
    [1rI2ePSq…](https://docs.google.com/spreadsheets/d/1rI2ePSqkmHeUByorcEMsGv3anRKT7HuOHYCQ4vR8D8o/edit),
    а в папке лежит дубль
-   [1cDlPWsD…](https://docs.google.com/spreadsheets/d/1cDlPWsD4gmmbzdaV0spVxLNSAedEXZruizYYtnn7CsQ/edit)
+   [168OI2_T…](https://docs.google.com/spreadsheets/d/168OI2_TjSLZSUpxWIkaXcCoGfgpiWa_hVh2QrN-Fzb8/edit)
    с теми же данными. Какую считаем рабочей — вторую удалить, чтобы не разъехались.
 6. Папку «Готовые MOU» надо создать заново — старая удалена, в конфиге остался мёртвый ID.

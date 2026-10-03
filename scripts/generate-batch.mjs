@@ -18,7 +18,7 @@ const TEMPLATE = templateFor(MORTGAGE, READY, SELLER_MORTGAGE);
 const DEFS = getArticleDefsForTemplate(TEMPLATE);
 const CASES = READY ? [...SCENARIOS, ...READY_SCENARIOS, ...(SELLER_MORTGAGE ? SELLER_MORTGAGE_SCENARIOS : [])] : SCENARIOS;
 
-const MOU_FOLDER = "1wAOozC2ofCV3Hsm16wdJoywK6_jvjZpm";
+const MOU_FOLDER = "1aj_s4joYlP-8QnEn8fLRTSHdFtjDs2MG";
 
 const templateId = process.argv[2];
 if (!templateId) throw new Error("укажи ID шаблона");
