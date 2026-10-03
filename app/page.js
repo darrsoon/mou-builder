@@ -132,6 +132,12 @@ const initialForm = {
   buyerAgentPosition: "",
   buyerAgentLicense: "",
   buyerAgentAddress: "",
+  // Commission Agreement: плательщик Seller | Buyer | Company, 1–2 агентства-получателя
+  caPayer: "Seller",
+  caPayerCompany: emptyCaAgency(""),
+  caAgencies: [emptyCaAgency(DEFAULT_AGENT)],
+  caDate: "",
+  caPaymentTerm: "on_transfer",
   buyerChequeThirdParty: "No",
   sellerChequeThirdParty: "No",
   agencyFeeSeller: "",
@@ -367,6 +373,21 @@ function partySectionStatus(parties) {
   return makeSectionStatus(missing);
 }
 
+function emptyCaAgency(name = "") {
+  return { name, position: "", representative: "", license: "", address: "", fee: "" };
+}
+
+// реквизиты агентства из AGENTS; overwrite — при смене названия, иначе только пустые поля
+function agencyFromDirectory(agency, agents, overwrite) {
+  const record = findAgent(agents, agency.name);
+  if (!record) return agency;
+  const next = { ...agency };
+  for (const field of ["representative", "position", "license", "address"]) {
+    if ((overwrite || !String(next[field] || "").trim()) && record[field] !== undefined) next[field] = record[field];
+  }
+  return next;
+}
+
 function findAgent(agents, name) {
   const key = (v) => String(v || "").toLowerCase().replace(/[^a-z0-9]/g, "");
   return (agents || []).find((a) => key(a.name) === key(name));
@@ -383,6 +404,7 @@ function fillAgentDetails(form, agents) {
       if (!String(next[`${side}Agent${field}`] || "").trim() && value) next[`${side}Agent${field}`] = value;
     }
   }
+  if (Array.isArray(next.caAgencies)) next.caAgencies = next.caAgencies.map((a) => agencyFromDirectory(a, agents, false));
   return next;
 }
 
@@ -717,6 +739,46 @@ export default function HomePage() {
       } else {
         setActionErrors([error.message]);
       }
+      setMessage(error.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function patchCa(field, value) {
+    setForm((current) => ({ ...current, [field]: value }));
+  }
+
+  function patchCaAgency(index, field, value) {
+    setForm((current) => {
+      const list = [...(current.caAgencies || [])];
+      let agency = { ...list[index], [field]: value };
+      if (field === "name") agency = agencyFromDirectory(agency, init.agents, true);
+      list[index] = agency;
+      return { ...current, caAgencies: list };
+    });
+  }
+
+  function patchCaPayerCompany(field, value) {
+    setForm((current) => {
+      let company = { ...(current.caPayerCompany || emptyCaAgency("")), [field]: value };
+      if (field === "name") company = agencyFromDirectory(company, init.agents, true);
+      return { ...current, caPayerCompany: company };
+    });
+  }
+
+  async function createCommission() {
+    setBusy(true);
+    setResult(null);
+    setActionErrors([]);
+    setMessage("Creating Commission Agreement...");
+    try {
+      const data = await api("/api/commission", { method: "POST", body: JSON.stringify(form) });
+      setResult({ ...data, kind: "Commission Agreement" });
+      setMessage("Commission Agreement created");
+      await loadInit();
+    } catch (error) {
+      setActionErrors(error.payload?.validation?.errors || [error.message]);
       setMessage(error.message);
     } finally {
       setBusy(false);
@@ -1168,6 +1230,16 @@ export default function HomePage() {
             <DateField id="sellerSignatureDate" label="Seller Signature Date" tip={tips.signatureDate} value={form.sellerSignatureDate} onChange={patch} />
             <DateField id="buyerSignatureDate" label="Buyer Signature Date" tip={tips.signatureDate} value={form.buyerSignatureDate} onChange={patch} />
           </Section>
+
+          <CommissionSection
+            form={form}
+            agentOptions={(init.agents || []).map((a) => a.name).concat(lists.agent || []).filter((v, i, arr) => arr.indexOf(v) === i)}
+            patchCa={patchCa}
+            patchCaAgency={patchCaAgency}
+            patchCaPayerCompany={patchCaPayerCompany}
+            busy={busy || loadingInit}
+            onCreate={createCommission}
+          />
         </form>
 
         <aside className="previewPanel">
@@ -1195,6 +1267,71 @@ export default function HomePage() {
   );
 }
 
+// Commission Agreement: отдельный документ к MOU. Сумма по умолчанию — 2,1% от
+// Selling Price, поле редактируемое. Платит Продавец (обычно), Покупатель или
+// компания; если платят обе стороны сделки — два отдельных соглашения.
+function CommissionSection({ form, agentOptions, patchCa, patchCaAgency, patchCaPayerCompany, busy, onCreate }) {
+  const agencies = form.caAgencies?.length ? form.caAgencies : [emptyCaAgency(DEFAULT_AGENT)];
+  const isCompany = form.caPayer === "Company";
+  const price = Number(String(form.sellingPrice || "").replace(/,/g, ""));
+  const autoFee = price ? (Math.round(price * 0.021 * 100) / 100).toFixed(2) : "";
+  const company = form.caPayerCompany || emptyCaAgency("");
+  const maxAgencies = isCompany ? 1 : 2;
+
+  const agencyFields = (a, onField, prefix, withFee) => (
+    <>
+      <Field id={`${prefix}Name`} label="Agency" tip="Агентство из справочника AGENTS или любое другое — с MOU не связано" value={a.name} onChange={(_, v) => onField("name", v)} options={agentOptions} />
+      <Field id={`${prefix}Position`} label="Position" tip="Должность представителя (из AGENTS, можно поправить)" value={a.position} onChange={(_, v) => onField("position", v)} placeholder="Manager" />
+      <Field id={`${prefix}Representative`} label="Representative" tip="Представитель агентства (из AGENTS, можно поправить)" value={a.representative} onChange={(_, v) => onField("representative", v)} placeholder="Авто из справочника" />
+      <Field id={`${prefix}License`} label="License" tip="Номер лицензии без #" value={a.license} onChange={(_, v) => onField("license", v)} placeholder="Авто из справочника" />
+      <Field id={`${prefix}Address`} label="Address" tip="Адрес агентства" value={a.address} onChange={(_, v) => onField("address", v)} placeholder="Авто из справочника" />
+      {withFee ? (
+        <AutoMoneyField id={`${prefix}Fee`} label="Commission (VAT inclusive)" tip="По умолчанию 2,1% от Selling Price, можно изменить" value={a.fee} autoValue={autoFee} onChange={(_, v) => onField("fee", v)} placeholder="Пусто = auto 2.1%" />
+      ) : null}
+    </>
+  );
+
+  return (
+    <Section title="Commission Agreement" status={{ state: "optional", label: "Separate document" }} defaultOpen={false}>
+      <SelectField id="caPayer" label="Who pays (First Party)" tip="Обычно платит Продавец. Если платят оба — делаем два отдельных соглашения." value={form.caPayer || "Seller"} onChange={(_, v) => {
+        patchCa("caPayer", v);
+        if (v === "Company" && agencies.length > 1) patchCa("caAgencies", agencies.slice(0, 1));
+      }} options={[{ value: "Seller", label: "Seller (из MOU)" }, { value: "Buyer", label: "Buyer (из MOU)" }, { value: "Company", label: "Company (компания — компании)" }]} />
+      <SelectField id="caPaymentTerm" label="Payment term" tip="Когда платится комиссия" value={form.caPaymentTerm || "on_transfer"} onChange={(_, v) => patchCa("caPaymentTerm", v)} options={[{ value: "on_transfer", label: "In full on the day of transfer" }, { value: "two_days", label: "Within 2 business days after Transfer" }]} />
+      <DateField id="caDate" label="Agreement date" tip="Дата Commission Agreement. Пусто — дата MOU" value={form.caDate} onChange={(_, v) => patchCa("caDate", v)} />
+
+      {isCompany ? (
+        <div style={{ display: "grid", gap: "10px", alignContent: "start" }}>
+          <strong>First Party — company</strong>
+          {agencyFields(company, patchCaPayerCompany, "caPayerCompany", false)}
+        </div>
+      ) : null}
+
+      {agencies.slice(0, maxAgencies).map((a, i) => (
+        <div key={i} style={{ display: "grid", gap: "10px", alignContent: "start" }}>
+          <strong>{i === 0 ? "Second Party" : "Third Party"} — receives commission</strong>
+          {agencyFields(a, (field, v) => patchCaAgency(i, field, v), `caAgency${i}`, true)}
+          {i > 0 ? (
+            <button type="button" className="secondary iconText" onClick={() => patchCa("caAgencies", agencies.filter((_, k) => k !== i))}>
+              <Trash2 size={16} /> Remove agency
+            </button>
+          ) : null}
+        </div>
+      ))}
+
+      {agencies.length < maxAgencies ? (
+        <button type="button" className="secondary iconText" onClick={() => patchCa("caAgencies", [...agencies, emptyCaAgency("")])}>
+          <Plus size={16} /> Add second agency
+        </button>
+      ) : null}
+
+      <button type="button" className="primary iconText" onClick={onCreate} disabled={busy}>
+        {busy ? <Loader2 className="spin" size={16} /> : <FileText size={16} />} Create Commission Agreement
+      </button>
+    </Section>
+  );
+}
+
 function FullScreenLoader({ text }) {
   return <main className="login"><section className="loginPanel"><Loader2 className="spin" /><p>{text}</p></section></main>;
 }
@@ -1216,7 +1353,7 @@ function ResultBox({ result }) {
   return (
     <section className="resultBox">
       <div>
-        <strong>MOU created</strong>
+        <strong>{result.kind || "MOU"} created</strong>
         <p>{result.title}</p>
         {result.remainingPlaceholders?.length ? <p className="warningText">Остались placeholders: {result.remainingPlaceholders.join(", ")}</p> : null}
       </div>

@@ -55,6 +55,19 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 Проверки №1: check-markup, check-scenarios, check-combinations (9216) — 0; №2–№4 — 0.
 Шаблоны №2–№4 по-прежнему с «Agent» — редакция пришла только для №1.
 
+## Commission Agreement (03.10)
+
+Отдельный документ к MOU, секция «Commission Agreement» внизу формы, кнопка Create Commission Agreement,
+маршрут `/api/commission`, логика `lib/mou/commission.js`. Документ кладётся в «Готовые MOU» и пишется в DRAFTS_LOG.
+- Шаблоны (копии .docx Даши `1nwKtbLm…` и `1WGHPes9…`, размечены `scripts/markup-commission.mjs`):
+  7 (1 agency) `13KTXRtzB0lfbjYYza4yeUBZExFQrzpO-VCHGf_aqXCA`, 8 (2 agencies) `1YdVvN1OhhFBtnL-Yu5WfANRDDAAKWQQkYnoXp5yQCHI`.
+- Стороны: Seller (обычно) или Buyer из MOU + 1–2 агентства; или компания + одна компания (шаблон 7,
+  флаг `payer_is_company`). Если платят обе стороны сделки — два отдельных соглашения.
+- Агентства не обязаны совпадать с MOU, реквизиты — из AGENTS. Комиссия по умолчанию 2,1% от Selling Price.
+- Срок оплаты: «in full on the day of transfer» или «within 2 (two) business days following the Transfer Date».
+- Подписи — блок как в конце MOU (FIRST/SECOND/THIRD PARTY, Company, Represented by, Signature, Date, Company Stamp).
+- Ждём текст для договора только между агентствами (до трёх) — шаблона нет.
+
 ## Шаблоны на движке v2
 
 | # | Шаблон | Размечен | Бэкап до разметки | Правок |
