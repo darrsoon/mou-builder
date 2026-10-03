@@ -64,6 +64,7 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 - Стороны: Seller (обычно) или Buyer из MOU + 1–2 агентства; или компания + одна компания (шаблон 7,
   флаг `payer_is_company`). Если платят обе стороны сделки — два отдельных соглашения.
 - Агентства не обязаны совпадать с MOU, реквизиты — из AGENTS. Комиссия по умолчанию 2,1% от Selling Price.
+- Дата соглашения — дата создания (сегодня), выбирается вручную в редких случаях; дата MOU — из формы MOU.
 - Срок оплаты: «in full on the day of transfer» или «within 2 (two) business days following the Transfer Date».
 - Подписи — блок как в конце MOU (FIRST/SECOND/THIRD PARTY, Company, Represented by, Signature, Date, Company Stamp).
 - Ждём текст для договора только между агентствами (до трёх) — шаблона нет.

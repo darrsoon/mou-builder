@@ -773,7 +773,8 @@ export default function HomePage() {
     setActionErrors([]);
     setMessage("Creating Commission Agreement...");
     try {
-      const data = await api("/api/commission", { method: "POST", body: JSON.stringify(form) });
+      // дата соглашения — дата создания, если её не выбрали вручную
+      const data = await api("/api/commission", { method: "POST", body: JSON.stringify({ ...form, caDate: form.caDate || todayFormValue() }) });
       setResult({ ...data, kind: "Commission Agreement" });
       setMessage("Commission Agreement created");
       await loadInit();
@@ -1298,7 +1299,7 @@ function CommissionSection({ form, agentOptions, patchCa, patchCaAgency, patchCa
         if (v === "Company" && agencies.length > 1) patchCa("caAgencies", agencies.slice(0, 1));
       }} options={[{ value: "Seller", label: "Seller (из MOU)" }, { value: "Buyer", label: "Buyer (из MOU)" }, { value: "Company", label: "Company (компания — компании)" }]} />
       <SelectField id="caPaymentTerm" label="Payment term" tip="Когда платится комиссия" value={form.caPaymentTerm || "on_transfer"} onChange={(_, v) => patchCa("caPaymentTerm", v)} options={[{ value: "on_transfer", label: "In full on the day of transfer" }, { value: "two_days", label: "Within 2 business days after Transfer" }]} />
-      <DateField id="caDate" label="Agreement date" tip="Дата Commission Agreement. Пусто — дата MOU" value={form.caDate} onChange={(_, v) => patchCa("caDate", v)} />
+      <DateField id="caDate" label="Agreement date" tip="Дата Commission Agreement — по умолчанию сегодняшняя (дата создания), можно выбрать другую" value={form.caDate || todayFormValue()} onChange={(_, v) => patchCa("caDate", v)} />
 
       {isCompany ? (
         <div style={{ display: "grid", gap: "10px", alignContent: "start" }}>

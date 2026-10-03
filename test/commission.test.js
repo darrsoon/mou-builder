@@ -18,7 +18,10 @@ test("Commission: Продавец платит одному агентству,
   assert.equal(b.replacements.agency1_fee_words, "Twenty-one thousand dirhams");
   assert.equal(b.replacements.payer_role, "Seller");
   assert.equal(b.replacements.payer_name, "Petr Petrov");
-  assert.equal(b.replacements.ca_date, "29/11/2026");
+  assert.match(b.replacements.ca_date, /^\d{2}\/\d{2}\/\d{4}$/); // пусто — сегодня
+  assert.notEqual(b.replacements.ca_date, "29/11/2026");
+  assert.equal(buildCommission({ ...base, caDate: "05/12/2026", caAgencies: [PB] }).replacements.ca_date, "05/12/2026");
+  assert.equal(b.replacements.mou_date, "29/11/2026");
   assert.equal(b.replacements.payment_term, "full on the day of transfer");
   assert.equal(b.flags.payer_is_company, false);
   assert.match(b.replacements.first_party_signature, /<<Name:>> Petr Petrov/);
