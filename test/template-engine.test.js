@@ -388,3 +388,14 @@ test("Cheque Timing «Later»: абзац без реквизитов, рекв�
   const onSigning = v2Form({ buyerChequeNumber: "" });
   assert.equal(validateMou(onSigning).errors.some((e) => e.startsWith("Buyer Security Deposit: заполните")), true);
 });
+
+test("Off-plan: Title Deed Number по умолчанию N/A, в готовых — как ввели", async () => {
+  const { formForTemplate } = await import("../lib/mou/core.js");
+  const { MOU_TEMPLATES } = await import("../lib/mou/config.js");
+  const offplan = MOU_TEMPLATES[0];
+  const ready = MOU_TEMPLATES.find((t) => t.ready);
+  assert.equal(offplan.defaults.titleDeedNumber, "N/A");
+  assert.equal(formForTemplate({ titleDeedNumber: "" }, offplan).titleDeedNumber, "N/A");
+  assert.equal(formForTemplate({ titleDeedNumber: "TD-1" }, offplan).titleDeedNumber, "TD-1");
+  assert.equal(formForTemplate({ titleDeedNumber: "" }, ready).titleDeedNumber, "");
+});

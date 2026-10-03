@@ -691,7 +691,7 @@ test("суммы сборов по умолчанию — свои у каждо
   const { MOU_TEMPLATES } = await import(`../lib/mou/config.js?defaults-check=${Date.now()}`);
   const byLabel = (label) => templateByLabel(MOU_TEMPLATES, label);
   assert.deepEqual(byLabel("2. Off-plan — mortgage").defaults,
-    { admElectronicFee: "1,392", admValuationFee: "925.75" });
+    { admElectronicFee: "1,392", admValuationFee: "925.75", titleDeedNumber: "N/A" });
   assert.deepEqual(byLabel("3. Ready — cash to cash").defaults,
     { admElectronicFee: "919", admValuationFee: "1,037", developerNocFee: "2,750", communityNocFee: "1,050" });
   const t4 = byLabel("4. Ready — cash to mortgage");
