@@ -167,6 +167,33 @@ const PATCHES = {
     { within: "Company: {{buyer_agent_name}}", find: "{{buyer_agent_name}}", bold: false, note: "агентство Покупателя: название" },
     { within: "Company: {{buyer_agent_name}}", find: "{{buyer_agent_representative}}", bold: false, note: "агентство Покупателя: представитель" },
   ],
+  // 03.10 (вечер), обновлённая редакция №1 от Даши (тот же docx 1aX_h4yU…): правки текста
+  // и жирного. Держатель чека, «Mr(s).» у представителя по доверенности и начало абзаца
+  // Продавца в ст.6 собирает код. Абзац про банк Покупателя — ждёт ответа, в какой шаблон
+  "redaction-1003": [
+    { within: "{{seller_party_block}}", find: "hereafter", replace: "hereinafter", note: "Seller: hereinafter" },
+    { find: "additions there to", replace: "additions thereto", note: "определения: thereto" },
+    { within: "an agreed amount payable by the defaulting", find: "Default", bold: true, note: "Liquidated Damages: Default" },
+    { within: "any fee levied by the", find: "Transfer fee", replace: "Transfer Fee", note: "Transfer Fee с заглавной" },
+    { within: "agrees to purchase, the", find: "Selling Price", bold: true, note: "ст.1 B: Selling Price" },
+    { within: "as per the SPA issued", find: "SPA", bold: true, note: "Original Price: SPA" },
+    { within: "(2% from the", find: "transfer date", replace: "Transfer Date", bold: true, note: "ADM: Transfer Date" },
+    { find: "Security deposit:", replace: "Security Deposit:", note: "таблица: Security Deposit" },
+    { within: "to be paid by the Buyer to The Buyer’s Agency", find: "The Buyer’s Agency", replace: "the Buyer’s Agency",
+      runs: [[0, 4, false]], note: "комиссия: to the Buyer’s Agency" },
+    { within: "to be paid by the Seller to The Seller’s Agency", find: "The Seller’s Agency", replace: "the Seller’s Agency",
+      runs: [[0, 4, false]], note: "комиссия: to the Seller’s Agency" },
+    { within: "due to the occurrence of", find: "no more than", insertBefore: "for ", bold: false, note: "Force Majeure: for no more than" },
+    { within: "{{#if !buyer_cheque_details}}Upon signing", find: "agreement", replace: "Agreement", bold: true, note: "ст.6: Agreement (без реквизитов)" },
+    { within: "{{#if buyer_cheque_details}}Upon signing", find: "agreement", replace: "Agreement", bold: true, note: "ст.6: Agreement (с реквизитами)" },
+    { within: "In the event that the Buyer fails", find: "Buyer’s reasonable control", bold: true, note: "ст.7: Buyer’s reasonable control" },
+    { within: "In the event that the Seller fails", find: "Seller’s reasonable control", bold: true, note: "ст.8: Seller’s reasonable control" },
+    { within: "made solely with the", find: "Default", bold: true, note: "own funds: Default" },
+    { find: "In such event,", replace: "In such an event,", note: "одобрение застройщика: In such an event" },
+    { find: "neither Party shall", replace: "neither Party shall", runs: [[0, 8, false], [8, 13, true], [13, 19, false]], note: "…neither Party (жирное)" },
+    { within: "Both Parties agree to comply", find: "KYC", bold: true, note: "AML: KYC" },
+    { find: "other than may be required by law", replace: "other than as may be required by law", note: "конфиденциальность: as may be" },
+  ],
 };
 
 const [documentId, key] = process.argv.slice(2);

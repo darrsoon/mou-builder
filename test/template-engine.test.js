@@ -295,8 +295,8 @@ test("liquidated damages: без агента другой стороны 80% с
 test("depositHolder: матрица держателей", () => {
   // каждая сторона отдаёт чек своему агентству
   const both = v2Form();
-  assert.equal(depositHolder("Buyer", both), "<<The Buyer’s Agency>> as stakeholder");
-  assert.equal(depositHolder("Seller", both), "<<The Seller’s Agency>> as stakeholder");
+  assert.equal(depositHolder("Buyer", both), "the <<Buyer’s Agency>> as <<stakeholder>>");
+  assert.equal(depositHolder("Seller", both), "the <<Seller’s Agency>> as <<stakeholder>>");
 
   // держатель не зависит от того, вписаны ли реквизиты чека
   const delayed = v2Form({ buyerChequeTiming: "Delayed (within X days)" });
@@ -304,12 +304,12 @@ test("depositHolder: матрица держателей", () => {
 
   // своего агентства нет — чек берёт второе
   const buyerAgentOnly = v2Form({ sellerAgentEnabled: "No" });
-  assert.equal(depositHolder("Buyer", buyerAgentOnly), "<<The Buyer’s Agency>> as stakeholder");
-  assert.equal(depositHolder("Seller", buyerAgentOnly), "<<The Buyer’s Agency>> as stakeholder");
+  assert.equal(depositHolder("Buyer", buyerAgentOnly), "the <<Buyer’s Agency>> as <<stakeholder>>");
+  assert.equal(depositHolder("Seller", buyerAgentOnly), "the <<Buyer’s Agency>> as <<stakeholder>>");
 
   const sellerAgentOnly = v2Form({ buyerAgentEnabled: "No" });
-  assert.equal(depositHolder("Buyer", sellerAgentOnly), "<<The Seller’s Agency>> as stakeholder");
-  assert.equal(depositHolder("Seller", sellerAgentOnly), "<<The Seller’s Agency>> as stakeholder");
+  assert.equal(depositHolder("Buyer", sellerAgentOnly), "the <<Seller’s Agency>> as <<stakeholder>>");
+  assert.equal(depositHolder("Seller", sellerAgentOnly), "the <<Seller’s Agency>> as <<stakeholder>>");
 
   const noAgents = v2Form({ sellerAgentEnabled: "No", buyerAgentEnabled: "No" });
   assert.equal(depositHolder("Buyer", noAgents), "the <<Seller>>");
@@ -324,7 +324,7 @@ test("buildReplacementsV2: agencies_word, intro, return parties, подписи"
   });
   const r = buildReplacementsV2(data, calculate(data), {});
   assert.equal(r.agencies_word, "Agencies");
-  assert.equal(r.seller_deposit_intro, "Similarly, upon signing this agreement,");
+  assert.equal(r.seller_deposit_intro, "Similarly, upon signing this <<Agreement>>,");
   assert.equal(r.deposit_return_parties, "the <<Buyer>> and to the <<Seller>>");
   assert.ok(r.buyer_signature_block.includes("<<Name:>> Petr Petrov <<Signature:>>"));
   assert.ok(r.buyer_signature_block.includes("<<Name:>> Anna Petrova"));
@@ -336,7 +336,7 @@ test("buildReplacementsV2: agencies_word, intro, return parties, подписи"
   const singleAgent = v2Form({ buyerAgentEnabled: "No", buyerDepositEnabled: "No" });
   const r2 = buildReplacementsV2(singleAgent, calculate(singleAgent), {});
   assert.equal(r2.agencies_word, "the Agency");
-  assert.equal(r2.seller_deposit_intro, "Upon signing this agreement,");
+  assert.equal(r2.seller_deposit_intro, "Upon signing this <<Agreement>>,");
   assert.equal(r2.deposit_return_parties, "the <<Seller>>");
 });
 
