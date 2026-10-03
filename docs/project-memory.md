@@ -143,16 +143,23 @@
 
 ## 9. Прямой доступ бота к Google (OAuth)
 
-Cloud-проект `mou-bot-506311` (личный аккаунт Алины), OAuth-клиент Desktop `mou-bot-cli`,
-приложение «MOU Bot» в режиме Testing, тестовый пользователь — tsokuraline@gmail.com.
-Scopes: documents, drive, spreadsheets.
+С 03.10.2026 бот работает от **d.kim@primebridge.estate**. Прежний проект `mou-bot-506311`
+и клиент `mou-bot-cli` (аккаунт Алины) больше не используются.
 
-- Ключи и refresh token — в `.env.local` (`GOOGLE_BOT_*`), в гит не попадают.
-- Клиенты: `scripts/google-bot.mjs` → `getBotClients()` даёт `docs` / `drive` / `sheets`.
-- Перевыпуск токена: `node scripts/google-auth.mjs`, дальше открыть напечатанный AUTH_URL
-  в браузере Playwright и подтвердить. В режиме Testing токен живёт 7 дней.
-- Опубликовать приложение (чтобы токен не истекал) нельзя: Google требует сайт
-  с политикой конфиденциальности.
+- Проект Google Cloud «MOU App» (`prime-bridge-ad-site`, аккаунт adminad@primebridge.estate),
+  Docs/Drive/Sheets включены, consent screen Internal — токен не истекает через 7 дней.
+- OAuth-клиент бота — `mou-bot-web` (Web application, Client ID начинается с
+  `167360552151-u8vg04…`), redirect `https://developers.google.com/oauthplayground`.
+  Клиент `MOU App` (`167360552151-r8jli8…`) — вход на сайт, для бота не годится, не трогать.
+- Refresh token получается в OAuth Playground со своими credentials (шестерёнка →
+  Use your own OAuth credentials), scopes documents, drive, spreadsheets, вход под d.kim.
+- В облачных сессиях Claude ключи — в переменных окружения «Work»: `GOOGLE_BOT_CLIENT_ID`,
+  `GOOGLE_BOT_CLIENT_SECRET`, `GOOGLE_BOT_REFRESH_TOKEN`. `scripts/google-bot.mjs` берёт их
+  оттуда, если нет `.env.local`.
+- `invalid_client` — ID и секрет не от одного клиента или вставлены с ошибкой;
+  `invalid_grant` — токен отозван, получить новый в Playground.
+- ID шаблонов, таблицы и папки сменились 03.10 — актуальные в `lib/mou/config.js`;
+  ID в разделах 4 и 10 ниже устарели.
 
 ## 10. Актуальные адреса (22.08.2026)
 
