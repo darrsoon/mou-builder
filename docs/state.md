@@ -60,6 +60,8 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 - Суммы без «.00», если копеек нет (`money()` в helpers — все шаблоны и Commission Agreement); с копейками — два знака.
 - «provided» → «issued» в строках депозита таблицы ст.4 в шаблонах №5, №6, C3-1, C3-2 (текст-образец),
   поиск в `scripts/markup/offplan-edits.mjs` обновлён под новый текст.
+- C3-1, C3-2: строка депозита — «AED 000,000.00 / (10% of the Selling Price, Security Deposit cheque issued by the Buyer
+  in favour of the Seller)», оформление как в №1 (при разметке C3 искать уже этот текст).
 - Имена файлов: «<docTitle> <юнит>» (docTitle в реестре `lib/mou/config.js`), «Commission Agreement <юнит>».
 
 ## Commission Agreement (03.10)
