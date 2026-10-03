@@ -1685,7 +1685,10 @@ function CheckboxField({ id, label, tip, checked, onChange, disabled = false }) 
 
 function ComboInput({ id, value, options, onChange }) {
   const [open, setOpen] = useState(false);
-  const normalized = String(value || "").trim().toLowerCase();
+  // фильтруем только по тому, что печатают сейчас: при открытии списка с уже
+  // выбранным значением показываем все варианты, иначе виден один выбранный
+  const [typing, setTyping] = useState(false);
+  const normalized = typing ? String(value || "").trim().toLowerCase() : "";
   const filtered = normalized
     ? options.filter((option) => String(option).toLowerCase().includes(normalized))
     : options;
@@ -1696,16 +1699,17 @@ function ComboInput({ id, value, options, onChange }) {
         id={id}
         value={value || ""}
         autoComplete="off"
-        onFocus={() => setOpen(true)}
+        onFocus={() => { setTyping(false); setOpen(true); }}
         onChange={(e) => {
           onChange(e.target.value);
+          setTyping(true);
           setOpen(true);
         }}
         onKeyDown={(e) => {
           if (e.key === "Escape") setOpen(false);
         }}
       />
-      <button className="comboToggle" type="button" aria-label="Open options" onMouseDown={(e) => e.preventDefault()} onClick={() => setOpen((current) => !current)}>
+      <button className="comboToggle" type="button" aria-label="Open options" onMouseDown={(e) => e.preventDefault()} onClick={() => { setTyping(false); setOpen((current) => !current); }}>
         <ChevronDown size={16} />
       </button>
       {open && (
