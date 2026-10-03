@@ -224,7 +224,11 @@ function expected(c) {
   };
 }
 
-const fmt = (n) => new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+// как money() в lib/mou/helpers.js: без «.00», если копеек нет
+const fmt = (n) => {
+  const fils = Math.round(Math.abs(n) * 100) % 100 !== 0;
+  return new Intl.NumberFormat("en-US", { minimumFractionDigits: fils ? 2 : 0, maximumFractionDigits: 2 }).format(n);
+};
 
 const DEFECTS = [
   [/\{\{/, "неподставленный маркер"],
@@ -315,7 +319,7 @@ for (const c of combos) {
   }
 
   // все суммы в тексте — только ожидаемые
-  const seen = new Set(Array.from(text.matchAll(/AED\s([\d,]+\.\d{2})/g), (m) => m[1]));
+  const seen = new Set(Array.from(text.matchAll(/AED\s(\d[\d,]*(?:\.\d{2})?)/g), (m) => m[1]));
   for (const v of seen) if (!e.money.has(v)) found.push(`сумма AED ${v} не из этой сделки`);
 
   // каждая обязательная сумма — на своём месте, а не просто «где-то в тексте»

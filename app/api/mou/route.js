@@ -38,7 +38,7 @@ export async function POST(request) {
     }
 
     const calc = calculate(data);
-    const title = buildDraftTitle(data);
+    const title = buildDraftTitle(data, templateEntry);
 
     let document;
     let rules;

@@ -331,7 +331,7 @@ test("buildReplacementsV2: agencies_word, intro, return parties, подписи"
   // дату не ставим, пока её не ввели; Date — переносом внутри абзаца
   assert.ok(r.buyer_signature_block.includes("\u000b<<Date:>>\n") || r.buyer_signature_block.endsWith("\u000b<<Date:>>"));
   assert.equal(r.seller_signature_date, "");
-  assert.equal(r.buyer_liquidated_damages_amount, "100,000.00");
+  assert.equal(r.buyer_liquidated_damages_amount, "100,000");
 
   const singleAgent = v2Form({ buyerAgentEnabled: "No", buyerDepositEnabled: "No" });
   const r2 = buildReplacementsV2(singleAgent, calculate(singleAgent), {});

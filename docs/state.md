@@ -55,6 +55,13 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 Проверки №1: check-markup, check-scenarios, check-combinations (9216) — 0; №2–№4 — 0.
 Шаблоны №2–№4 по-прежнему с «Agent» — редакция пришла только для №1.
 
+## Правки 03.10 (вечер)
+
+- Суммы без «.00», если копеек нет (`money()` в helpers — все шаблоны и Commission Agreement); с копейками — два знака.
+- «provided» → «issued» в строках депозита таблицы ст.4 в шаблонах №5, №6, C3-1, C3-2 (текст-образец),
+  поиск в `scripts/markup/offplan-edits.mjs` обновлён под новый текст.
+- Имена файлов: «<docTitle> <юнит>» (docTitle в реестре `lib/mou/config.js`), «Commission Agreement <юнит>».
+
 ## Commission Agreement (03.10)
 
 Отдельный документ к MOU, секция «Commission Agreement» внизу формы, кнопка Create Commission Agreement,

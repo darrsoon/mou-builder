@@ -14,7 +14,7 @@ const base = {
 test("Commission: Продавец платит одному агентству, 2,1% по умолчанию", () => {
   const b = buildCommission({ ...base, caAgencies: [PB] });
   assert.equal(b.templateId, COMMISSION_TEMPLATES.oneAgency);
-  assert.equal(b.replacements.agency1_fee, "21,000.00");
+  assert.equal(b.replacements.agency1_fee, "21,000");
   assert.equal(b.replacements.agency1_fee_words, "Twenty-one thousand dirhams");
   assert.equal(b.replacements.payer_role, "Seller");
   assert.equal(b.replacements.payer_name, "Petr Petrov");
@@ -34,8 +34,8 @@ test("Commission: Покупатель, два агентства, сумма в
     caAgencies: [{ ...PB, name: "OTHER REAL ESTATE", fee: "23,625" }, PB] });
   assert.equal(b.templateId, COMMISSION_TEMPLATES.twoAgencies);
   assert.equal(b.replacements.payer_name, "Anna Ivanova");
-  assert.equal(b.replacements.agency1_fee, "23,625.00");
-  assert.equal(b.replacements.agency2_fee, "21,000.00");
+  assert.equal(b.replacements.agency1_fee, "23,625");
+  assert.equal(b.replacements.agency2_fee, "21,000");
   assert.match(b.replacements.payment_term, /2 \(two\) business days/);
   assert.ok(b.replacements.third_party_signature);
 });
@@ -54,4 +54,12 @@ test("Commission: проверка обязательных полей", () => {
   const bad = validateCommission({ ...base, unitNumber: "", caAgencies: [{ name: "" }] });
   assert.equal(bad.ok, false);
   assert.ok(bad.errors.some((e) => e.includes("Unit Number")));
+});
+
+test("Имена файлов: «<договор> <юнит>»", async () => {
+  const { buildDraftTitle, normalizeForm } = await import("../lib/mou/core.js");
+  const { MOU_TEMPLATES } = await import("../lib/mou/config.js");
+  const data = normalizeForm({ unitNumber: "Manarat-B1-01-00" });
+  assert.equal(buildDraftTitle(data, MOU_TEMPLATES[0]), "Off-plan Memorandum of Understanding (MOU) Manarat-B1-01-00");
+  assert.equal(buildCommission({ ...base, caAgencies: [PB] }).title, "Commission Agreement Manarat-B1-01-00");
 });

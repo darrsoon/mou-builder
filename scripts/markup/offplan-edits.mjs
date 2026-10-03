@@ -208,9 +208,9 @@ export function buildEdits(D) {
   { find: "Security deposit:", replace: "{{#row any_deposit}}Security deposit:" },
   // строку целиком собирает движок: при проценте — «10% of the Selling Price…»,
   // при фиксированной сумме — «Security Deposit…». Разметка по кускам это не умела.
-  { find: "AED 000,000.00 / (10% of the Selling Price provided by the Buyer to the Seller)",
+  { find: "AED 000,000.00 / (10% of the Selling Price issued by the Buyer to the Seller)",
     replace: "{{#if buyer_deposit}}{{buyer_security_deposit_table_line}}{{/if}}", note: "строка депозита Покупателя" },
-  { find: "AED 000,000.00 / (10% of the Selling Price provided by the Seller to the Buyer)",
+  { find: "AED 000,000.00 / (10% of the Selling Price issued by the Seller to the Buyer)",
     replace: "{{#if seller_deposit}}{{seller_security_deposit_table_line}}{{/if}}", note: "строка депозита Продавца" },
 
   { find: "Agency Fee:", replace: "{{#row any_agent_fee}}Agency Fee:" },

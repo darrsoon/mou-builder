@@ -551,7 +551,7 @@ test("article 6 deposit block supports delayed cheque timing and drops agency la
   const replacements = buildReplacements(data, calc, {});
   const block = replacements.seller_security_deposit_article6_block;
   
-  const expected = "Upon signing this agreement, the <<Seller>> undertakes to provide a sum of <<AED 360,000.00>> as a holding <<Security Deposit cheque>> within <<5 (Five) calendar days>> from the date of this MOU. This cheque is to secure the purchase of the <<Property>> and will be held by <<PRIME BRIDGE REAL ESTATE BROKERAGE L.L.C - S.P.C>> as stakeholder until the <<Transfer Date>> in accordance with the terms of this <<MOU>>.";
+  const expected = "Upon signing this agreement, the <<Seller>> undertakes to provide a sum of <<AED 360,000>> as a holding <<Security Deposit cheque>> within <<5 (Five) calendar days>> from the date of this MOU. This cheque is to secure the purchase of the <<Property>> and will be held by <<PRIME BRIDGE REAL ESTATE BROKERAGE L.L.C - S.P.C>> as stakeholder until the <<Transfer Date>> in accordance with the terms of this <<MOU>>.";
   
   if (block !== expected) {
     throw new Error(`Deposit block does not match expected output.\nEXPECTED: ${expected}\nACTUAL:   ${block}`);
@@ -590,7 +590,7 @@ test("ADM-сборы ипотечного шаблона: ручное знач�
   const data = normalizeForm({ ...base, admElectronicFee: "1,392", admValuationFee: "925.75" });
   const r = buildReplacementsV2(data, calculate(data), {});
   assert.equal(r.adm_fee, "106,521.70");
-  assert.equal(r.adm_electronic_fee, "1,392.00");
+  assert.equal(r.adm_electronic_fee, "1,392");
   assert.equal(r.adm_valuation_fee, "925.75");
 });
 
@@ -729,7 +729,7 @@ test("готовый объект с ипотекой Продавца: сбор
   const p = buildPreview(form, undefined, template);
   assert.equal(p.articles.length, 18);
   assert.equal(p.replacements.article_seller_mortgage_number, "10");
-  assert.equal(p.replacements.mortgage_release_fee, "960.00");
+  assert.equal(p.replacements.mortgage_release_fee, "960");
   assert.equal(p.replacements.seller_bank_name, "Dubai Islamic Bank");
   assert.equal(p.data.amountToSellerPaymentMethod, "manager_cheque");
   // по умолчанию Покупатель платит своими деньгами (Алина, 13.09.2026)
@@ -752,7 +752,7 @@ test("готовый объект: ADM Fee без админ-части, аре�
   assert.equal(p.calc.admFee, 1670000 * 0.02);
   assert.equal(p.replacements.annual_rent_words, "One hundred fifty thousand dirhams");
   assert.equal(p.replacements.tenancy_end_date, "12 December 2027");
-  assert.equal(p.replacements.developer_noc_fee, "2,750.00");
+  assert.equal(p.replacements.developer_noc_fee, "2,750");
   assert.equal(p.replacements.project_number, "2023/278930");
 });
 
