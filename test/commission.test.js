@@ -36,7 +36,9 @@ test("Commission: Покупатель, два агентства, сумма в
   assert.equal(b.replacements.payer_name, "Anna Ivanova");
   assert.equal(b.replacements.agency1_fee, "23,625");
   assert.equal(b.replacements.agency2_fee, "21,000");
-  assert.match(b.replacements.payment_term, /2 \(two\) business days/);
+  assert.equal(b.replacements.payment_term, "full within 2 (two) business days following the Transfer Date");
+  const five = buildCommission({ ...base, caPaymentTerm: "within_days", caPaymentDays: "5", caAgencies: [PB] });
+  assert.equal(five.replacements.payment_term, "full within 5 (five) business days following the Transfer Date");
   assert.ok(b.replacements.third_party_signature);
 });
 

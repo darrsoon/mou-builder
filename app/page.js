@@ -138,6 +138,7 @@ const initialForm = {
   caAgencies: [emptyCaAgency(DEFAULT_AGENT)],
   caDate: "",
   caPaymentTerm: "on_transfer",
+  caPaymentDays: "2",
   buyerChequeThirdParty: "No",
   sellerChequeThirdParty: "No",
   agencyFeeSeller: "",
@@ -704,24 +705,54 @@ export default function HomePage() {
     }
   }
 
-  async function createMou() {
+  // Проверки перед созданием MOU: доли сторон и выбранный шаблон
+  function mouPrecheck() {
     const totalSellers = form.sellers.reduce((sum, p) => sum + (Number(String(p.ownershipPercent || "").replace(",", ".")) || 0), 0);
     const totalBuyers = form.buyers.reduce((sum, p) => sum + (Number(String(p.ownershipPercent || "").replace(",", ".")) || 0), 0);
     
     if (Math.round(totalSellers * 100) / 100 !== 100) {
       setActionErrors(["Сумма долей продавцов (Seller) должна быть ровно 100%."]);
-      return;
+      return false;
     }
     if (Math.round(totalBuyers * 100) / 100 !== 100) {
       setActionErrors(["Сумма долей покупателей (Buyer) должна быть ровно 100%."]);
-      return;
+      return false;
     }
 
     if (hasTemplateChoice && !templateId) {
       setActionErrors(["Выберите шаблон договора в разделе Template."]);
-      return;
+      return false;
     }
+    return true;
+  }
 
+  // MOU и Commission Agreement одной кнопкой: сначала MOU, затем соглашение по тем же данным
+  async function createBoth() {
+    if (!mouPrecheck()) return;
+    setBusy(true);
+    setResult(null);
+    setActionErrors([]);
+    const created = [];
+    try {
+      setMessage("Creating MOU...");
+      created.push(await api("/api/mou", { method: "POST", body: JSON.stringify({ ...form, templateId }) }));
+      setMessage("Creating Commission Agreement...");
+      const ca = await api("/api/commission", { method: "POST", body: JSON.stringify({ ...form, caDate: form.caDate || todayFormValue() }) });
+      created.push({ ...ca, kind: "Commission Agreement" });
+      setResult(created);
+      setMessage("MOU and Commission Agreement created");
+      await loadInit();
+    } catch (error) {
+      if (created.length) setResult(created);
+      setActionErrors(error.payload?.validation?.errors || [error.message]);
+      setMessage(error.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function createMou() {
+    if (!mouPrecheck()) return;
     setBusy(true);
     setResult(null);
     setActionErrors([]);
@@ -949,7 +980,7 @@ export default function HomePage() {
       </header>
 
       {message && <StatusLine text={message} type={message.includes("created") || message.includes("loaded") ? "ok" : actionErrors.length ? "error" : "info"} />}
-      {result && <ResultBox result={result} />}
+      {result && [].concat(result).map((r) => <ResultBox key={r.url} result={r} />)}
 
       <SectionNav items={navItems} />
 
@@ -1158,6 +1189,7 @@ export default function HomePage() {
                 <>
                   <Field id="sellerAgentName" label="Seller Agent" tip={tips.sellerAgentName} value={form.sellerAgentName} onChange={(_, value) => patchAgentName("seller", value)} list="agentsList" options={(init.agents || []).map((a) => a.name).concat(lists.agent || []).filter((v, i, arr) => arr.indexOf(v) === i)} />
                   <Field id="sellerAgentRepresentative" label="Representative" tip="Представитель агентства (из вкладки AGENTS, можно поправить)" value={form.sellerAgentRepresentative} onChange={patch} placeholder="Авто из справочника" />
+                  <Field id="sellerAgentPosition" label="Position" tip="Должность представителя (из вкладки AGENTS, можно поправить). Пусто — Manager" value={form.sellerAgentPosition} onChange={patch} placeholder="Manager" />
                   <Field id="sellerAgentLicense" label="License" tip="Номер лицензии агентства" value={form.sellerAgentLicense} onChange={patch} placeholder="Авто из справочника" />
                   <Field id="sellerAgentAddress" label="Address" tip="Адрес агентства" value={form.sellerAgentAddress} onChange={patch} placeholder="Авто из справочника" />
                   <CheckboxField id="sellerAgentFeeEnabled" label="Agency Fee enabled" tip="Есть ли комиссия у агентства продавца? Если снять — строка комиссии уйдет из договора (шаблон v2)" checked={form.sellerAgentFeeEnabled !== "No"} onChange={(_, checked) => patch("sellerAgentFeeEnabled", checked ? "Yes" : "No")} />
@@ -1174,6 +1206,7 @@ export default function HomePage() {
                 <>
                   <Field id="buyerAgentName" label="Buyer Agent" tip={tips.buyerAgentName} value={form.buyerAgentName} onChange={(_, value) => patchAgentName("buyer", value)} list="agentsList" options={(init.agents || []).map((a) => a.name).concat(lists.agent || []).filter((v, i, arr) => arr.indexOf(v) === i)} />
                   <Field id="buyerAgentRepresentative" label="Representative" tip="Представитель агентства (из вкладки AGENTS, можно поправить)" value={form.buyerAgentRepresentative} onChange={patch} placeholder="Авто из справочника" />
+                  <Field id="buyerAgentPosition" label="Position" tip="Должность представителя (из вкладки AGENTS, можно поправить). Пусто — Manager" value={form.buyerAgentPosition} onChange={patch} placeholder="Manager" />
                   <Field id="buyerAgentLicense" label="License" tip="Номер лицензии агентства" value={form.buyerAgentLicense} onChange={patch} placeholder="Авто из справочника" />
                   <Field id="buyerAgentAddress" label="Address" tip="Адрес агентства" value={form.buyerAgentAddress} onChange={patch} placeholder="Авто из справочника" />
                   <CheckboxField id="buyerAgentFeeEnabled" label="Agency Fee enabled" tip="Есть ли комиссия у агентства покупателя? Если снять — строка комиссии уйдет из договора (шаблон v2)" checked={form.buyerAgentFeeEnabled !== "No"} onChange={(_, checked) => patch("buyerAgentFeeEnabled", checked ? "Yes" : "No")} />
@@ -1263,6 +1296,7 @@ export default function HomePage() {
         busy={busy}
         disabled={busy || loadingInit}
         onCreate={createMou}
+        onCreateBoth={createBoth}
       />
     </main>
   );
@@ -1275,7 +1309,7 @@ function CommissionSection({ form, agentOptions, patchCa, patchCaAgency, patchCa
   const agencies = form.caAgencies?.length ? form.caAgencies : [emptyCaAgency(DEFAULT_AGENT)];
   const isCompany = form.caPayer === "Company";
   const price = Number(String(form.sellingPrice || "").replace(/,/g, ""));
-  const autoFee = price ? (Math.round(price * 0.021 * 100) / 100).toFixed(2) : "";
+  const autoFee = price ? String(Math.round(price * 0.021 * 100) / 100) : "";
   const company = form.caPayerCompany || emptyCaAgency("");
   const maxAgencies = isCompany ? 1 : 2;
 
@@ -1298,7 +1332,10 @@ function CommissionSection({ form, agentOptions, patchCa, patchCaAgency, patchCa
         patchCa("caPayer", v);
         if (v === "Company" && agencies.length > 1) patchCa("caAgencies", agencies.slice(0, 1));
       }} options={[{ value: "Seller", label: "Seller (из MOU)" }, { value: "Buyer", label: "Buyer (из MOU)" }, { value: "Company", label: "Company (компания — компании)" }]} />
-      <SelectField id="caPaymentTerm" label="Payment term" tip="Когда платится комиссия" value={form.caPaymentTerm || "on_transfer"} onChange={(_, v) => patchCa("caPaymentTerm", v)} options={[{ value: "on_transfer", label: "In full on the day of transfer" }, { value: "two_days", label: "Within 2 business days after Transfer" }]} />
+      <SelectField id="caPaymentTerm" label="Payment term" tip="Когда платится комиссия" value={form.caPaymentTerm === "two_days" ? "within_days" : form.caPaymentTerm || "on_transfer"} onChange={(_, v) => patchCa("caPaymentTerm", v)} options={[{ value: "on_transfer", label: "In full on the day of transfer" }, { value: "within_days", label: "Within N business days after Transfer" }]} />
+      {form.caPaymentTerm === "within_days" || form.caPaymentTerm === "two_days" ? (
+        <Field id="caPaymentDays" label="Business days" tip="Сколько рабочих дней после Transfer Date на оплату. В договоре: within 2 (two) business days following the Transfer Date" value={form.caPaymentDays ?? "2"} onChange={(_, v) => patchCa("caPaymentDays", v)} placeholder="2" />
+      ) : null}
       <DateField id="caDate" label="Agreement date" tip="Дата Commission Agreement — по умолчанию сегодняшняя (дата создания), можно выбрать другую" value={form.caDate || todayFormValue()} onChange={(_, v) => patchCa("caDate", v)} />
 
       {isCompany ? (
@@ -1389,16 +1426,21 @@ function SectionNav({ items }) {
   );
 }
 
-function ActionBar({ missingTotal, sellingPrice, busy, disabled, onCreate }) {
+function ActionBar({ missingTotal, sellingPrice, busy, disabled, onCreate, onCreateBoth }) {
   return (
     <div className="actionBar">
       <div className="actionBarInfo">
         <strong>{missingTotal ? `Не заполнено полей: ${missingTotal}` : "Все обязательные поля заполнены"}</strong>
         {sellingPrice ? <span>Selling Price — AED {sellingPrice}</span> : null}
       </div>
-      <button className="primary iconText" onClick={onCreate} disabled={disabled}>
-        {busy ? <Loader2 className="spin" size={16} /> : <FileText size={16} />} Create MOU
-      </button>
+      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+        <button className="secondary iconText" onClick={onCreateBoth} disabled={disabled}>
+          {busy ? <Loader2 className="spin" size={16} /> : <FileText size={16} />} Create MOU and Commission Agreement
+        </button>
+        <button className="primary iconText" onClick={onCreate} disabled={disabled}>
+          {busy ? <Loader2 className="spin" size={16} /> : <FileText size={16} />} Create MOU
+        </button>
+      </div>
     </div>
   );
 }

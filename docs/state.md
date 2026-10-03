@@ -79,7 +79,8 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
   флаг `payer_is_company`). Если платят обе стороны сделки — два отдельных соглашения.
 - Агентства не обязаны совпадать с MOU, реквизиты — из AGENTS. Комиссия по умолчанию 2,1% от Selling Price.
 - Дата соглашения — дата создания (сегодня), выбирается вручную в редких случаях; дата MOU — из формы MOU.
-- Срок оплаты: «in full on the day of transfer» или «within 2 (two) business days following the Transfer Date».
+- Срок оплаты: «in full on the day of transfer» или «within N (words) business days following the Transfer Date», N в форме.
+- Кнопка «Create MOU and Commission Agreement» в нижней панели — оба документа по одной форме.
 - Подписи — блок как в конце MOU (FIRST/SECOND/THIRD PARTY, Company, Represented by, Signature, Date, Company Stamp).
 - Вёрстка (`patch-commission-layout.mjs`): дата соглашения в шапке ({{ca_date_header}}, «3 October, 2026»),
   пустые строки перед п.3 и п.4, заголовки держатся со следующим абзацем.
