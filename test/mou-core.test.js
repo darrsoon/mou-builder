@@ -664,8 +664,12 @@ test("движок v2: снятая галочка статьи не сдвиг�
   assert.equal(noDeposits.replacements.article_electronic_signature_number, "16");
 });
 
+// Шаблоны ищем по названию, а не по ID: ID меняются при переносе документов.
+const templateByLabel = (templates, label) => templates.find((x) => x.label === label);
+
 test("MOU_TEMPLATES из окружения не отменяет движок шаблона", async () => {
-  const id = "1RjrVeLZG65Fyzc5h0TFR0sks8D--jJocEXyF2H9fg9g";
+  const { MOU_TEMPLATES: registry } = await import(`../lib/mou/config.js?id-lookup=${Date.now()}`);
+  const { id } = templateByLabel(registry, "2. Off-plan — mortgage");
   process.env.MOU_TEMPLATES = JSON.stringify([{ id, label: "2. Off-plan — mortgage" }]);
   const { MOU_TEMPLATES } = await import(`../lib/mou/config.js?env-check=${Date.now()}`);
   delete process.env.MOU_TEMPLATES;
@@ -677,7 +681,7 @@ test("MOU_TEMPLATES из окружения не отменяет движок �
 
 test("реестр: №3 Ready cash to cash — движок v2, признак готового объекта", async () => {
   const { MOU_TEMPLATES } = await import(`../lib/mou/config.js?registry-check=${Date.now()}`);
-  const t = MOU_TEMPLATES.find((x) => x.id === "1d-bXwKBO9J8fUQ35vqKWw5KzADJ6lB6fmD4hxeSjy3k");
+  const t = templateByLabel(MOU_TEMPLATES, "3. Ready — cash to cash");
   assert.equal(t.engine, "v2");
   assert.equal(t.articles, "ready-cash-v2");
   assert.equal(t.ready, true);
@@ -685,12 +689,12 @@ test("реестр: №3 Ready cash to cash — движок v2, признак 
 
 test("суммы сборов по умолчанию — свои у каждого шаблона", async () => {
   const { MOU_TEMPLATES } = await import(`../lib/mou/config.js?defaults-check=${Date.now()}`);
-  const byId = (id) => MOU_TEMPLATES.find((x) => x.id === id);
-  assert.deepEqual(byId("1RjrVeLZG65Fyzc5h0TFR0sks8D--jJocEXyF2H9fg9g").defaults,
+  const byLabel = (label) => templateByLabel(MOU_TEMPLATES, label);
+  assert.deepEqual(byLabel("2. Off-plan — mortgage").defaults,
     { admElectronicFee: "1,392", admValuationFee: "925.75" });
-  assert.deepEqual(byId("1d-bXwKBO9J8fUQ35vqKWw5KzADJ6lB6fmD4hxeSjy3k").defaults,
+  assert.deepEqual(byLabel("3. Ready — cash to cash").defaults,
     { admElectronicFee: "919", admValuationFee: "1,037", developerNocFee: "2,750", communityNocFee: "1,050" });
-  const t4 = byId("1slUJ8aQCw8nKIhlKBHWvhUFkLWnLH3k_N_OtwH5sm3Y");
+  const t4 = byLabel("4. Ready — cash to mortgage");
   assert.equal(t4.engine, "v2");
   assert.equal(t4.articles, "ready-mortgage-v2");
   assert.ok(t4.ready && t4.mortgage && t4.unitVerification);
