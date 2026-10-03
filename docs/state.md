@@ -3,7 +3,7 @@
 Оперативная память проекта: что сделано, что ждём, что дальше. Общий план —
 `plan.md`, правила и адреса — `project-memory.md`.
 
-Обновлено: 13.09.2026, вечер
+Обновлено: 03.10.2026
 
 ## Сейчас
 
@@ -119,9 +119,14 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
    ADM Electronic 1,392, строка Unit Verification есть.
 3. C3-1 и C3-2 — нужен блок стороны-юрлица, его ещё нет.
 
-Токен бота к Google в тестовом режиме живёт 7 дней. Ошибка `invalid_grant` — значит
-истёк: `node scripts/google-auth.mjs`, ссылку открыть в браузере Playwright, выбрать
-tsokuraline@gmail.com, «Продолжить», отметить все права. Последний перевыпуск — 13.09.
+Бот к Google с 03.10 работает от d.kim@primebridge.estate: проект Google Cloud «MOU App»
+(`prime-bridge-ad-site`, аккаунт adminad@primebridge.estate), consent screen Internal —
+токен не истекает через 7 дней. OAuth-клиент бота — `mou-bot-web` (Web application,
+redirect `https://developers.google.com/oauthplayground`), refresh token получен через
+OAuth Playground со своими credentials. Клиент `MOU App` в том же проекте — вход на сайт,
+не трогать. В облачных сессиях Claude ключи лежат в переменных окружения «Work»
+(`GOOGLE_BOT_CLIENT_ID` / `_SECRET` / `_REFRESH_TOKEN`); `scripts/google-bot.mjs` берёт их
+оттуда, если нет `.env.local`. Перевыпуск — так же через Playground.
 
 Порядок работы с новым шаблоном: прочитать документ с комментариями → задать Алине
 вопросы по расхождениям → разметить черновик → проверки → пакет договоров →
