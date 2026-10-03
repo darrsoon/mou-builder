@@ -118,6 +118,55 @@ const PATCHES = {
     { within: "{{#if seller_cheque_details}}{{seller_deposit_intro}}", find: "MOU", bold: true, note: "…MOU" },
     { find: " cheque{{#if both_deposits}}s{{/if}} shall be returned to {{deposit_return_parties}}", bold: false, note: "возврат чеков: жирное только Security Deposit" },
   ],
+  // 03.10, строка Security deposit по образцу Даши: жёлтым и жирным только сумма,
+  // жирные Selling Price / Security Deposit / Buyer / Seller, пустая строка между
+  // Покупателем и Продавцом (при одном депозите движок убирает её вместе с абзацем).
+  // Текст строки переехал из кода в шаблон, код даёт только {{…_deposit_basis}}
+  "deposit-row": ["buyer", "seller"].map((side) => {
+    const [who, whom] = side === "buyer" ? ["Buyer", "Seller"] : ["Seller", "Buyer"];
+    const parts = [
+      [`{{#if ${side}_deposit}}`, true, true],
+      [`AED {{${side}_deposit_amount}}`, true, true],
+      [" / ", true, false],
+      [`({{${side}_deposit_basis}}`, false, false],
+      ["Security Deposit", true, false],
+      [" cheque issued by the ", false, false],
+      [who, true, false],
+      [" in favour of the ", false, false],
+      [whom, true, false],
+      [")", false, false],
+      ["{{/if}}", false, false],
+    ];
+    let text = "";
+    const runs = [];
+    const noHighlight = [];
+    for (const [t, bold, yellow] of parts) {
+      runs.push([text.length, text.length + t.length, bold]);
+      if (!yellow) noHighlight.push([text.length, text.length + t.length]);
+      text += t;
+    }
+    if (side === "buyer") text += "\n"; // пустой абзац-разделитель перед строкой Продавца
+    return {
+      find: `{{#if ${side}_deposit}}{{${side}_security_deposit_table_line}}{{/if}}`,
+      replace: text, runs, noHighlight, note: `строка Security deposit: ${who}`,
+    };
+  }),
+  // 03.10: перед «Article 13» (одобрение застройщика) не было пустой строки, зато была
+  // лишняя после заголовка — как в образце Даши: пустая строка до, текст сразу под заголовком
+  "article13-spacing": [
+    { find: "Article {{article_developer_approval_number}}", insertBefore: "\n", note: "пустая строка перед заголовком" },
+    { find: "\nCompletion of the transfer", replace: "Completion of the transfer", bold: false, note: "убрать пустую строку после заголовка" },
+  ],
+  // 03.10: в подписях жирные только подписи полей — имена сторон, название агентства
+  // и представитель обычным (жирное «Name:» и т.п. код ставит сам через << >>)
+  "signature-names-plain": [
+    { find: "{{seller_signature_block}}", bold: false, note: "THE SELLER: блок подписи" },
+    { find: "{{buyer_signature_block}}", bold: false, note: "THE BUYER: блок подписи" },
+    { within: "SELLER’S AGENCY", find: "{{seller_agent_name}}", bold: false, note: "агентство Продавца: название" },
+    { within: "SELLER’S AGENCY", find: "{{seller_agent_representative}}", bold: false, note: "агентство Продавца: представитель" },
+    { within: "Company: {{buyer_agent_name}}", find: "{{buyer_agent_name}}", bold: false, note: "агентство Покупателя: название" },
+    { within: "Company: {{buyer_agent_name}}", find: "{{buyer_agent_representative}}", bold: false, note: "агентство Покупателя: представитель" },
+  ],
 };
 
 const [documentId, key] = process.argv.slice(2);

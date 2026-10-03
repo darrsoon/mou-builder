@@ -119,6 +119,13 @@ export async function applyEdit(docs, documentId, edit) {
           textStyle: { bold }, fields: "bold",
         } });
       }
+      // noHighlight: [[от, до], ...] — снять выделение цветом, унаследованное вставкой
+      for (const [a, b] of edit.noHighlight || []) {
+        requests.push({ updateTextStyle: {
+          range: { ...seg, startIndex: hit.start + a, endIndex: hit.start + b },
+          textStyle: {}, fields: "backgroundColor",
+        } });
+      }
     }
   } else if (typeof edit.insertBefore === "string") {
     requests.push({ insertText: { location: { ...seg, index: hit.start }, text: edit.insertBefore } });
