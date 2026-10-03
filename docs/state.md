@@ -69,6 +69,9 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
   используется). Отличия 1.2 от №1 вне депозитов: «by Credit Card» в Transfer Fee, абзац LPC с датой, «third party».
 - Имена файлов: «<docTitle> <юнит>» (docTitle в реестре `lib/mou/config.js`), «Commission Agreement <юнит>».
 
+- 04.10: из таблицы подписей в колонтитуле №1 убрана строка «Company Stamp» (`scripts/remove-footer-stamp.mjs`);
+  жирный №1 сверен с docx (`scripts/sync-bold-from-docx.mjs`, 55 слов).
+
 ## Commission Agreement (03.10)
 
 Отдельный документ к MOU, секция «Commission Agreement» внизу формы, кнопка Create Commission Agreement,
