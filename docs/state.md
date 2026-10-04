@@ -86,7 +86,7 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 - Дата соглашения — дата создания (сегодня), выбирается вручную в редких случаях; дата MOU — из формы MOU.
 - Срок оплаты: «in full on the day of transfer» или «within N (words) business days following the Transfer Date», N в форме.
 - Кнопка «Create MOU and Commission Agreement» в нижней панели — оба документа по одной форме.
-- Подписи (04.10): «Name: …   Signature: ____» и «Date:»; у компании Name — представитель и строка «Company Stamp».
+- Подписи (04.10): «Name: …   Signature: ____» и «Date:»; у компании Name — должность и представитель («Manager Mikhail Slobodchikov») и строка «Company Stamp».
 - Вёрстка (`patch-commission-layout.mjs`): дата соглашения в шапке ({{ca_date_header}}, «3 October, 2026»),
   пустые строки перед п.3 и п.4, заголовки держатся со следующим абзацем.
 - Ждём текст для договора только между агентствами (до трёх) — шаблона нет.

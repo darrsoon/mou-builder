@@ -27,7 +27,7 @@ test("Commission: Продавец платит одному агентству,
   assert.equal(b.flags.payer_is_company, false);
   assert.equal(b.replacements.first_party_signature, "<<Name:>> Petr Petrov   <<Signature:>> ________________\u000b<<Date:>>");
   assert.equal(b.replacements.second_party_signature,
-    "<<Name:>> Mikhail Slobodchikov   <<Signature:>> ________________\u000b<<Date:>>\u000b<<Company Stamp>>");
+    "<<Name:>> Manager Mikhail Slobodchikov   <<Signature:>> ________________\u000b<<Date:>>\u000b<<Company Stamp>>");
 });
 
 test("Commission: Покупатель, два агентства, сумма вручную, срок 2 дня", () => {
