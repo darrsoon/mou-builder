@@ -70,7 +70,9 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 - Имена файлов: «<docTitle> <юнит>» (docTitle в реестре `lib/mou/config.js`), «Commission Agreement <юнит>».
 
 - 04.10: из таблицы подписей в колонтитуле №1 убрана строка «Company Stamp» (`scripts/remove-footer-stamp.mjs`);
-  жирный №1 сверен с docx (`scripts/sync-bold-from-docx.mjs`, 55 слов).
+  жирный №1 сверен с docx (`scripts/sync-bold-from-docx.mjs`, 55 слов). «Company Stamp» убран из колонтитула и в №2–№4.
+- 04.10: перед «THE SELLER» во всех шаблонах (1–6, C3, 1.2) ровно одна пустая строка без интервалов, в №1 убран
+  интервал после «Article 9» (`scripts/fix-signature-gap.mjs`, повторный запуск безопасен).
 
 ## Commission Agreement (03.10)
 
