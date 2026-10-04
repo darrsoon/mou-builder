@@ -25,8 +25,9 @@ test("Commission: Продавец платит одному агентству,
   assert.equal(buildCommission({ ...base, caDate: "05/12/2026", caAgencies: [PB] }).replacements.ca_date_header, "5 December, 2026");
   assert.equal(b.replacements.payment_term, "full on the day of transfer");
   assert.equal(b.flags.payer_is_company, false);
-  assert.match(b.replacements.first_party_signature, /<<Name:>> Petr Petrov/);
-  assert.match(b.replacements.second_party_signature, /<<Company:>> PRIME BRIDGE/);
+  assert.equal(b.replacements.first_party_signature, "<<Name:>> Petr Petrov   <<Signature:>> ________________\u000b<<Date:>>");
+  assert.equal(b.replacements.second_party_signature,
+    "<<Name:>> Mikhail Slobodchikov   <<Signature:>> ________________\u000b<<Date:>>\u000b<<Company Stamp>>");
 });
 
 test("Commission: Покупатель, два агентства, сумма вручную, срок 2 дня", () => {
