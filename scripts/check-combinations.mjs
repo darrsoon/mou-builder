@@ -357,12 +357,12 @@ for (const c of combos) {
     if (MORTGAGE) inRow("Unit Verification", "Unit Verification / Search Certificate:", UNIT_VERIFICATION);
     if (SELLER_MORTGAGE) inRow("Mortgage Release Fee", "Mortgage Release Fee:", MORTGAGE_RELEASE);
   }
-  if (!READY) inRow("Transfer Fee", "Transfer Fee", TRANSFER_FEE);
+  if (!READY) inRow("Transfer Fee", "Transfer Fee / NOC Fee:", TRANSFER_FEE);
   if (e.topUp > 0) inRow("добор порога", "Remaining balance to complete", e.topUp);
   if (e.buyerDep !== "") inRow("депозит Покупателя", "issued by the Buyer in favour of the Seller", e.buyerDep);
   if (e.sellerDep !== "") inRow("депозит Продавца", "issued by the Seller in favour of the Buyer", e.sellerDep);
-  if (c.sellerAgent && e.feesOn) inRow("агентские Продавца", "to The Seller’s Agen", AGENCY_FEE_SELLER);
-  if (c.buyerAgent && e.feesOn) inRow("агентские Покупателя", "to The Buyer’s Agen", AGENCY_FEE_BUYER);
+  if (c.sellerAgent && e.feesOn) inRow("агентские Продавца", ["Seller’s Agen", "on the Transfer Date"], AGENCY_FEE_SELLER);
+  if (c.buyerAgent && e.feesOn) inRow("агентские Покупателя", ["Buyer’s Agen", "on the Transfer Date"], AGENCY_FEE_BUYER);
   // Фраза «Upon Buyer Default … shall pay AED … as liquidated damages» стоит в шаблоне
   // под {{#if !buyer_deposit}}: когда депозит есть, вместо неё идёт распределение
   // удержанного депозита. Поэтому сумму LD проверяем только у стороны без депозита.
@@ -374,7 +374,7 @@ for (const c of combos) {
       c.sellerAgent ? "to the Seller; and" : ["a) 100%", "to the Seller"], e.buyerLd80);
     inRow("доля Покупателю при дефолте Продавца",
       c.buyerAgent ? "to the Buyer; and" : ["a) 100%", "to the Buyer"], e.sellerLd80);
-    if (c.sellerAgent) inRow("доля агенту Продавца", "to the Seller’s Agen", e.buyerLd20);
+    if (c.sellerAgent) inRow("доля агенту Продавца", ["b) 20%", "to the Seller’s"], e.buyerLd20);
     // в №1 «Buyer’s agent», в №2 «Buyer’s Agent» — ищем без учёта последней буквы
     if (c.buyerAgent) inRow("доля агенту Покупателя", ["b) 20%", "to the Buyer’s"], e.sellerLd20);
   }
