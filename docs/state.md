@@ -78,6 +78,9 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
   строка перед ст.4 заменена интервалом над заголовком (`scripts/fix-article4-gap.mjs`). check-combinations
   под новые формулировки; №1 и №2 — 9216 комбинаций без замечаний.
 
+- 05.10: абзац «The Seller shall cooperate with the Buyer’s financing bank…» оставлен только в №2 и C3-2,
+  из №4 и №6 удалён вместе с пустой строкой перед ним (по решению Даши).
+
 ## Commission Agreement (03.10)
 
 Отдельный документ к MOU, секция «Commission Agreement» внизу формы, кнопка Create Commission Agreement,
