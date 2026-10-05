@@ -45,6 +45,8 @@ const SCENARIOS = {
   "no-deposits": { buyerDepositEnabled: "No", sellerDepositEnabled: "No" },
   "no-agents": { sellerAgentEnabled: "No", buyerAgentEnabled: "No" },
   "seller-agent-only": { buyerAgentEnabled: "No" },
+  "buyer-deposit-only": { sellerDepositEnabled: "No" },
+  "seller-deposit-only": { buyerDepositEnabled: "No" },
 };
 
 const templateId = process.argv[2];

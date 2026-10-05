@@ -297,7 +297,7 @@ const tips = {
   titleDeedNumber: "Номер title deed (документа о праве собственности). Если для Off-Plan его нет, оставьте пустым.",
   propertyLocation: "Можно указать только остров/район, например Yas Island. Abu Dhabi, UAE добавится автоматически.",
   bedrooms: "Как должно быть в договоре: Studio, 1 Bedroom, 2 Bedrooms и т.д.",
-  areaM2: "Площадь в квадратных метрах, всегда с запятой и двумя знаками: 67,20. Можно ввести 67.2 или 67 — формат поправится сам.",
+  areaM2: "Площадь в квадратных метрах, всегда с точкой и двумя знаками: 67.20. Можно ввести 67,2 или 67 — формат поправится сам.",
   propertyType: "Apartment, Villa, Townhouse и т.д.",
   unitNumber: "Unit number (номер объекта) из SPA или developer documents (документов застройщика).",
   additionalInformation: "Любая дополнительная информация по unit, если ее надо видеть в property details.",
@@ -1114,7 +1114,7 @@ export default function HomePage() {
             <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={form.titleDeedNumber} onChange={patch} />
             <Field id="propertyLocation" label="Property Location / Island" tip={tips.propertyLocation} value={form.propertyLocation} onChange={patch} />
             <Field id="bedrooms" label="Bedrooms" tip={tips.bedrooms} value={form.bedrooms} onChange={patch} list="bedroomsList" options={lists.bedroom || []} />
-            <Field id="areaM2" label="Area, sq.m" tip={tips.areaM2} value={form.areaM2} onChange={patch} onBlur={(id, value) => patch(id, formatArea(value))} placeholder="Например 67,20" />
+            <Field id="areaM2" label="Area, sq.m" tip={tips.areaM2} value={form.areaM2} onChange={patch} onBlur={(id, value) => patch(id, formatArea(value))} placeholder="Например 67.20" />
             <Field id="propertyType" label="Property Type" tip={tips.propertyType} value={form.propertyType} onChange={patch} list="propertyTypesList" options={lists.property_types || []} />
             <Field id="unitNumber" label="Unit Number" tip={tips.unitNumber} value={form.unitNumber} onChange={patch} />
             {isReadyTemplate && <Field id="projectNumber" label="Project No." tip={tips.projectNumber} value={form.projectNumber} onChange={patch} />}
