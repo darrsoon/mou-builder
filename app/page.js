@@ -15,7 +15,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { getArticleDefsForTemplate } from "@/lib/mou/articles";
-import { matchProject } from "@/lib/units/map";
 import Holidays from "date-holidays";
 import { IMaskInput } from "react-imask";
 
@@ -952,26 +951,6 @@ export default function HomePage() {
     }));
   }
 
-  // Юнит с платформы: заполняем Project и Property, developer и сборы — из PROJECTS.
-  // Статус Off-Plan/Ready, если его задаёт выбранный шаблон, не трогаем.
-  function applyPlatformUnit(data) {
-    const { projectName, matched } = matchProject(data.platformProject, init.projects);
-    const templateLabel = (init.config?.templates?.find((t) => t.id === templateId)?.label || "").toLowerCase();
-    const templateStatus = /off-plan|off plan/.test(templateLabel) ? "Off-Plan" : /ready|cash/.test(templateLabel) ? "Ready" : "";
-    const unitStatus = templateStatus || data.fields.unitStatus || form.unitStatus;
-    const fields = Object.fromEntries(Object.entries(data.fields).filter(([, v]) => v !== ""));
-    if (unitStatus === "Ready") delete fields.originalPrice;
-    setForm((current) => ({ ...current, ...fields, projectName, unitStatus }));
-    if (matched) applyProjectData(projectName, unitStatus, { syncLocation: !fields.propertyLocation });
-
-    const notes = [`Подставлен юнит ${data.fields.unitNumber} (${data.platformProject}) с платформы.`];
-    if (!matched) notes.push(`Проекта «${data.platformProject}» нет в PROJECTS — Developer и сборы заполните вручную.`);
-    if (templateStatus && data.fields.unitStatus && data.fields.unitStatus !== templateStatus) {
-      notes.push(`На платформе юнит ${data.fields.unitStatus}, а шаблон — ${templateStatus}. Проверьте шаблон.`);
-    }
-    setMessage(notes.join(" "));
-  }
-
   if (status === "loading") return <FullScreenLoader text="Checking Google session..." />;
 
   if (status !== "authenticated") {
@@ -1094,7 +1073,6 @@ export default function HomePage() {
           </Section>
 
           <Section title="Project / Developer" status={sectionStatuses.project}>
-            <PlatformUnitSearch onPick={applyPlatformUnit} />
             <Field id="projectName" label="Project" tip={tips.projectName} value={form.projectName} onChange={(id, value) => { patch(id, value); applyProjectData(value, form.unitStatus, { syncLocation: true }); }} list="projectsList" options={projectNames} />
             <SelectField
               id="unitStatus"
@@ -1765,77 +1743,6 @@ function CheckboxField({ id, label, tip, checked, onChange, disabled = false }) 
     <div className="checkField">
       <input id={id} type="checkbox" checked={Boolean(checked)} disabled={disabled} onChange={(e) => onChange(id, e.target.checked)} />
       <Label label={label} tip={tip} />
-    </div>
-  );
-}
-
-// Поиск юнита на платформе app.primebridge.estate по номеру или коду
-function PlatformUnitSearch({ onPick }) {
-  const [query, setQuery] = useState("");
-  const [units, setUnits] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [state, setState] = useState("");
-
-  useEffect(() => {
-    const q = query.trim();
-    if (q.length < 2) { setUnits([]); setState(""); return; }
-    let cancelled = false;
-    setState("Ищу…");
-    const timer = window.setTimeout(async () => {
-      try {
-        const res = await fetch(`/api/units?q=${encodeURIComponent(q)}`);
-        const data = await res.json();
-        if (cancelled) return;
-        if (!data.ok) throw new Error(data.error || "Поиск не сработал");
-        setUnits(data.units);
-        setState(data.units.length ? "" : "Не найдено");
-      } catch (error) {
-        if (!cancelled) { setUnits([]); setState(error.message); }
-      }
-    }, 300);
-    return () => { cancelled = true; window.clearTimeout(timer); };
-  }, [query]);
-
-  async function pick(unit) {
-    setOpen(false);
-    setState("Загружаю юнит…");
-    try {
-      const res = await fetch(`/api/units?id=${encodeURIComponent(unit.id)}`);
-      const data = await res.json();
-      if (!data.ok) throw new Error(data.error || "Юнит не загрузился");
-      onPick(data);
-      setQuery("");
-      setState("");
-    } catch (error) {
-      setState(error.message);
-    }
-  }
-
-  return (
-    <div className="field" style={{ gridColumn: "1 / -1" }}>
-      <Label label="Find unit on platform" tip="Начните вводить номер юнита или код с платформы app.primebridge.estate — Project, Unit Number, тип, спальни, площадь, цены и остров подставятся сами. Поля потом можно поправить." />
-      <div className="combo" onBlur={() => window.setTimeout(() => setOpen(false), 120)}>
-        <input
-          id="platformUnitSearch"
-          value={query}
-          autoComplete="off"
-          placeholder="Например B5-07-15 или 041.02.004"
-          onFocus={() => setOpen(true)}
-          onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
-          onKeyDown={(e) => { if (e.key === "Escape") setOpen(false); }}
-        />
-        {open && (units.length > 0 || state) && (
-          <div className="comboMenu" role="listbox">
-            {units.map((unit) => (
-              <button key={unit.id} className="comboOption" type="button" role="option" onMouseDown={(e) => e.preventDefault()} onClick={() => pick(unit)}>
-                {unit.unitNumber || unit.code} — {unit.project}{unit.code ? ` (${unit.code})` : ""}{unit.status && unit.status !== "available" ? ` · ${unit.status}` : ""}
-              </button>
-            ))}
-            {state && <div className="comboEmpty">{state}</div>}
-          </div>
-        )}
-      </div>
-      {!open && state && <small>{state}</small>}
     </div>
   );
 }
