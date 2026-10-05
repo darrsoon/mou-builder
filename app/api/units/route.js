@@ -3,8 +3,7 @@ import { mapPlatformUnit } from "@/lib/units/map";
 import { getUnit, searchUnits } from "@/lib/units/platform";
 
 // Юнит с платформы: ?q=… — список для поиска, ?id=… — поля формы MOU.
-// Только для вошедших через Google, как и остальные маршруты. Проект с PROJECTS
-// сверяет форма — список проектов у неё уже загружен.
+// Только для вошедших через Google, как и остальные маршруты.
 export async function GET(request) {
   try {
     await getGoogleClients();
