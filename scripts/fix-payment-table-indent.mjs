@@ -1,5 +1,6 @@
 // Таблица статьи 4 (PAYMENT TABLE): одинаковый отступ слева у всех абзацев ячеек и без
-// лишних интервалов снизу (Даша, 05.10.2026: «отступы у предложений скачут»).
+// лишних интервалов снизу (Даша, 05.10.2026: «отступы у предложений скачут»); у строк
+// нет минимальной высоты — строка по тексту, без пустого места под одной комиссией.
 //   node scripts/fix-payment-table-indent.mjs <documentId>. Повтор безопасен.
 import { getBotClients } from "./google-bot.mjs";
 const { docs } = getBotClients();
@@ -20,5 +21,12 @@ table.table.tableRows.forEach((row, ri) => {
     } });
   }
 });
+const rows = table.table.tableRows.length;
+for (let ri = 1; ri < rows; ri += 1) {
+  requests.push({ updateTableRowStyle: {
+    tableStartLocation: { index: table.startIndex }, rowIndices: [ri],
+    tableRowStyle: { minRowHeight: pt(0) }, fields: "minRowHeight",
+  } });
+}
 await docs.documents.batchUpdate({ documentId: id, requestBody: { requests } });
-console.log(`абзацев выровнено: ${requests.length}`);
+console.log(`абзацев выровнено и строк без минимальной высоты: ${requests.length}`);
