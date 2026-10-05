@@ -126,10 +126,11 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 
 ## Юнит с платформы (05.10)
 
-В разделе Property — поле «Find unit on platform»: поиск по номеру юнита или коду, по выбору
-подставляются только Unit Number, Property Type, Bedrooms («2BR» → «2 Bedrooms»), Area и
-Parking Spaces (Даша: остальное берётся из таблицы). Колонку парковки AutoPost не читает —
-берём первое заполненное поле юнита с «parking» в названии; проверить на проде.
+В разделе Project / Developer — поле «Find unit on platform»: поиск по номеру юнита или коду,
+по выбору подставляются Project (сверяется с PROJECTS → developer и сборы), Unit Number,
+Off-Plan/Ready (если статус не задан шаблоном), Property Type, Bedrooms («2BR» → «2 Bedrooms»),
+Area, Selling / Original Price (Original — не для Ready), остров в Property Location.
+Title Deed, парковка, аренда, Paid to Developer — руками.
 
 Данные — из базы IT-команды (Neon Postgres), той же, что читает AutoPost (`real-estate-autopost`,
 `src/lib/units-db/units.ts`). Переменная `UNITS_DB_URL` на Vercel mou-builder (production, sensitive) —

@@ -15,6 +15,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { getArticleDefsForTemplate } from "@/lib/mou/articles";
+import { matchProject } from "@/lib/units/map";
 import Holidays from "date-holidays";
 import { IMaskInput } from "react-imask";
 
@@ -951,14 +952,24 @@ export default function HomePage() {
     }));
   }
 
-  // Юнит с платформы: только Unit Number, Property Type, Bedrooms, Area, Parking Spaces —
-  // остальное берётся из таблицы. Пустые на платформе поля не затирают введённое.
+  // Юнит с платформы: заполняем Project и Property, developer и сборы — из PROJECTS.
+  // Статус Off-Plan/Ready, если его задаёт выбранный шаблон, не трогаем.
   function applyPlatformUnit(data) {
+    const { projectName, matched } = matchProject(data.platformProject, init.projects);
+    const templateLabel = (init.config?.templates?.find((t) => t.id === templateId)?.label || "").toLowerCase();
+    const templateStatus = /off-plan|off plan/.test(templateLabel) ? "Off-Plan" : /ready|cash/.test(templateLabel) ? "Ready" : "";
+    const unitStatus = templateStatus || data.fields.unitStatus || form.unitStatus;
     const fields = Object.fromEntries(Object.entries(data.fields).filter(([, v]) => v !== ""));
-    setForm((current) => ({ ...current, ...fields }));
-    const missing = [["bedrooms", "Bedrooms"], ["areaM2", "Area"], ["propertyType", "Property Type"], ["parkingSpaces", "Parking Spaces"]]
-      .filter(([key]) => !fields[key]).map(([, label]) => label);
-    setMessage(`Юнит ${data.fields.unitNumber} подставлен с платформы.${missing.length ? ` На платформе не заполнено: ${missing.join(", ")}.` : ""}`);
+    if (unitStatus === "Ready") delete fields.originalPrice;
+    setForm((current) => ({ ...current, ...fields, projectName, unitStatus }));
+    if (matched) applyProjectData(projectName, unitStatus, { syncLocation: !fields.propertyLocation });
+
+    const notes = [`Подставлен юнит ${data.fields.unitNumber} (${data.platformProject}) с платформы.`];
+    if (!matched) notes.push(`Проекта «${data.platformProject}» нет в PROJECTS — Developer и сборы заполните вручную.`);
+    if (templateStatus && data.fields.unitStatus && data.fields.unitStatus !== templateStatus) {
+      notes.push(`На платформе юнит ${data.fields.unitStatus}, а шаблон — ${templateStatus}. Проверьте шаблон.`);
+    }
+    setMessage(notes.join(" "));
   }
 
   if (status === "loading") return <FullScreenLoader text="Checking Google session..." />;
@@ -1083,6 +1094,7 @@ export default function HomePage() {
           </Section>
 
           <Section title="Project / Developer" status={sectionStatuses.project}>
+            <PlatformUnitSearch onPick={applyPlatformUnit} />
             <Field id="projectName" label="Project" tip={tips.projectName} value={form.projectName} onChange={(id, value) => { patch(id, value); applyProjectData(value, form.unitStatus, { syncLocation: true }); }} list="projectsList" options={projectNames} />
             <SelectField
               id="unitStatus"
@@ -1119,7 +1131,6 @@ export default function HomePage() {
           </Section>
 
           <Section title="Property" status={sectionStatuses.property}>
-            <PlatformUnitSearch onPick={applyPlatformUnit} />
             <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={form.titleDeedNumber} onChange={patch} />
             <Field id="propertyLocation" label="Property Location / Island" tip={tips.propertyLocation} value={form.propertyLocation} onChange={patch} />
             <Field id="bedrooms" label="Bedrooms" tip={tips.bedrooms} value={form.bedrooms} onChange={patch} list="bedroomsList" options={lists.bedroom || []} />
@@ -1802,7 +1813,7 @@ function PlatformUnitSearch({ onPick }) {
 
   return (
     <div className="field" style={{ gridColumn: "1 / -1" }}>
-      <Label label="Find unit on platform" tip="Начните вводить номер юнита или код с платформы app.primebridge.estate — Unit Number, Property Type, Bedrooms, Area и Parking Spaces подставятся сами. Поля потом можно поправить." />
+      <Label label="Find unit on platform" tip="Начните вводить номер юнита или код с платформы app.primebridge.estate — Project, Unit Number, тип, спальни, площадь, цены и остров подставятся сами. Поля потом можно поправить." />
       <div className="combo" onBlur={() => window.setTimeout(() => setOpen(false), 120)}>
         <input
           id="platformUnitSearch"
