@@ -1,5 +1,6 @@
 // Ширина текста по правому краю (Даша, 05.10.2026): node scripts/fix-text-width.mjs <documentId> [см]
 // Левое поле не трогаем, правое — так, чтобы текст кончался на 16,75 см по линейке;
+// правый отступ у всех абзацев — 0, чтобы ни один не вылезал за край, текст — по ширине;
 // таблицы с фиксированной шириной колонок растягиваются (пропорционально) на ту же ширину,
 // чтобы их правый край совпал с текстом. Повторный запуск ничего не меняет.
 import { getBotClients } from "./google-bot.mjs";
@@ -17,6 +18,27 @@ const marginRight = ds.pageSize.width.magnitude - ds.marginLeft.magnitude - widt
 const requests = [{ updateDocumentStyle: {
   documentStyle: { marginRight: { magnitude: marginRight, unit: "PT" } }, fields: "marginRight",
 } }];
+
+// правый отступ абзацев — 0: в шаблоне были −0,07 и −0,82 см (абзацы о депозите
+// вылезали за край почти на сантиметр); левые отступы не трогаем
+for (const b of doc.body.content) {
+  if (!b.paragraph || !b.paragraph.paragraphStyle.indentEnd?.magnitude) continue;
+  requests.push({ updateParagraphStyle: {
+    range: { startIndex: b.startIndex, endIndex: b.endIndex },
+    paragraphStyle: { indentEnd: { magnitude: 0, unit: "PT" } }, fields: "indentEnd",
+  } });
+}
+
+// выравнивание по ширине: абзацы «по левому краю» (в №1 их было 4, например «The Selling
+// Price…» под Payment Table) — как весь остальной текст; по центру и справа не трогаем
+for (const b of doc.body.content) {
+  const align = b.paragraph?.paragraphStyle.alignment;
+  if (!b.paragraph || (align && align !== "START")) continue;
+  requests.push({ updateParagraphStyle: {
+    range: { startIndex: b.startIndex, endIndex: b.endIndex },
+    paragraphStyle: { alignment: "JUSTIFIED" }, fields: "alignment",
+  } });
+}
 
 for (const b of doc.body.content) {
   if (!b.table) continue;
