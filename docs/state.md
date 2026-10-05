@@ -68,6 +68,8 @@ forfeited…». `scripts/fix-forfeited-gap.mjs <id>`. Проверено на к
 текста: `scripts/fix-footer-align.mjs <id> [см]`.
 Номер в ссылках «Article N» внутри текста (WHEREAS A/B, ст. 7/8) — жирный, как слово Article:
 `scripts/fix-article-ref-bold.mjs <id>`.
+Payment Table по колонкам как Property Details (левая 8,43 см, правая 8,32, всего 16,75 —
+разделитель колонок на одной линии): `scripts/fix-payment-columns.mjs <id>`.
 
 ## Commission Agreement «7»: нижнее поле (05.10)
 
