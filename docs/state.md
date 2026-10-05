@@ -124,13 +124,22 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
   пустые строки перед п.3 и п.4, заголовки держатся со следующим абзацем.
 - Ждём текст для договора только между агентствами (до трёх) — шаблона нет.
 
-## Отложено: Property с платформы (03.10)
+## Юнит с платформы (05.10)
 
-Идея — по номеру юнита подтягивать в Property данные с app.primebridge.estate (проект, тип, спальни,
-площадь, локация, при наличии цены). API у платформы нет, данные только со страниц после входа; учётку
-блокируют за частые входы. Варианты: через AutoPost (`primebridge-estate/pb-autopost`, `lib/platform.ts`)
-или напрямую с отдельной учёткой в env Vercel. Для работы нужны: доступ к app.primebridge.estate в сети
-облачной среды и доступ сессии к репозиторию pb-autopost. Title Deed, аренда, Additional Information — руками.
+В разделе Project / Developer — поле «Find unit on platform»: поиск по номеру юнита или коду,
+по выбору подставляются Project (сверяется с PROJECTS → developer и сборы), Unit Number,
+Off-Plan/Ready (если статус не задан шаблоном), Property Type, Bedrooms («2BR» → «2 Bedrooms»),
+Area, Selling / Original Price (Original — не для Ready), остров в Property Location.
+Title Deed, парковка, аренда, Paid to Developer — руками.
+
+Данные — из базы IT-команды (Neon Postgres), той же, что читает AutoPost (`real-estate-autopost`,
+`src/lib/units-db/units.ts`). Переменная `UNITS_DB_URL` на Vercel mou-builder (production, sensitive) —
+копия development-значения из Vercel AutoPost, 05.10 с согласия Даши. Строка под владельцем базы
+(`neondb_owner`), поэтому каждый запрос — в транзакции READ ONLY (`lib/units/platform.js`).
+Надо попросить у IT отдельного пользователя только на чтение и заменить строку.
+Только Абу-Даби. Код: `lib/units/platform.js`, `lib/units/map.js`, `app/api/units/route.js`.
+Из облачной среды Claude база недоступна — проверяли на проде.
+Откат: удалить `UNITS_DB_URL` на Vercel mou-builder (поиск ответит «не настроен»), код не мешает.
 
 ## Шаблоны на движке v2
 

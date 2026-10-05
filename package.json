@@ -16,6 +16,7 @@
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
+    "@neondatabase/serverless": "^1.2.0",
     "date-holidays": "^3.30.2",
     "googleapis": "^172.0.0",
     "lucide-react": "^1.16.0",
