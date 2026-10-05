@@ -102,8 +102,9 @@ for (const { name, over, forbidden } of SCENARIOS) {
   // пустые строки ищем только в теле и вне таблиц: в плоском тексте каждая ячейка
   // заканчивается переводом строки, и пустая ячейка шапки даёт ложное срабатывание
   let found = [];
-  if (/\n[ \t]*\n[ \t]*\n/.test(outsideTables)) {
-    const m = outsideTables.match(/.{0,60}\n[ \t]*\n[ \t]*\n.{0,60}/);
+  // мягкий перенос в начале абзаца (\v) — тоже пустая строка: «⏎ ⏎ \vThis amount» = две подряд
+  if (/\n[ \t]*\n[ \t]*[\n\v]/.test(outsideTables)) {
+    const m = outsideTables.match(/.{0,60}\n[ \t]*\n[ \t]*[\n\v].{0,60}/);
     found.push("две пустые строки подряд → …" + m[0].replace(/\n/g, " ⏎ ") + "…");
   }
   if (cond.errors.length) found.push("ошибки движка: " + cond.errors.join("; "));

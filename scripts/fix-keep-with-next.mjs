@@ -15,7 +15,8 @@ const { docs } = getBotClients();
 const text = (b) => (b.paragraph.elements || []).map((e) => e.textRun?.content || "").join("");
 // текст без маркеров условий: «{{#if any_deposit}}Article {{…}}» → «Article {{…}}»
 const plain = (b) => text(b).replace(/\{\{[#/][^}]*\}\}/g, "").trim();
-const isLead = (b) => /^Article \{\{/.test(plain(b)) || /^(WHEREAS|BY AND BETWEEN|AND)\b/.test(plain(b)) || /:$/.test(plain(b));
+const isArticle = (b) => /^Article (\{\{|\d+$)/.test(plain(b));
+const isLead = (b) => isArticle(b) || /^(WHEREAS|BY AND BETWEEN|AND)\b/.test(plain(b)) || /:$/.test(plain(b));
 
 const content = (await docs.documents.get({ documentId })).data.body.content;
 const style = (b, paragraphStyle) => ({ updateParagraphStyle: {
@@ -24,7 +25,7 @@ const style = (b, paragraphStyle) => ({ updateParagraphStyle: {
 } });
 
 const ps = content.filter((b) => b.paragraph);
-const from = ps.findLastIndex((b) => /^Article \{\{/.test(plain(b)));
+const from = ps.findLastIndex(isArticle);
 if (from === -1) throw new Error("последний Article не найден");
 
 const requests = [];

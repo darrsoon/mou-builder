@@ -16,9 +16,9 @@ const walk = (content) => content.forEach((b) => {
   if (!b.paragraph) return;
   const els = b.paragraph.elements || [];
   const full = els.map((e) => e.textRun?.content || "").join("");
-  if (/^(\{\{[^}]*\}\})*Article \{\{/.test(full)) return;
+  if (/^(\{\{[^}]*\}\})*Article (\{\{[a-z_]+\}\}|\d+)\s*$/.test(full)) return;
   const bold = (i) => Boolean(els.find((e) => e.startIndex <= i && i < e.endIndex)?.textRun?.textStyle?.bold);
-  for (const m of full.matchAll(/Article (\{\{[a-z_]+\}\})/g)) {
+  for (const m of full.matchAll(/Article (\{\{[a-z_]+\}\}|\d+)/g)) {
     const at = b.startIndex + m.index;
     const ph = at + "Article ".length;
     if (!bold(at) || bold(ph)) continue;

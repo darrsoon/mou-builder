@@ -19,8 +19,15 @@ const edits = []; // { at, requests } — применяем снизу ввер
 ps.forEach((b, i) => {
   const s = text(b);
   const lead = "{{#if any_deposit}}";
-  if (s.startsWith(`${lead}This amount shall be distributed`)) {
+  // если перед фразой уже стоит пустая строка (так в №2 и №4), перенос не нужен —
+  // а поставленный раньше убираем, иначе выходят две пустые строки подряд
+  const prevBlank = i > 0 && text(ps[i - 1]) === "\n";
+  if (s.startsWith(`${lead}This amount shall be distributed`) && !prevBlank) {
     edits.push({ at: b.startIndex, requests: [{ insertText: { location: { index: b.startIndex + lead.length }, text: "\u000b" } }] });
+  }
+  if (s.startsWith(`${lead}\u000bThis amount shall be distributed`) && prevBlank) {
+    const at = b.startIndex + lead.length;
+    edits.push({ at: b.startIndex, requests: [{ deleteContentRange: { range: { startIndex: at, endIndex: at + 1 } } }] });
   }
   const marker = s.match(/^(\{\{#if !(?:buyer|seller)_deposit\}\})\n$/);
   if (marker && text(ps[i + 1] || b).startsWith("Upon ")) {
