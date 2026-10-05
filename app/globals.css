@@ -106,11 +106,12 @@ input::placeholder {
   font-weight: 800;
 }
 
+/* автоматически посчитанная сумма — голубым, чтобы не путать с ошибкой (Даша, 05.10.2026) */
 .autoCalculatedInput {
-  background: var(--accent-soft);
-  color: #8a3c1f;
+  background: #eaf3fc;
+  color: #1f4e79;
   font-weight: 800;
-  border-color: rgba(226, 96, 58, 0.22);
+  border-color: rgba(58, 130, 206, 0.28);
 }
 
 .login {
