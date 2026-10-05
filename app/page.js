@@ -991,7 +991,8 @@ export default function HomePage() {
       </header>
 
       {message && <StatusLine text={message} type={message.includes("created") || message.includes("loaded") ? "ok" : actionErrors.length ? "error" : "info"} />}
-      {result && [].concat(result).map((r) => <ResultBox key={r.url} result={r} />)}
+      {/* оба документа сразу — ссылки уже на нижней панели, плашки не нужны (Даша, 05.10) */}
+      {result && !Array.isArray(result) && <ResultBox result={result} />}
 
       <SectionNav items={navItems} />
 
