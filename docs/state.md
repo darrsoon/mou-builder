@@ -132,6 +132,11 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 или напрямую с отдельной учёткой в env Vercel. Для работы нужны: доступ к app.primebridge.estate в сети
 облачной среды и доступ сессии к репозиторию pb-autopost. Title Deed, аренда, Additional Information — руками.
 
+05.10 попробовали: поиск юнита в Property по базе IT-команды (Neon, `UNITS_DB_URL` из Vercel AutoPost,
+только чтение) — подставлял Unit Number, Property Type, Bedrooms, Area, Parking. По просьбе Даши
+откатили в тот же день (revert 7b13d2f, aad1fa7), `UNITS_DB_URL` с Vercel mou-builder убрана.
+Код можно вернуть из этих коммитов.
+
 ## Шаблоны на движке v2
 
 | # | Шаблон | Размечен | Бэкап до разметки | Правок |
