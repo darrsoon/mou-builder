@@ -20,3 +20,18 @@ test("cleanAgent: заполненная Position не трогает имя", (
   const a = cleanAgent({ name: "X ", license: "CN-1", representative: "Ivan Ivanov", position: "Director", address: "" });
   assert.deepEqual(a, { name: "X", license: "CN-1", representative: "Ivan Ivanov", position: "Director", address: "" });
 });
+
+test("cleanAgent: имя и должность в перепутанных колонках, должность с именем в одной ячейке", () => {
+  const swapped = cleanAgent({ name: "TRANIO GLOBAL REAL ESTATE", position: "Georgy Kachmazov", representative: "Manager" });
+  assert.equal(swapped.position, "Manager");
+  assert.equal(swapped.representative, "Georgy Kachmazov");
+  const joined = cleanAgent({ name: "RELIAN", position: "Manager Anton Doronin", representative: "" });
+  assert.equal(joined.position, "Manager");
+  assert.equal(joined.representative, "Anton Doronin");
+  const agent = cleanAgent({ name: "X", position: "Real Estate Agent", representative: "Marina Ganova" });
+  assert.equal(agent.position, "Real Estate Agent");
+  assert.equal(agent.representative, "Marina Ganova");
+  const nameFirst = cleanAgent({ name: "X", position: "", representative: "Georgy Kachmazov\nManager" });
+  assert.equal(nameFirst.position, "Manager");
+  assert.equal(nameFirst.representative, "Georgy Kachmazov");
+});

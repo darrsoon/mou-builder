@@ -81,6 +81,11 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 - 05.10: абзац «The Seller shall cooperate with the Buyer’s financing bank…» оставлен только в №2 и C3-2,
   из №4 и №6 удалён вместе с пустой строкой перед ним (по решению Даши).
 
+- 05.10: списки — национальности Russian Federation / UAE / Kazakhstan первыми, агентства — PRIME BRIDGE первым,
+  остальное по алфавиту; cleanAgent распознаёт перепутанные Position/Representative (в AGENTS 11 строк поправлены);
+  дата чека в договоре dd.mm.yyyy; подписи нескольких сторон — без пустого абзаца между ними; таблица ст.4 №1–№4 —
+  одинаковый отступ 2 пт (`scripts/fix-payment-table-indent.mjs`).
+
 ## Commission Agreement (03.10)
 
 Отдельный документ к MOU, секция «Commission Agreement» внизу формы, кнопка Create Commission Agreement,

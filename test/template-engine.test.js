@@ -399,3 +399,11 @@ test("Off-plan: Title Deed Number по умолчанию N/A, в готовых
   assert.equal(formForTemplate({ titleDeedNumber: "TD-1" }, offplan).titleDeedNumber, "TD-1");
   assert.equal(formForTemplate({ titleDeedNumber: "" }, ready).titleDeedNumber, "");
 });
+
+test("дата чека в договоре — через точки; подписи нескольких сторон без пустого абзаца", () => {
+  const data = v2Form({ buyerChequeDate: "19/05/2026", buyers: [{ name: "A B", ownershipPercent: "50" }, { name: "C D", ownershipPercent: "50" }] });
+  const r = buildReplacementsV2(data, calculate(data), {});
+  assert.equal(r.buyer_cheque_date, "19.05.2026");
+  assert.ok(!r.buyer_signature_block.includes("\n\n"));
+  assert.equal(r.buyer_signature_block.split("\n").length, 2);
+});

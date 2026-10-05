@@ -374,6 +374,17 @@ function partySectionStatus(parties) {
   return makeSectionStatus(missing);
 }
 
+// Порядок в выпадающих списках (Даша, 05.10.2026): частые — первыми, остальные по алфавиту
+const PRIORITY_NATIONALITIES = ["Russian Federation", "Russia", "United Arab Emirates", "Kazakhstan"];
+function orderedOptions(options, priority = []) {
+  const uniq = (options || []).filter((v, i, arr) => v && arr.indexOf(v) === i);
+  const key = (v) => String(v).toLowerCase();
+  const first = priority.flatMap((p) => uniq.filter((v) => key(v) === key(p) || key(v).startsWith(key(p))));
+  const firstSet = new Set(first);
+  return [...first.filter((v, i, arr) => arr.indexOf(v) === i), ...uniq.filter((v) => !firstSet.has(v)).sort((a, b) => a.localeCompare(b))];
+}
+const agencyOptions = (agents, extra) => orderedOptions((agents || []).map((a) => a.name).concat(extra || []), ["PRIME BRIDGE"]);
+
 function emptyCaAgency(name = "") {
   return { name, position: "", representative: "", license: "", address: "", fee: "" };
 }
@@ -1187,7 +1198,7 @@ export default function HomePage() {
               <CheckboxField id="sellerAgentEnabled" label="Seller has an Agent" tip="Есть ли агентство со стороны продавца?" checked={form.sellerAgentEnabled === "Yes"} onChange={(_, checked) => patch("sellerAgentEnabled", checked ? "Yes" : "No")} />
               {form.sellerAgentEnabled === "Yes" ? (
                 <>
-                  <Field id="sellerAgentName" label="Seller Agent" tip={tips.sellerAgentName} value={form.sellerAgentName} onChange={(_, value) => patchAgentName("seller", value)} list="agentsList" options={(init.agents || []).map((a) => a.name).concat(lists.agent || []).filter((v, i, arr) => arr.indexOf(v) === i)} />
+                  <Field id="sellerAgentName" label="Seller Agent" tip={tips.sellerAgentName} value={form.sellerAgentName} onChange={(_, value) => patchAgentName("seller", value)} list="agentsList" options={agencyOptions(init.agents, lists.agent)} />
                   <Field id="sellerAgentRepresentative" label="Representative" tip="Представитель агентства (из вкладки AGENTS, можно поправить)" value={form.sellerAgentRepresentative} onChange={patch} placeholder="Авто из справочника" />
                   <Field id="sellerAgentPosition" label="Position" tip="Должность представителя (из вкладки AGENTS, можно поправить). Пусто — Manager" value={form.sellerAgentPosition} onChange={patch} placeholder="Manager" />
                   <Field id="sellerAgentLicense" label="License" tip="Номер лицензии агентства" value={form.sellerAgentLicense} onChange={patch} placeholder="Авто из справочника" />
@@ -1204,7 +1215,7 @@ export default function HomePage() {
               <CheckboxField id="buyerAgentEnabled" label="Buyer has an Agent" tip="Есть ли агентство со стороны покупателя?" checked={form.buyerAgentEnabled === "Yes"} onChange={(_, checked) => patch("buyerAgentEnabled", checked ? "Yes" : "No")} />
               {form.buyerAgentEnabled === "Yes" ? (
                 <>
-                  <Field id="buyerAgentName" label="Buyer Agent" tip={tips.buyerAgentName} value={form.buyerAgentName} onChange={(_, value) => patchAgentName("buyer", value)} list="agentsList" options={(init.agents || []).map((a) => a.name).concat(lists.agent || []).filter((v, i, arr) => arr.indexOf(v) === i)} />
+                  <Field id="buyerAgentName" label="Buyer Agent" tip={tips.buyerAgentName} value={form.buyerAgentName} onChange={(_, value) => patchAgentName("buyer", value)} list="agentsList" options={agencyOptions(init.agents, lists.agent)} />
                   <Field id="buyerAgentRepresentative" label="Representative" tip="Представитель агентства (из вкладки AGENTS, можно поправить)" value={form.buyerAgentRepresentative} onChange={patch} placeholder="Авто из справочника" />
                   <Field id="buyerAgentPosition" label="Position" tip="Должность представителя (из вкладки AGENTS, можно поправить). Пусто — Manager" value={form.buyerAgentPosition} onChange={patch} placeholder="Manager" />
                   <Field id="buyerAgentLicense" label="License" tip="Номер лицензии агентства" value={form.buyerAgentLicense} onChange={patch} placeholder="Авто из справочника" />
@@ -1267,7 +1278,7 @@ export default function HomePage() {
 
           <CommissionSection
             form={form}
-            agentOptions={(init.agents || []).map((a) => a.name).concat(lists.agent || []).filter((v, i, arr) => arr.indexOf(v) === i)}
+            agentOptions={agencyOptions(init.agents, lists.agent)}
             patchCa={patchCa}
             patchCaAgency={patchCaAgency}
             patchCaPayerCompany={patchCaPayerCompany}
@@ -1822,7 +1833,7 @@ function PartySection({ title, type, parties, setForm, lists, status }) {
               ]}
             />
             <Field id={`${type}-${index}-name`} label="Name Surname" tip={tips.partyName} value={party.name} onChange={(_, v) => setParty(index, "name", v)} />
-            <Field id={`${type}-${index}-nationality`} label="Nationality" tip={tips.nationality} value={party.nationality} onChange={(_, v) => setParty(index, "nationality", v)} list={`${type}-${index}-nationalities`} options={lists.nationalities || []} />
+            <Field id={`${type}-${index}-nationality`} label="Nationality" tip={tips.nationality} value={party.nationality} onChange={(_, v) => setParty(index, "nationality", v)} list={`${type}-${index}-nationalities`} options={orderedOptions(lists.nationalities, PRIORITY_NATIONALITIES)} />
             <Field id={`${type}-${index}-passport`} label="Passport" tip={tips.passport} value={party.passport} onChange={(_, v) => setParty(index, "passport", v)} />
             <EidField id={`${type}-${index}-eid`} label="EID" tip={tips.eid} value={party.eid} onChange={(_, v) => setParty(index, "eid", v)} />
             <Field id={`${type}-${index}-ownership`} label="Ownership %" tip={tips.ownershipPercent} value={party.ownershipPercent} onChange={(_, v) => setParty(index, "ownershipPercent", v)} list={`${type}-${index}-ownerships`} options={lists.ownership_percent || []} />
@@ -1831,7 +1842,7 @@ function PartySection({ title, type, parties, setForm, lists, status }) {
           {party.hasPoa && (
             <div className="grid poaGrid">
               <Field id={`${type}-${index}-poaName`} label="POA Name Surname" tip="Имя представителя по Power of Attorney (доверенности)." value={party.poaName} onChange={(_, v) => setParty(index, "poaName", v)} />
-              <Field id={`${type}-${index}-poaNationality`} label="POA Nationality" tip={tips.nationality} value={party.poaNationality} onChange={(_, v) => setParty(index, "poaNationality", v)} list={`${type}-${index}-poa-nationalities`} options={lists.nationalities || []} />
+              <Field id={`${type}-${index}-poaNationality`} label="POA Nationality" tip={tips.nationality} value={party.poaNationality} onChange={(_, v) => setParty(index, "poaNationality", v)} list={`${type}-${index}-poa-nationalities`} options={orderedOptions(lists.nationalities, PRIORITY_NATIONALITIES)} />
               <Field id={`${type}-${index}-poaPassport`} label="POA Passport" tip={tips.passport} value={party.poaPassport} onChange={(_, v) => setParty(index, "poaPassport", v)} />
               <EidField id={`${type}-${index}-poaEid`} label="POA EID" tip={tips.eid} value={party.poaEid} onChange={(_, v) => setParty(index, "poaEid", v)} />
             </div>
