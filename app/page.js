@@ -1201,8 +1201,8 @@ export default function HomePage() {
               {form.sellerAgentEnabled === "Yes" ? (
                 <>
                   <Field id="sellerAgentName" label="Seller Agent" tip={tips.sellerAgentName} value={form.sellerAgentName} onChange={(_, value) => patchAgentName("seller", value)} list="agentsList" options={agencyOptions(init.agents, lists.agent)} />
-                  <Field id="sellerAgentRepresentative" label="Representative" tip="Представитель агентства (из вкладки AGENTS, можно поправить)" value={form.sellerAgentRepresentative} onChange={patch} placeholder="Авто из справочника" />
                   <Field id="sellerAgentPosition" label="Position" tip="Должность представителя (из вкладки AGENTS, можно поправить). Пусто — Manager" value={form.sellerAgentPosition} onChange={patch} placeholder="Manager" />
+                  <Field id="sellerAgentRepresentative" label="Representative" tip="Представитель агентства (из вкладки AGENTS, можно поправить)" value={form.sellerAgentRepresentative} onChange={patch} placeholder="Авто из справочника" />
                   <Field id="sellerAgentLicense" label="License" tip="Номер лицензии агентства" value={form.sellerAgentLicense} onChange={patch} placeholder="Авто из справочника" />
                   <Field id="sellerAgentAddress" label="Address" tip="Адрес агентства" value={form.sellerAgentAddress} onChange={patch} placeholder="Авто из справочника" />
                   <CheckboxField id="sellerAgentFeeEnabled" label="Agency Fee enabled" tip="Есть ли комиссия у агентства продавца? Если снять — строка комиссии уйдет из договора (шаблон v2)" checked={form.sellerAgentFeeEnabled !== "No"} onChange={(_, checked) => patch("sellerAgentFeeEnabled", checked ? "Yes" : "No")} />
@@ -1218,8 +1218,8 @@ export default function HomePage() {
               {form.buyerAgentEnabled === "Yes" ? (
                 <>
                   <Field id="buyerAgentName" label="Buyer Agent" tip={tips.buyerAgentName} value={form.buyerAgentName} onChange={(_, value) => patchAgentName("buyer", value)} list="agentsList" options={agencyOptions(init.agents, lists.agent)} />
-                  <Field id="buyerAgentRepresentative" label="Representative" tip="Представитель агентства (из вкладки AGENTS, можно поправить)" value={form.buyerAgentRepresentative} onChange={patch} placeholder="Авто из справочника" />
                   <Field id="buyerAgentPosition" label="Position" tip="Должность представителя (из вкладки AGENTS, можно поправить). Пусто — Manager" value={form.buyerAgentPosition} onChange={patch} placeholder="Manager" />
+                  <Field id="buyerAgentRepresentative" label="Representative" tip="Представитель агентства (из вкладки AGENTS, можно поправить)" value={form.buyerAgentRepresentative} onChange={patch} placeholder="Авто из справочника" />
                   <Field id="buyerAgentLicense" label="License" tip="Номер лицензии агентства" value={form.buyerAgentLicense} onChange={patch} placeholder="Авто из справочника" />
                   <Field id="buyerAgentAddress" label="Address" tip="Адрес агентства" value={form.buyerAgentAddress} onChange={patch} placeholder="Авто из справочника" />
                   <CheckboxField id="buyerAgentFeeEnabled" label="Agency Fee enabled" tip="Есть ли комиссия у агентства покупателя? Если снять — строка комиссии уйдет из договора (шаблон v2)" checked={form.buyerAgentFeeEnabled !== "No"} onChange={(_, checked) => patch("buyerAgentFeeEnabled", checked ? "Yes" : "No")} />
