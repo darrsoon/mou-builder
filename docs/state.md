@@ -66,6 +66,8 @@ forfeited…». `scripts/fix-forfeited-gap.mjs <id>`. Проверено на к
 (заменяет 5 pt из fix-payment-table-indent.mjs). Проверено PDF на копии.
 Колонтитул с подписями (таблица) — поле ячеек слева 0, ширина 16,75 см, строки начинаются по краю
 текста: `scripts/fix-footer-align.mjs <id> [см]`.
+Номер в ссылках «Article N» внутри текста (WHEREAS A/B, ст. 7/8) — жирный, как слово Article:
+`scripts/fix-article-ref-bold.mjs <id>`.
 
 ## Commission Agreement «7»: нижнее поле (05.10)
 
