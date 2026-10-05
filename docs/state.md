@@ -50,6 +50,14 @@ governmental…», «(hereinafter referred to as the … Agency)») переве
 как весь текст. Скрипт `scripts/fix-text-width.mjs <id> [см]`, повторный запуск ничего не меняет.
 Проверено PDF на копии.
 
+## №1: пустая строка перед «The forfeited Security Deposit…» (05.10)
+
+В статьях о дефолте Покупателя и Продавца пустая строка перед «The forfeited Security Deposit shall be
+distributed as follows:» пропадала: движок, вырезая соседний блок {{#if !buyer_deposit}}, забирал её
+как разделитель. Теперь это перенос строки (\u000b) в начале абзаца: «{{#if buyer_deposit}}\u000bThe
+forfeited…». `scripts/fix-forfeited-gap.mjs <id>`. Проверено на копии: PDF + check-combinations
+(9216 комбинаций, 0 замечаний).
+
 ## №1: одинаковый отступ текста в таблицах (05.10)
 
 В Property Details было поле ячейки 0 + отступ абзаца 2 pt, в Payment Table — стандартное поле ~5 pt:
