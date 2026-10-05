@@ -1308,6 +1308,7 @@ export default function HomePage() {
         disabled={busy || loadingInit}
         onCreate={createMou}
         onCreateBoth={createBoth}
+        results={result ? [].concat(result) : []}
       />
     </main>
   );
@@ -1437,12 +1438,22 @@ function SectionNav({ items }) {
   );
 }
 
-function ActionBar({ missingTotal, sellingPrice, busy, disabled, onCreate, onCreateBoth }) {
+function ActionBar({ missingTotal, sellingPrice, busy, disabled, onCreate, onCreateBoth, results = [] }) {
   return (
     <div className="actionBar">
       <div className="actionBarInfo">
         <strong>{missingTotal ? `Не заполнено полей: ${missingTotal}` : "Все обязательные поля заполнены"}</strong>
         {sellingPrice ? <span>Selling Price — AED {sellingPrice}</span> : null}
+        {/* ссылки на созданные документы — рядом с кнопками, отдельно MOU и Commission Agreement */}
+        {results.length ? (
+          <span className="actionBarLinks">
+            {results.map((r) => (
+              <a key={r.url} className="openDoc" href={r.url} target="_blank" rel="noreferrer">
+                Open {r.kind || "MOU"} <ExternalLink size={14} />
+              </a>
+            ))}
+          </span>
+        ) : null}
       </div>
       <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
         <button className="secondary iconText" onClick={onCreateBoth} disabled={disabled}>

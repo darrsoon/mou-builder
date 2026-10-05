@@ -1,4 +1,4 @@
-// Таблица статьи 4 (PAYMENT TABLE): одинаковый отступ слева у всех абзацев ячеек и без
+// Таблица статьи 4 (PAYMENT TABLE): поля ячеек 5 пт, абзацы без своего отступа и без
 // лишних интервалов снизу (Даша, 05.10.2026: «отступы у предложений скачут»); у строк
 // нет минимальной высоты — строка по тексту, без пустого места под одной комиссией.
 //   node scripts/fix-payment-table-indent.mjs <documentId>. Повтор безопасен.
@@ -16,7 +16,7 @@ table.table.tableRows.forEach((row, ri) => {
     if (!p.paragraph) continue;
     requests.push({ updateParagraphStyle: {
       range: { startIndex: p.startIndex, endIndex: p.endIndex },
-      paragraphStyle: { indentStart: pt(2), indentFirstLine: pt(2), spaceBelow: pt(0) },
+      paragraphStyle: { indentStart: pt(0), indentFirstLine: pt(0), spaceBelow: pt(0) },
       fields: "indentStart,indentFirstLine,spaceBelow",
     } });
   }
@@ -28,5 +28,11 @@ for (let ri = 1; ri < rows; ri += 1) {
     tableRowStyle: { minRowHeight: pt(0) }, fields: "minRowHeight",
   } });
 }
+// поля ячеек 5 пт слева и справа — текст не упирается в границы таблицы (Даша, 05.10.2026)
+requests.push({ updateTableCellStyle: {
+  tableRange: { tableCellLocation: { tableStartLocation: { index: table.startIndex }, rowIndex: 1, columnIndex: 0 },
+    rowSpan: rows - 1, columnSpan: table.table.columns },
+  tableCellStyle: { paddingLeft: pt(5), paddingRight: pt(5) }, fields: "paddingLeft,paddingRight",
+} });
 await docs.documents.batchUpdate({ documentId: id, requestBody: { requests } });
 console.log(`абзацев выровнено и строк без минимальной высоты: ${requests.length}`);

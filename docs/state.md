@@ -84,7 +84,7 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 - 05.10: списки — национальности Russian Federation / UAE / Kazakhstan первыми, агентства — PRIME BRIDGE первым,
   остальное по алфавиту; cleanAgent распознаёт перепутанные Position/Representative (в AGENTS 11 строк поправлены);
   дата чека в договоре dd.mm.yyyy; подписи нескольких сторон — без пустого абзаца между ними; таблица ст.4 №1–№4 —
-  одинаковый отступ 2 пт и строки без минимальной высоты (`scripts/fix-payment-table-indent.mjs`).
+  поля ячеек 5 пт, абзацы без отступа, строки без минимальной высоты (`scripts/fix-payment-table-indent.mjs`).
 
 ## Commission Agreement (03.10)
 

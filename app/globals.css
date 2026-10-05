@@ -977,6 +977,9 @@ label span:first-child {
 }
 
 /* ── Липкая панель снизу: статус заполнения и кнопка создания ── */
+.actionBarLinks { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+.actionBarLinks .openDoc { font-size: 14px; }
+
 .actionBar {
   position: sticky;
   bottom: 14px;
