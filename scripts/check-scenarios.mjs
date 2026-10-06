@@ -94,6 +94,7 @@ const doc = (await docs.documents.get({ documentId })).data;
 const idx = buildIndex(doc);
 
 let problems = 0;
+let baseGapless = null;
 for (const { name, over, forbidden } of SCENARIOS) {
   // общий рендер с комбинаторным прогоном: он умеет удалять строки таблиц
   // в колонтитулах, а прежняя копия здесь искала таблицы только в теле
@@ -102,6 +103,14 @@ for (const { name, over, forbidden } of SCENARIOS) {
   // пустые строки ищем только в теле и вне таблиц: в плоском тексте каждая ячейка
   // заканчивается переводом строки, и пустая ячейка шапки даёт ложное срабатывание
   let found = [];
+  // пропавшая пустая строка: перед заголовком статьи и перед «… shall have no further claim»
+  // должна быть пустая строка (или перенос \v); сравниваем с «всё включено», где разметка эталонная
+  // ключ — конец предыдущей строки + что за строка, номера статей не учитываем (они съезжают)
+  const gapless = [...outsideTables.matchAll(/([^\n]{0,40}[^\n\v])\n(Article \d+|The (?:Buyer|Seller) shall have no further claim)/g)]
+    .map((m) => `${m[1].trim()} ⏎ ${m[2].replace(/\d+/, "N")}`);
+  if (!baseGapless) baseGapless = new Set(gapless);
+  const lost = gapless.filter((g) => !baseGapless.has(g));
+  if (lost.length) found.push("нет пустой строки → " + lost.join(" | "));
   // мягкий перенос в начале абзаца (\v) — тоже пустая строка: «⏎ ⏎ \vThis amount» = две подряд
   if (/\n[ \t]*\n[ \t]*[\n\v]/.test(outsideTables)) {
     const m = outsideTables.match(/.{0,60}\n[ \t]*\n[ \t]*[\n\v].{0,60}/);

@@ -15,6 +15,7 @@ const steps = [
   ["fix-article-ref-bold.mjs"],
   ["fix-forfeited-gap.mjs"],
   ["fix-default-gaps.mjs"],
+  ["fix-nodeposit-gaps.mjs"],
   ["fix-keep-with-next.mjs"],
 ];
 for (const [script, ...args] of steps) {
