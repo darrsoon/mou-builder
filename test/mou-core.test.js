@@ -618,11 +618,11 @@ test("ипотечный шаблон: способ оплаты Продавц�
 test("готовый объект: сумма Продавцу всегда Manager's Cheque", () => {
   const form = { sellingPrice: "1,670,000", unitStatus: "Ready", amountToSellerPaymentMethod: "cash" };
   const ready = buildPreview(form, undefined, { engine: "v2", ready: true, articles: "ready-cash-v2" });
-  assert.equal(ready.replacements.amount_to_seller_payment_text, "Manager's Cheque.");
+  assert.equal(ready.replacements.amount_to_seller_payment_text, "Manager's Cheque");
   assert.ok(!ready.validation.errors.join(" ").includes("payment method"));
 
   const offplan = buildPreview(form, undefined, { engine: "v2", articles: "offplan-v2" });
-  assert.equal(offplan.replacements.amount_to_seller_payment_text, "Cash.");
+  assert.equal(offplan.replacements.amount_to_seller_payment_text, "Cash");
 });
 
 test("готовый объект: сдан в аренду — нужны сумма и срок", () => {
@@ -713,7 +713,7 @@ test("готовый объект с ипотекой: 19 статей, спра
   assert.equal(p.replacements.article_electronic_signature_number, "19");
   assert.equal(p.replacements.unit_verification_fee, "103.50");
   assert.equal(p.calc.admFee, 1670000 * 0.02);
-  assert.equal(p.replacements.amount_to_seller_payment_text, "Manager's Cheque.");
+  assert.equal(p.replacements.amount_to_seller_payment_text, "Manager's Cheque");
   // ипотека: способ оплаты не спрашиваем; готовый объект: аренду требуем, только если сдан
   assert.ok(!p.validation.errors.join(" ").includes("payment method"));
   assert.ok(!p.validation.errors.join(" ").includes("Annual Rent"));
