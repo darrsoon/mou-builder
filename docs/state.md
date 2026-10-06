@@ -78,6 +78,18 @@ Payment Table по колонкам как Property Details (левая 8,43 с�
 Поле уменьшено до 3,2 см (91.1 pt, как в MOU), по согласию Даши. Проверено PDF на копии её
 договора The Row-B5-07-15: Article 2 целиком на 1-й странице, 2-я начинается с «3. Governing Law».
 
+## №1 без депозитов — по чистовику 1.2 (06.10)
+
+Даша: эталон для off-plan без Security cheques — чистовик 1.2 «NO DEPOSIT CHEQUES»
+(`1lXf-lodoCXjaDhH8nyo7v0U3YhhMud3x`). Сверка текста варианта «Ни у кого» из №1 с ним:
+- распределение liquidated damages («This amount shall be distributed as follows: a) 80% … b) 20% …»)
+  было под {{#if any_deposit}} — без депозитов пропадало. Условие снято (`scripts/fix-ld-distribution.mjs`),
+  проверка: check-scenarios + check-combinations (9216, 0);
+- Location: «Yas Island, Abu Dhabi» → «…, Abu Dhabi, UAE» (formatPropertyLocation);
+- остались только расхождения редакции №1 и чистовика: «purchase, the Property» (в 1.2 без запятой) и
+  «third-party» (в 1.2 «third party») — не трогали, ждём решения Даши.
+В №2–№4 распределение без депозитов ещё под условием — по просьбе.
+
 ## AGENTS из формы + способ оплаты обычным шрифтом (06.10)
 
 AGENTS: при создании MOU / Commission Agreement новые агентства и новые представители сохраняются во
