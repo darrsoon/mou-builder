@@ -90,7 +90,16 @@ Payment Table по колонкам как Property Details (левая 8,43 с�
   редакция (~30–100 строк отличий). План: разметка (scripts/markup/*) на Google-копии чистовика — сейчас
   не находит 32–37 правок из ~180 (новые формулировки, образцы значений), поправить правки; затем
   жирный из чистовика, copy-default-articles из №1, apply-layout-fixes, проверки, замена с бэкапом.
-  Порядок: №5 («да» Даши 06.10), №3, №4, №2; №6 — разметки ещё нет. `scripts/markup/dry-run.mjs <ключ> [id]`
+  Порядок: №5 («да» Даши 06.10), №3, №4, №2; №6 — разметки ещё нет.
+  Что мешает разметке на чистовиках (dry-run): «Agent» → «Agency» в find/replace правок; «Security Deposit:»
+  с заглавной; строка депозита в таблице «…Selling Price, Security Deposit cheque issued by the Buyer in favour
+  of the Seller)»; «Upon signing this Agreement» с заглавной; образцы 000,000 / 000000 / 00.00.2026 вместо
+  528,013 / 174369 / 14.04.2026; абзац Продавца без реквизитов чека в чистовике уже есть (правка вставляла
+  его сама); «to the Buyer’s Agency on the Transfer Date» (строчная the); «via agencies’ email»; «respective
+  Agencies»; колонтитул «Seller’s Agency signature». Статьи 7/8 после разметки — copy-default-articles из №1.
+- Статьи о дефолте (liquidated damages, распределение 80/20 всегда) скопированы из №1 в живые №2–№4
+  (`scripts/copy-default-articles.mjs <№1> <шаблон>`), check-scenarios + check-combinations — 0 замечаний.
+  В №1 там же подсветка как в чистовике: жёлтым только суммы (`scripts/fix-ld-highlight.mjs`). `scripts/markup/dry-run.mjs <ключ> [id]`
   теперь принимает документ третьим аргументом. «.00» в №5/№6 — образцы значений, уйдут с разметкой.
 
 ## №1 без депозитов — по чистовику 1.2 (06.10)
