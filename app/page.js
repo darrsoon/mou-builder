@@ -522,9 +522,8 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
 
   // всё, что печатается в таблице Property Details (Даша, 06.10.2026: «все обязательные поля»);
   // Additional Information может быть пустой
-  // в off-plan (№1, №2) Title Deed всегда «N/A» — пустое поле сайт заполняет сам, не считаем его
+  // Title Deed пустой — сайт сам пишет «N/A» (во всех шаблонах), поэтому не считаем его
   const propertyRequired = [
-    ...(titleDeedDefault ? [] : [["titleDeedNumber", "Title Deed Number"]]),
     ["propertyLocation", "Property Location"],
     ["bedrooms", "Bedrooms"],
     ["areaM2", "Area"],
@@ -1138,7 +1137,7 @@ export default function HomePage() {
           </Section>
 
           <Section title="Property" status={sectionStatuses.property}>
-            <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={form.titleDeedNumber} onChange={patch} placeholder={selectedTemplate?.defaults?.titleDeedNumber || ""} />
+            <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={form.titleDeedNumber} onChange={patch} placeholder="N/A" />
             <Field id="propertyLocation" label="Property Location / Island" tip={tips.propertyLocation} value={form.propertyLocation} onChange={patch} />
             <Field id="bedrooms" label="Bedrooms" tip={tips.bedrooms} value={form.bedrooms} onChange={patch} list="bedroomsList" options={lists.bedroom || []} />
             <Field id="areaM2" label="Area, sq.m" tip={tips.areaM2} value={form.areaM2} onChange={patch} onBlur={(id, value) => patch(id, formatArea(value))} placeholder="Например 67.20" />

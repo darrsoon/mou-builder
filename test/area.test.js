@@ -25,3 +25,9 @@ test("площадь: пусто и текст не трогаем", () => {
 test("в договор площадь уходит с точкой", () => {
   assert.equal(normalizeForm({ areaM2: "95,5" }).areaM2, "95.50");
 });
+
+test("Title Deed пустой — в договор «N/A», заполненный — как есть", () => {
+  assert.equal(normalizeForm({}).titleDeedNumber, "N/A");
+  assert.equal(normalizeForm({ titleDeedNumber: " " }).titleDeedNumber, "N/A");
+  assert.equal(normalizeForm({ titleDeedNumber: "2026/0000" }).titleDeedNumber, "2026/0000");
+});

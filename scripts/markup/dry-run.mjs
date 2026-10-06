@@ -16,7 +16,9 @@ const DEALS = {
 };
 
 const key = process.argv[2] || "ready";
-const [documentId, deal] = DEALS[key] || [];
+const [defaultId, deal] = DEALS[key] || [];
+// третьим аргументом — другой документ (например, Google Doc из чистовика Даши)
+const documentId = process.argv[3] || defaultId;
 if (!documentId) throw new Error(`сделки нет: ${Object.keys(DEALS).join(", ")}`);
 
 const { docs } = getBotClients();

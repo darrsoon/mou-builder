@@ -78,6 +78,21 @@ Payment Table по колонкам как Property Details (левая 8,43 с�
 Поле уменьшено до 3,2 см (91.1 pt, как в MOU), по согласию Даши. Проверено PDF на копии её
 договора The Row-B5-07-15: Article 2 целиком на 1-й странице, 2-я начинается с «3. Governing Law».
 
+## Agency вместо Agent, Title Deed N/A, чистовики №2–№6 (06.10)
+
+- «Agent» → «Agency» по тексту шаблонов №1–№6 (тело и колонтитулы, «the Agent», «Agents» → «Agencies»,
+  «agents’» → «agencies’»): `scripts/fix-agency-wording.mjs <id>`. C3 НЕ трогать (Даша): старый движок
+  (lib/google/docs.js) ищет в их тексте фразы со словом «Agent». Commission Agreement — «Agent» не было.
+- Title Deed пустой — в договор «N/A» во всех шаблонах (normalizeForm), в форме не считается обязательным.
+- Даша дала чистовики (docx, 03.10) как эталон для №2–№6: №2 `1dFoxeFeI27gIuinjKcFtRtuI_EheRH1e`,
+  №3 `1gnwGupIsGfqCCVqfqOPFfTipZRCg9CVB`, №4 `1PF9rWkaiEcdBhlaG66pp9bLgyLsIdC9J`,
+  №5 `1b4vthq_LJOxddmEeWRtoAjN0khkyDIqy`, №6 `1_4UtEmXwXtvikjlHmLu6t38X8Dp6mAlM`. Живые №2–№5 — старая
+  редакция (~30–100 строк отличий). План: разметка (scripts/markup/*) на Google-копии чистовика — сейчас
+  не находит 32–37 правок из ~180 (новые формулировки, образцы значений), поправить правки; затем
+  жирный из чистовика, copy-default-articles из №1, apply-layout-fixes, проверки, замена с бэкапом.
+  Порядок: №5 («да» Даши 06.10), №3, №4, №2; №6 — разметки ещё нет. `scripts/markup/dry-run.mjs <ключ> [id]`
+  теперь принимает документ третьим аргументом. «.00» в №5/№6 — образцы значений, уйдут с разметкой.
+
 ## №1 без депозитов — по чистовику 1.2 (06.10)
 
 Даша: эталон для off-plan без Security cheques — чистовик 1.2 «NO DEPOSIT CHEQUES»
