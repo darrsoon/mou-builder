@@ -1,6 +1,6 @@
 import { getGoogleClients, jsonError } from "@/lib/google/client";
 import { createMouDocument } from "@/lib/google/docs";
-import { appendDraftLog, readRules } from "@/lib/google/sheets";
+import { appendDraftLog, readRules, syncAgents } from "@/lib/google/sheets";
 import {
   buildDraftTitle,
   buildFlags,
@@ -73,8 +73,17 @@ export async function POST(request) {
       formJson: JSON.stringify(form || {}),
     });
 
+    // новые агентства / представители — в AGENTS; сбой здесь договор не отменяет
+    const agents = await syncAgents(sheets, [
+      data.sellerAgentEnabled && { name: data.sellerAgentName, representative: data.sellerAgentRepresentative,
+        position: data.sellerAgentPosition, license: data.sellerAgentLicense, address: data.sellerAgentAddress },
+      data.buyerAgentEnabled && { name: data.buyerAgentName, representative: data.buyerAgentRepresentative,
+        position: data.buyerAgentPosition, license: data.buyerAgentLicense, address: data.buyerAgentAddress },
+    ].filter(Boolean)).catch((error) => ({ error: error.message }));
+
     return Response.json({
       ok: true,
+      agents,
       title: document.title,
       url: document.url,
       remainingPlaceholders: document.remainingPlaceholders,

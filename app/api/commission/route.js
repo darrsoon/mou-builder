@@ -1,6 +1,6 @@
 import { getGoogleClients, jsonError } from "@/lib/google/client";
 import { createMouDocument } from "@/lib/google/docs";
-import { appendDraftLog } from "@/lib/google/sheets";
+import { appendDraftLog, syncAgents } from "@/lib/google/sheets";
 import { buildCommission, validateCommission } from "@/lib/mou/commission";
 import { getMainPartyName } from "@/lib/mou/core";
 import { money } from "@/lib/mou/helpers";
@@ -38,8 +38,15 @@ export async function POST(request) {
       formJson: JSON.stringify(form || {}),
     });
 
+    // новые агентства / представители (и компания-плательщик) — в AGENTS; сбой договор не отменяет
+    const agents = await syncAgents(sheets, [
+      ...built.ca.agencies,
+      ...(built.ca.payer === "Company" ? [built.ca.payerCompany] : []),
+    ]).catch((error) => ({ error: error.message }));
+
     return Response.json({
       ok: true,
+      agents,
       title: document.title,
       url: document.url,
       remainingPlaceholders: document.remainingPlaceholders,
