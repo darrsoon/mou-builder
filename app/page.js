@@ -327,7 +327,6 @@ const tips = {
   chequeDrawnBy: "Drawn by (кем выписан чек).",
   chequeInFavourOf: "In favour of (в пользу кого выписан чек).",
   articles: "Если снять галочку, статья будет удалена из договора, а номера остальных статей пересчитаются.",
-  signatureDate: "Если оставить пустым, будет использована Agreement Date.",
   partyName: "Полное имя стороны так, как должно быть в MOU.",
   nationality: "Nationality (гражданство) на английском, как в passport.",
   passport: "Passport number (номер паспорта). Если пусто, не попадет в party block.",
@@ -514,13 +513,18 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
   }
   if (!isReadyTemplate) projectRequired.push(["transferFeeLabel", "Transfer Fee Label"]);
 
+  // всё, что печатается в таблице Property Details (Даша, 06.10.2026: «все обязательные поля»);
+  // Additional Information может быть пустой
   const propertyRequired = [
+    ["titleDeedNumber", "Title Deed Number"],
     ["propertyLocation", "Property Location"],
     ["bedrooms", "Bedrooms"],
     ["areaM2", "Area"],
     ["propertyType", "Property Type"],
     ["unitNumber", "Unit Number"],
+    ["parkingSpaces", isReadyTemplate ? "Parking Space No." : "Parking Spaces"],
   ];
+  if (isReadyTemplate) propertyRequired.push(["projectNumber", "Project No."]);
   // объект сдан в аренду: без суммы и срока в статье остаются дырки
   if (isReadyTemplate && form.propertyRented === "Yes") {
     propertyRequired.push(["annualRent", "Annual Rent"], ["tenancyEndDate", "Tenancy Contract Until"]);
@@ -533,14 +537,20 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
     sellers: partySectionStatus(form.sellers),
     buyers: partySectionStatus(form.buyers),
     payments: makeSectionStatus(missingFields(form, paymentsRequired)),
-    agency: makeSectionStatus(missingFields(form, [
-      ["sellerAgentName", "Seller Agent"],
-      ["buyerAgentName", "Buyer Agent"],
-    ])),
+    // реквизиты агентства печатаются в договоре; должность пустая — Manager
+    agency: makeSectionStatus(["seller", "buyer"].flatMap((side) => {
+      if (form[`${side}AgentEnabled`] === "No") return [];
+      const who = side === "seller" ? "Seller" : "Buyer";
+      return missingFields(form, [
+        [`${side}AgentName`, `${who} Agent`],
+        [`${side}AgentRepresentative`, `${who} Agent Representative`],
+        [`${side}AgentLicense`, `${who} Agent License`],
+        [`${side}AgentAddress`, `${who} Agent Address`],
+      ]);
+    })),
     buyerDeposit: depositSectionStatus(form, "buyer"),
     sellerDeposit: depositSectionStatus(form, "seller"),
     articles: makeSectionStatus([]),
-    signatures: makeSectionStatus([], true),
   };
 }
 
@@ -651,7 +661,6 @@ export default function HomePage() {
       ["Security Deposit - Buyer", sectionStatuses.buyerDeposit],
       ["Security Deposit - Seller", sectionStatuses.sellerDeposit],
       ["Articles", sectionStatuses.articles],
-      ["Signatures", sectionStatuses.signatures],
     ];
     for (const [title, status] of order) {
       items.push({ title, state: status?.state || "optional", missingCount: status?.missingCount || 0 });
@@ -1271,11 +1280,6 @@ export default function HomePage() {
                 />
               );
             })}
-          </Section>
-
-          <Section title="Signatures" status={sectionStatuses.signatures}>
-            <DateField id="sellerSignatureDate" label="Seller Signature Date" tip={tips.signatureDate} value={form.sellerSignatureDate} onChange={patch} />
-            <DateField id="buyerSignatureDate" label="Buyer Signature Date" tip={tips.signatureDate} value={form.buyerSignatureDate} onChange={patch} />
           </Section>
 
           <CommissionSection
