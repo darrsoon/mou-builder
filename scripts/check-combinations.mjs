@@ -21,6 +21,12 @@ const READY = process.argv.includes("--ready");
 // --ready --seller-mortgage — №5, ипотека Продавца: строка Mortgage Release Fee, банк
 // Продавца и два варианта денег Покупателя в ст.10
 const SELLER_MORTGAGE = process.argv.includes("--seller-mortgage");
+// --ready --mortgage --seller-mortgage — №6, ипотека у обеих сторон: ст.10 как в №5, но без
+// вариантов денег Покупателя; ст.11–12 как в №4, но без строки Unit Verification и без
+// абзаца об отказе банка в статье о депозите
+const BUYER_FUNDS = SELLER_MORTGAGE && !MORTGAGE;
+const UNIT_VERIFICATION_ROW = READY && MORTGAGE && !SELLER_MORTGAGE;
+const REJECTION_PARAGRAPH = MORTGAGE && !SELLER_MORTGAGE;
 const TEMPLATE = templateFor(MORTGAGE, READY, SELLER_MORTGAGE);
 const DEFS = getArticleDefsForTemplate(TEMPLATE);
 // №4 (готовый объект с ипотекой): ADM Electronic как у ипотеки и справка Unit Verification
@@ -89,7 +95,7 @@ const AXES = {
   // «ровно» — застройщику заплачено ровно столько, сколько требует порог:
   // добор равен нулю, строка из таблицы должна уйти. «сверх» — переплата.
   ...(READY ? { rented: [false, true] } : { paidThreshold: ["не добран", "ровно", "сверх"] }),
-  ...(SELLER_MORTGAGE ? { buyerFunds: ["свои", "кредит"] } : {}),
+  ...(BUYER_FUNDS ? { buyerFunds: ["свои", "кредит"] } : {}),
   // способ расчёта у сторон независимый: у одного процент, у другого сумма
   buyerDepositCalc: ["процент", "сумма"],
   sellerDepositCalc: ["процент", "сумма"],
@@ -146,7 +152,7 @@ function formFor(c) {
       unitStatus: "Ready",
       admAdminFee: "", admElectronicFee: String(ADM_ELECTRONIC_READY), admValuationFee: String(ADM_VALUATION_READY),
       developerNocFee: String(DEVELOPER_NOC), communityNocFee: String(COMMUNITY_NOC),
-      ...(MORTGAGE ? { unitVerificationFee: String(UNIT_VERIFICATION) } : {}),
+      ...(UNIT_VERIFICATION_ROW ? { unitVerificationFee: String(UNIT_VERIFICATION) } : {}),
       ...(SELLER_MORTGAGE ? { mortgageReleaseFee: String(MORTGAGE_RELEASE), sellerBankName: SELLER_BANK,
         buyerFunds: c.buyerFunds === "кредит" ? "financing" : "own_funds" } : {}),
       projectNumber: "2023/278930", titleDeedNumber: "2026/0000", parkingSpaces: "B27",
@@ -202,7 +208,7 @@ function expected(c) {
       buyerLd, sellerLd, buyerLd80, sellerLd80,
     ];
   if (READY && c.rented) amounts.push(150000);
-  if (READY && MORTGAGE) amounts.push(UNIT_VERIFICATION);
+  if (UNIT_VERIFICATION_ROW) amounts.push(UNIT_VERIFICATION);
   if (READY && SELLER_MORTGAGE) amounts.push(MORTGAGE_RELEASE);
   if (topUp > 0) amounts.push(topUp);
   if (buyerDep !== "") amounts.push(buyerDep);
@@ -300,14 +306,16 @@ for (const c of combos) {
     if (!text.includes(`existing mortgage in favour of ${SELLER_BANK} (the “Seller’s Bank”)`)) found.push("в ст.10 нет банка Продавца");
     const own = /made solely with the Buyer’s own funds/.test(text);
     const financing = /may be financed through the Buyer’s own funds, a Personal Loan, Equity Release/.test(text);
-    const wantOwn = c.buyerFunds === "свои";
-    if (own !== wantOwn || financing === wantOwn) found.push(`деньги Покупателя: в тексте «${own ? "свои" : ""}${financing ? "кредит" : ""}», а выбрано «${c.buyerFunds}»`);
+    if (BUYER_FUNDS) {
+      const wantOwn = c.buyerFunds === "свои";
+      if (own !== wantOwn || financing === wantOwn) found.push(`деньги Покупателя: в тексте «${own ? "свои" : ""}${financing ? "кредит" : ""}», а выбрано «${c.buyerFunds}»`);
+    } else if (own || financing) found.push("у Покупателя ипотека, а в тексте вариант денег Покупателя из №5");
     if (/^_{2,}\s*$/m.test(text)) found.push("осталась строка-разделитель из подчёркиваний");
     // Personal Cheque держат по правилу депозитных чеков
     const holder = c.sellerAgent ? "the Seller’s Agency" : c.buyerAgent ? "the Buyer’s Agency" : "the Buyer";
     if (!text.includes(`to be held by ${holder} and returned to the Seller`)) found.push(`Personal Cheque: ожидал держателя «${holder}»`);
-    const collect = c.sellerAgent ? "the Buyer may collect this Personal Cheque from the Seller’s Agent and present it for payment."
-      : c.buyerAgent ? "the Buyer may collect this Personal Cheque from the Buyer’s Agent and present it for payment."
+    const collect = c.sellerAgent ? "the Buyer may collect this Personal Cheque from the Seller’s Agency and present it for payment."
+      : c.buyerAgent ? "the Buyer may collect this Personal Cheque from the Buyer’s Agency and present it for payment."
       : "the Buyer may present this Personal Cheque for payment.";
     if (!text.includes(collect)) found.push(`Personal Cheque: ожидал «${collect}»`);
   }
@@ -347,14 +355,15 @@ for (const c of combos) {
   inRow("ADM Fee", "2% from the Selling Price", e.admFee);
   if (MORTGAGE && !READY) {
     inRow("ADM Electronic Fee", "ADM Electronic Fee:", ADM_ELECTRONIC);
-    inRow("ADM Valuation Certificate", "ADM Valuation Certificate:", ADM_VALUATION);
+    // в чистовике №2 (03.10) строка называется «ADM Verification Certificate»
+    inRow("ADM Valuation Certificate", ["ADM V", "Certificate:"], ADM_VALUATION);
   }
   if (READY) {
     inRow("Developer NOC Fee", "Developer NOC Fee:", DEVELOPER_NOC);
     inRow("Community NOC Fee", "Community NOC Fee:", COMMUNITY_NOC);
     inRow("ADM Electronic Fee", "ADM Electronic Fee:", ADM_ELECTRONIC_READY);
     inRow("ADM Valuation Certificate", "ADM Valuation Certificate:", ADM_VALUATION_READY);
-    if (MORTGAGE) inRow("Unit Verification", "Unit Verification / Search Certificate:", UNIT_VERIFICATION);
+    if (UNIT_VERIFICATION_ROW) inRow("Unit Verification", "Unit Verification / Search Certificate:", UNIT_VERIFICATION);
     if (SELLER_MORTGAGE) inRow("Mortgage Release Fee", "Mortgage Release Fee:", MORTGAGE_RELEASE);
   }
   if (!READY) inRow("Transfer Fee", "Transfer Fee / NOC Fee:", TRANSFER_FEE);
@@ -414,7 +423,7 @@ for (const c of combos) {
     if (/Articles \d+ and \d+/.test(text.replace(new RegExp(ref, "g"), ""))) found.push("осталась старая ссылка «Articles N and M»");
     // возврат депозита при отказе банка — только когда депозит Покупателя есть
     const rejection = /unable to obtain Final Mortgage Approval/.test(text);
-    if (rejection !== c.buyerDeposit) found.push(`абзац об отказе банка ${rejection ? "есть" : "отсутствует"} при депозите Покупателя=${c.buyerDeposit}`);
+    if (rejection !== (REJECTION_PARAGRAPH && c.buyerDeposit)) found.push(`абзац об отказе банка ${rejection ? "есть" : "отсутствует"} при депозите Покупателя=${c.buyerDeposit}`);
     if (!/Mortgage Pre-Approval/.test(text)) found.push("нет статьи про Mortgage Approval");
   }
 

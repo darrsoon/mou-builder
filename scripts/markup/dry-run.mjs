@@ -4,8 +4,8 @@
 import { getBotClients } from "../google-bot.mjs";
 import { buildIndex } from "../docs-edit.mjs";
 import { buildEdits } from "./offplan-edits.mjs";
-import { READY_CASH, READY_MORTGAGE, READY_MORTGAGE_CASH } from "./ready-deals.mjs";
-import { OFFPLAN, OFFPLAN_MORTGAGE } from "./offplan-deals.mjs";
+import { READY_CASH, READY_MORTGAGE, READY_MORTGAGE_CASH, READY_MORTGAGE_CASH_CLEAN, READY_CASH_CLEAN, READY_MORTGAGE_CLEAN, READY_MORTGAGE_MORTGAGE_CLEAN } from "./ready-deals.mjs";
+import { OFFPLAN, OFFPLAN_MORTGAGE, OFFPLAN_MORTGAGE_CLEAN } from "./offplan-deals.mjs";
 
 const DEALS = {
   offplan: ["1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k", OFFPLAN],
@@ -13,6 +13,12 @@ const DEALS = {
   ready: ["1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk", READY_CASH],
   "ready-mortgage": ["1fsVQKEKGYNng0ND1kkensdIqUOOQ7h_KgobDCoKwN-E", READY_MORTGAGE],
   "ready-mortgage-cash": ["1hhruVEiqBbNhib4NNmtTX-gNvGwpCw6rsMJ76Iqhk1g", READY_MORTGAGE_CASH],
+  // чистовики Даши — Google-копии docx 03.10
+  "clean-2": ["1Sy4FpNvcO2ahf2uL3sU6Os-rZcI_GZEXIrvWYql56Bo", OFFPLAN_MORTGAGE_CLEAN],
+  "clean-3": ["17VDP2-Ca5DI_3FNbUkj1gYWDVEjSAg85INVhdkN4r4Y", READY_CASH_CLEAN],
+  "clean-4": ["1Suj6HTQxfljkzRWQ0mHmq4NJ1EECTzyDeF1dF4S3mhs", READY_MORTGAGE_CLEAN],
+  "clean-5": ["1EREXr3_5zj_o2Lq0M0AYLB-8wvHCWaUR1fWbryingxw", READY_MORTGAGE_CASH_CLEAN],
+  "clean-6": ["1mB9S9exCjrUNZDK6Yj_dNs-xHfYuKMMahA69SxWxOFU", READY_MORTGAGE_MORTGAGE_CLEAN],
 };
 
 const key = process.argv[2] || "ready";

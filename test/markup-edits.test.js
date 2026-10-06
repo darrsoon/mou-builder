@@ -5,7 +5,7 @@ import { OFFPLAN } from "../scripts/markup/offplan-deals.mjs";
 
 test("список правок off-plan собирается целиком", () => {
   const edits = buildEdits(OFFPLAN);
-  assert.equal(edits.length, 172);
+  assert.equal(edits.length, 174);
   for (const e of edits) {
     assert.ok(e.find || e.cellAfter, `правка без find: ${JSON.stringify(e)}`);
     assert.ok(e.replace !== undefined || e.insertBefore !== undefined || e.bold !== undefined,
@@ -31,7 +31,7 @@ import { OFFPLAN_MORTGAGE, THRESHOLD_ROW } from "../scripts/markup/offplan-deals
 
 test("список правок для ипотечного шаблона собирается целиком", () => {
   const edits = buildEdits(OFFPLAN_MORTGAGE);
-  assert.equal(edits.length, 180);
+  assert.equal(edits.length, 182);
   for (const e of edits) {
     assert.ok(e.find || e.cellAfter, `правка без find: ${JSON.stringify(e)}`);
     assert.ok(e.replace !== undefined || e.insertBefore !== undefined || e.bold !== undefined,
@@ -78,7 +78,7 @@ import { READY_CASH, ARTICLES_READY_CASH } from "../scripts/markup/ready-deals.m
 
 test("список правок для Ready cash-to-cash собирается целиком", () => {
   const edits = buildEdits(READY_CASH);
-  assert.equal(edits.length, 178);
+  assert.equal(edits.length, 180);
   assert.equal(ARTICLES_READY_CASH.length, 18);
   const heads = edits.filter((e) => /^Article \d+$/.test(e.find));
   assert.equal(heads.length, 18);
@@ -98,7 +98,7 @@ import { ARTICLE_DEFS_READY_MORTGAGE_V2 } from "../lib/mou/articles.js";
 
 test("список правок для Ready cash-to-mortgage собирается целиком", () => {
   const edits = buildEdits(READY_MORTGAGE);
-  assert.equal(edits.length, 182);
+  assert.equal(edits.length, 184);
   for (const e of edits) {
     assert.ok(e.find || e.cellAfter, `правка без find: ${JSON.stringify(e)}`);
     assert.ok(e.replace !== undefined || e.insertBefore !== undefined, `правка без замены: ${JSON.stringify(e)}`);
@@ -131,7 +131,7 @@ import { ARTICLE_DEFS_READY_MORTGAGE_CASH_V2 } from "../lib/mou/articles.js";
 
 test("список правок для Ready mortgage-to-cash собирается целиком", () => {
   const edits = buildEdits(READY_MORTGAGE_CASH);
-  assert.equal(edits.length, 185);
+  assert.equal(edits.length, 187);
   for (const e of edits) {
     assert.ok(e.find || e.cellAfter, `правка без find: ${JSON.stringify(e)}`);
     assert.ok(e.replace !== undefined || e.insertBefore !== undefined, `правка без замены: ${JSON.stringify(e)}`);
@@ -159,5 +159,61 @@ test("статьи №5 в разметке и в коде совпадают", 
   ARTICLES_READY_MORTGAGE_CASH.forEach(([num, key], i) => {
     assert.equal(ARTICLE_DEFS_READY_MORTGAGE_CASH_V2[i][0], key);
     assert.equal(ARTICLE_DEFS_READY_MORTGAGE_CASH_V2[i][1], num);
+  });
+});
+
+// ═══ чистовики Даши (docx 03.10): разметка заново, статьи о дефолте — из №1
+import { READY_CASH_CLEAN, READY_MORTGAGE_CLEAN, READY_MORTGAGE_CASH_CLEAN, READY_MORTGAGE_MORTGAGE_CLEAN,
+  ARTICLES_READY_MORTGAGE_MORTGAGE } from "../scripts/markup/ready-deals.mjs";
+import { OFFPLAN_MORTGAGE_CLEAN } from "../scripts/markup/offplan-deals.mjs";
+import { ARTICLE_DEFS_READY_MORTGAGE_MORTGAGE_V2 } from "../lib/mou/articles.js";
+import { toAgency } from "../scripts/markup/offplan-edits.mjs";
+
+test("Agent → Agency в правках: плейсхолдеры не задеты", () => {
+  assert.equal(toAgency("to the Seller’s Agent{{/if}}"), "to the Seller’s Agency{{/if}}");
+  assert.equal(toAgency("via agents’ email"), "via agencies’ email");
+  assert.equal(toAgency("Buyer’s agent"), "Buyer’s Agency");
+  assert.equal(toAgency("{{#if any_agent}}{{seller_agent_name}}"), "{{#if any_agent}}{{seller_agent_name}}");
+  assert.equal(toAgency("{{agencies_word}}"), "{{agencies_word}}");
+});
+
+test("правки чистовиков: в find/within нет «Agent», статьи о дефолте не размечаются", () => {
+  const configs = { OFFPLAN_MORTGAGE_CLEAN, READY_CASH_CLEAN, READY_MORTGAGE_CLEAN, READY_MORTGAGE_MORTGAGE_CLEAN };
+  for (const [name, D] of Object.entries(configs)) {
+    const edits = buildEdits(D);
+    for (const e of edits) {
+      for (const k of ["find", "within"]) {
+        assert.ok(!/(?<![A-Za-z_])[Aa]gents?(?![A-Za-z_}])/.test(e[k] || ""), `${name}: «Agent» в ${k}: ${e[k]}`);
+      }
+    }
+    assert.ok(!edits.some((e) => e.find === "Upon Buyer Default" || e.find === "—-"), `${name}: ст.7–8 размечаются`);
+  }
+  // в №5 статьи 7–8 размечены по-старому (разметка сделана раньше перехода на copy-default-articles)
+  assert.ok(buildEdits(READY_MORTGAGE_CASH_CLEAN).some((e) => e.find === "—-"));
+});
+
+test("№4 и №6 по чистовикам: абзац о содействии банку Покупателя убирается (05.10)", () => {
+  for (const D of [READY_MORTGAGE_CLEAN, READY_MORTGAGE_MORTGAGE_CLEAN]) {
+    assert.ok(buildEdits(D).some((e) => e.find?.startsWith("The Seller shall cooperate with the Buyer’s financing bank") && e.replace === ""));
+  }
+  assert.ok(!buildEdits(OFFPLAN_MORTGAGE_CLEAN).some((e) => e.find?.startsWith("The Seller shall cooperate")));
+});
+
+test("№6: 20 статей, ипотека Продавца как в №5, ипотека Покупателя как в №4", () => {
+  const edits = buildEdits(READY_MORTGAGE_MORTGAGE_CLEAN);
+  const heads = edits.filter((e) => /^Article \d+$/.test(e.find));
+  assert.equal(heads.length, 20);
+  assert.equal(heads[0].find, "Article 20");
+  assert.ok(edits.some((e) => e.replace === "{{seller_bank_name}}"));
+  assert.ok(edits.some((e) => e.replace === "AED {{mortgage_release_fee}}"));
+  assert.ok(edits.some((e) => e.replace === "obtained Mortgage Pre-Approval and that"));
+  assert.equal(edits.filter((e) => e.find === "described in Articles 11 and 12").length, 2);
+  // денег Покупателя на выбор (как в №5) нет — у него ипотека
+  assert.ok(!edits.some((e) => e.insertBefore === "{{#if buyer_own_funds}}"));
+  assert.ok(!edits.some((e) => e.replace === "AED {{unit_verification_fee}}"));
+  assert.equal(ARTICLES_READY_MORTGAGE_MORTGAGE.length, ARTICLE_DEFS_READY_MORTGAGE_MORTGAGE_V2.length);
+  ARTICLES_READY_MORTGAGE_MORTGAGE.forEach(([num, key], i) => {
+    assert.equal(ARTICLE_DEFS_READY_MORTGAGE_MORTGAGE_V2[i][0], key);
+    assert.equal(ARTICLE_DEFS_READY_MORTGAGE_MORTGAGE_V2[i][1], num);
   });
 });

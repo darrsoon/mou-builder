@@ -7,10 +7,12 @@
 // Там, где правка накрыла несколько кусков с разным начертанием, жирный слетел —
 // на экране это заметно только при сравнении с исходным шаблоном.
 // Проверка: node scripts/check-style.mjs <шаблон> <эталон до разметки>
-export const BOLD_REPAIR = [
-  { find: "The Buyer’s Agent", bold: true, within: "{{agency_fee_buyer}}", note: "жирный: агентские Покупателя" },
+import { toAgency } from "./offplan-edits.mjs";
+
+const BOLD_REPAIR_RAW = [
+  { find: "Buyer’s Agent", bold: true, within: "{{agency_fee_buyer}}", note: "жирный: агентские Покупателя" },
   { find: "Transfer Date", bold: true, within: "{{agency_fee_buyer}}", note: "жирный: Transfer Date" },
-  { find: "The Seller’s Agent", bold: true, within: "{{agency_fee_seller}}", note: "жирный: агентские Продавца" },
+  { find: "Seller’s Agent", bold: true, within: "{{agency_fee_seller}}", note: "жирный: агентские Продавца" },
   { find: "Transfer Date", bold: true, within: "{{agency_fee_seller}}", note: "жирный: Transfer Date" },
 
   { find: "Security Deposit", bold: true, withinNth: 0,
@@ -41,11 +43,13 @@ export const BOLD_REPAIR = [
     within: "a) 100% (AED {{seller_deposit_80_percent_amount}})", note: "жирный: ст.8 100% сумма" },
 ];
 
+// «Agency» вместо «Agent» (06.10.2026) — шаблоны уже в новой редакции
+export const BOLD_REPAIR = BOLD_REPAIR_RAW.map((e) => ({ ...e, find: toAgency(e.find), within: toAgency(e.within) }));
+
 // Ипотечный шаблон (№2): те же места, только «Buyer’s Agent» с заглавной буквы,
 // а в ст.8 строки a) 80% и a) 100% — один абзац (мягкий перенос), поэтому сумму
 // у 100% ищем вторым вхождением, иначе правка попадает в строку 80%.
 export const BOLD_REPAIR_MORTGAGE = BOLD_REPAIR.map((e) => {
-  if (e.find === "Buyer’s agent") return { ...e, find: "Buyer’s Agent" };
   if (e.find === "AED {{seller_deposit_80_percent_amount}}" && e.within.startsWith("a) 100%")) return { ...e, nth: 1 };
   return e;
 });

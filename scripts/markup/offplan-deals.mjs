@@ -154,8 +154,9 @@ export const OFFPLAN_MORTGAGE = {
     // возврат депозита при отказе банка — только если депозит Покупателя есть
     { find: "In the event that the Buyer is unable to obtain Final Mortgage Approval",
       insertBefore: "{{#if buyer_deposit}}", note: "ст.6 ипотека: открыть buyer_deposit" },
-    { find: "subject to submission of official bank rejection letter.",
-      replace: "subject to submission of official bank rejection letter.{{/if}}", note: "ст.6 ипотека: закрыть buyer_deposit" },
+    // в чистовиках «of an official bank rejection letter», в прежних исходниках без «an»
+    { find: "bank rejection letter.", within: "unable to obtain Final Mortgage Approval",
+      replace: "bank rejection letter.{{/if}}", note: "ст.6 ипотека: закрыть buyer_deposit" },
     // ст.10–11: возврат депозита упоминается, только когда депозит Покупателя есть
     // (то же правило, что для ст.13 в №1)
     { find: ", and the Security Deposit shall be refunded to the Buyer in full.",
@@ -165,5 +166,23 @@ export const OFFPLAN_MORTGAGE = {
     // открывающие маркеры блоков агентств — в конец предыдущего абзаца
     { find: "{{buyer_signature_block}}", replace: "{{buyer_signature_block}}{{#if seller_agent}}", note: "подписи: открыть seller_agent" },
     { find: "Company Stamp{{/if}}", nth: 0, replace: "Company Stamp{{/if}}{{#if buyer_agent}}", note: "подписи: открыть buyer_agent" },
+  ],
+};
+
+// ═══ Чистовик №2 (docx 03.10, Google-копия «ЧИСТОВИК 2…»). Статьи о дефолте после
+// разметки переносятся из №1 (copy-default-articles), поэтому их не размечаем.
+export const OFFPLAN_MORTGAGE_CLEAN = {
+  ...OFFPLAN_MORTGAGE,
+  article78: "copy",
+  // в чистовике №2 «via agency email»
+  disputeEmailWord: "agency",
+  pre: [
+    // скобка в строке ADM Fee в чистовике уже закрыта: «(whatever comes higher))», точка в конце
+    // ст.4 уже стоит; a)/b) в ст.8 переносит copy-default-articles
+    ...OFFPLAN_MORTGAGE.pre.filter((e) => !["ст.4: скобка в ADM Fee", "ст.8: a)/b) отдельным абзацем",
+      "точка в конце ст.4"].includes(e.note)),
+    // разделители вокруг абзацев Продавца в ст.6 — пустой строкой, как в чистовике №5
+    { find: "letter.\n__\nSimilarly", replace: "letter.\n\nSimilarly", note: "ст.6: разделитель перед Продавцом" },
+    { find: "MOU.\n___\nSimilarly", replace: "MOU.\n\nSimilarly", note: "ст.6: разделитель между абзацами Продавца" },
   ],
 };

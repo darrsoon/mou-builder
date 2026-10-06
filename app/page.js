@@ -1202,7 +1202,7 @@ export default function HomePage() {
             {hasSellerMortgage && (
               <>
                 <Field id="sellerBankName" label="Seller's Bank (mortgage)" tip={tips.sellerBankName} value={form.sellerBankName} onChange={patch} options={lists.banks || []} />
-                <SelectField
+                {!isMortgage && <SelectField
                   id="buyerFunds"
                   label="Buyer Funds"
                   tip={tips.buyerFunds}
@@ -1212,7 +1212,7 @@ export default function HomePage() {
                     { value: "own_funds", label: "Own funds" },
                     { value: "financing", label: "Own funds, Personal Loan, Equity Release" },
                   ]}
-                />
+                />}
               </>
             )}
             {!isCashToCash && <Field id="transferThresholdPercent" label="Transfer Threshold %" tip={tips.transferThresholdPercent} value={form.transferThresholdPercent} onChange={patch} list="thresholdList" options={lists.transfer_threshold_percent || []} />}

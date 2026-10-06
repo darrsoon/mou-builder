@@ -309,3 +309,131 @@ export const READY_MORTGAGE_CASH = {
       replace: "constitute a valid reason for failure to complete the transfer.{{/if}}", note: "ст.10: закрыть «с кредитом»" },
   ],
 };
+
+// ═══ Чистовики Даши (docx 03.10, Google-копии «ЧИСТОВИК N…» в папке MOU): разметка
+// заново поверх новой редакции. Отличия от прежних исходников — образцы значений
+// в абзаце чека Покупателя и написание отдельных подписей.
+// статьи о дефолте после разметки переносятся из №1 (copy-default-articles), не размечаем
+const CLEAN_ARTICLE78 = { article78: "copy" };
+const CLEAN_ZERO_CHEQUE = { buyerChequeAmount: "AED 000,000", buyerChequeNumber: "000000", buyerChequeDate: "00.00.2026" };
+
+export const READY_MORTGAGE_CASH_CLEAN = {
+  ...READY_MORTGAGE_CASH,
+  ...CLEAN_ZERO_CHEQUE,
+  projectName: "The Source",
+  pre: [
+    ...READY_MORTGAGE_CASH.pre,
+    // в чистовике у подписи агентства Продавца стоит дата Покупателя
+    { find: "Date: {{buyer_signature_date}}", replace: "Date: {{seller_signature_date}}", within: "SELLER’S AGENCY",
+      note: "подпись агентства Продавца: своя дата" },
+  ],
+};
+
+export const READY_CASH_CLEAN = {
+  ...READY_CASH,
+  ...CLEAN_ARTICLE78,
+  projectName: "The Source",
+  developerDefinitionName: "ALDAR DEVELOPMENT L.L.C",
+  securityDepositLabel: "Security deposit:",
+  pre: [
+    ...READY_CASH.pre,
+    // в чистовике №3 в строке Security deposit по ошибке стоит текст строки Agency Fee —
+    // ставим текст-образец депозита, как в остальных чистовиках (строку всё равно собирает движок)
+    { find: "AED 00,000.00 (VAT inclusive) /  to be paid by the Buyer to the Buyer’s Agency on the Transfer Date", nth: 0,
+      replace: "AED 000,000.00 / (10% of the Selling Price, Security Deposit cheque issued by the Buyer in favour of the Seller)",
+      note: "строка депозита Покупателя вместо копии Agency Fee" },
+    { find: "AED 00,000.00 (VAT inclusive) / to be paid by the Seller to the Seller’s Agency on the Transfer Date", nth: 0,
+      replace: "AED 000,000.00 / (10% of the Selling Price, Security Deposit cheque issued by the Seller in favour of the Buyer)",
+      note: "строка депозита Продавца вместо копии Agency Fee" },
+    // разделители «____» вокруг абзацев Продавца в ст.6 — пустой строкой, как в чистовике №5
+    { find: "MOU.\n____\nSimilarly", replace: "MOU.\n\nSimilarly", note: "ст.6: разделитель перед Продавцом" },
+    { find: "MOU.\n____\nSimilarly", replace: "MOU.\n\nSimilarly", note: "ст.6: разделитель между абзацами Продавца" },
+  ],
+};
+
+export const READY_MORTGAGE_CLEAN = {
+  ...READY_MORTGAGE,
+  ...CLEAN_ARTICLE78,
+  // демо-Покупатель в чистовике — тот же, что Продавец (с доверенностью)
+  buyerBlockText: undefined,
+  pre: READY_MORTGAGE.pre.filter((e) => e.note !== "ст.8: к раскладке №2"),
+};
+
+// Абзац «The Seller shall cooperate with the Buyer’s financing bank…» остаётся только в №2 и C3-2,
+// из №4 и №6 убран вместе с пустой строкой после него (Даша, 05.10.2026) — чистовики 03.10 его ещё содержат
+const REMOVE_COOPERATE = {
+  find: "The Seller shall cooperate with the Buyer’s financing bank and provide, in a timely manner, all documents "
+    + "required for mortgage approval and registration at the Abu Dhabi Real Estate Centre.\n\n",
+  replace: "", note: "убрать абзац о содействии банку Покупателя (решение 05.10)",
+};
+READY_MORTGAGE_CLEAN.pre = [...READY_MORTGAGE_CLEAN.pre, REMOVE_COOPERATE];
+
+// ═══ №6 Ready mortgage to mortgage — 20 статей (чистовик 03.10, разметки раньше не было)
+// Документ — №5 (ипотека Продавца в ст.10: Liability Letter, Personal Cheque, банк Продавца,
+// Mortgage Release Fee) плюс ипотека Покупателя из №4: ст.11 одобрение банка, ст.12 оценка.
+// Вариантов денег Покупателя (own funds / Personal Loan) в ст.10 нет.
+export const ARTICLES_READY_MORTGAGE_MORTGAGE = [
+  [1, "article_sale_offer_number"],
+  [2, "article_effective_date_number"],
+  [3, "article_property_details_number"],
+  [4, "article_payment_table_number"],
+  [5, "article_reservation_period_number"],
+  [6, "article_security_deposit_number"],
+  [7, "article_buyer_default_number"],
+  [8, "article_seller_default_number"],
+  [9, "article_deposit_release_number"],
+  [10, "article_seller_mortgage_number"],
+  [11, "article_mortgage_approval_number"],
+  [12, "article_bank_valuation_number"],
+  [13, "article_seller_outstanding_charges_number"],
+  [14, "article_vacant_on_transfer_number"],
+  [15, "article_property_hold_number"],
+  [16, "article_developer_approval_number"],
+  [17, "article_aml_number"],
+  [18, "article_amicable_dispute_number"],
+  [19, "article_entire_agreement_number"],
+  [20, "article_electronic_signature_number"],
+];
+
+const PREAPPROVAL_EDIT = READY_MORTGAGE.pre.find((e) => e.note === "ст.10: сумма пре-одобрения");
+const pick = (list, notes) => notes.map((n) => {
+  const e = list.find((x) => x.note === n);
+  if (!e) throw new Error(`нет правки «${n}»`);
+  return e;
+});
+
+export const READY_MORTGAGE_MORTGAGE_CLEAN = {
+  ...READY_MORTGAGE_CASH_CLEAN,
+  ...CLEAN_ARTICLE78,
+  articles: ARTICLES_READY_MORTGAGE_MORTGAGE,
+  feeEdits: READY_MORTGAGE_CASH.feeEdits.map((e) => (e.note === "ADM Electronic Fee"
+    ? { ...e, find: "AED 1,392.00" } : e)),
+  pre: [
+    ...pick(READY_MORTGAGE_CASH.pre, [
+      "шапка: убрать табы перед датой", "ст.4: скобка в ADM Fee", "двойной пробел, ADM Fee",
+      "двойной пробел, сумма Продавцу", "двойной пробел, ст.5",
+    ]),
+    // в чистовике №6 скрипт Agency задел плейсхолдеры подписей агентств
+    { find: "{{seller_Agency_name}}", replace: "{{seller_agent_name}}", note: "подписи: плейсхолдер агентства Продавца" },
+    { find: "{{buyer_Agency_name}}", replace: "{{buyer_agent_name}}", note: "подписи: плейсхолдер агентства Покупателя" },
+    { find: "Date: {{buyer_signature_date}}", replace: "Date: {{seller_signature_date}}", within: "SELLER’S AGENCY",
+      note: "подпись агентства Продавца: своя дата" },
+    // ссылки на ипотечные статьи в ст.7–8: при выключенных депозитах нумерация сдвигается
+    { find: "described in Articles 11 and 12", replace: MORTGAGE_ARTICLE_REFS, nth: 0, note: "ст.7 ссылка на ст.11–12" },
+    { find: "described in Articles 11 and 12", replace: MORTGAGE_ARTICLE_REFS, nth: 0, note: "ст.8 ссылка на ст.11–12" },
+    { find: "specified in Article 5 of this MOU",
+      replace: "specified in Article {{article_reservation_period_number}} of this MOU", note: "ст.11 ссылка на ст.5" },
+    // заголовок ст.11 приклеен к тексту мягким переносом — отдельным абзацем, как в №4
+    { find: "Article 11\u000b", replace: "Article 11\n", note: "ст.11: заголовок отдельным абзацем" },
+    PREAPPROVAL_EDIT,
+    REMOVE_COOPERATE,
+  ],
+  extra: [
+    ...TENANCY_EDITS,
+    ...pick(READY_MORTGAGE_CASH.extra, [
+      "банк Продавца", "ст.10: кто держит Personal Cheque", "ст.10: у кого Покупатель забирает Personal Cheque",
+    ]),
+    // ст.11–12: возврат депозита — только когда депозит Покупателя есть (как в №4)
+    ...pick(OFFPLAN_MORTGAGE.extra, ["ст.10 депозит под условием", "ст.11 депозит под условием"]),
+  ],
+};

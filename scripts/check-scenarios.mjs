@@ -23,7 +23,7 @@ const BASE = {
   // готовый объект: два NOC-сбора, свои ADM-суммы, номер проекта и аренда
   ...(READY ? {
     admAdminFee: "", admElectronicFee: MORTGAGE ? "1,392" : "919", admValuationFee: "1,037",
-    ...(MORTGAGE ? { unitVerificationFee: "103.50" } : {}),
+    ...(MORTGAGE && !SELLER_MORTGAGE ? { unitVerificationFee: "103.50" } : {}),
     ...(SELLER_MORTGAGE ? { mortgageReleaseFee: "960", sellerBankName: "Dubai Islamic Bank" } : {}),
     developerNocFee: "2,750", communityNocFee: "1,050", projectNumber: "2023/278930",
     propertyRented: "No", annualRent: "150,000", tenancyEndDate: "12/12/2027",
@@ -65,7 +65,7 @@ const SCENARIOS = [
     { name: "объект сдан в аренду", over: { propertyRented: "Yes" }, forbidden: [/shall be vacant on the Transfer Date/] },
     { name: "объект свободен", over: { propertyRented: "No" }, forbidden: [/currently leased/, /tenancy contract/] },
   ] : []),
-  ...(SELLER_MORTGAGE ? [
+  ...(SELLER_MORTGAGE && !MORTGAGE ? [
     { name: "покупатель на свои деньги", over: { buyerFunds: "own_funds" }, forbidden: [/Personal Loan/, /Equity Release/] },
     { name: "покупатель с кредитом", over: { buyerFunds: "financing" }, forbidden: [/made solely with the Buyer’s own funds/] },
   ] : []),

@@ -82,11 +82,14 @@
 |---|------|--------|--------|-----|
 | 1 | [Off-plan](https://docs.google.com/document/d/1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k/edit) | Off-plan | 17 | `1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k` |
 | 1.2 | [Off-plan NO DEPOSIT CHEQUES](https://docs.google.com/document/d/1BsYaITx4_FvELewiKx4yquzPwkAjDYpb1SoV4bToYIo/edit) | Off-plan | 15 | `1BsYaITx4_FvELewiKx4yquzPwkAjDYpb1SoV4bToYIo` |
-| 2 | [Off-plan–mortgage](https://docs.google.com/document/d/1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0/edit) | Off-plan | 18 | `1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0` |
-| 3 | [Cash to cash READY](https://docs.google.com/document/d/1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk/edit) — **размечен, v2** (08.09, бэкап `121Mwvo-6GlqkEJ3fMZ52DsdF4XrvdTVm9UpcY6L_0o4`) | Ready | 18 | `1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk` |
-| 4 | [Cash to Mortgage READY](https://docs.google.com/document/d/1fsVQKEKGYNng0ND1kkensdIqUOOQ7h_KgobDCoKwN-E/edit) — **размечен, v2** (13.09, бэкап `1HxLbN1-SpgGVej2avkZLFkDMgMM6i2d_hoylOJyPWEA`) | Ready | 19 | `1fsVQKEKGYNng0ND1kkensdIqUOOQ7h_KgobDCoKwN-E` |
-| 5 | [Mortgage to cash READY](https://docs.google.com/document/d/1hhruVEiqBbNhib4NNmtTX-gNvGwpCw6rsMJ76Iqhk1g/edit) | Ready | 18 | `1hhruVEiqBbNhib4NNmtTX-gNvGwpCw6rsMJ76Iqhk1g` |
-| 6 | [Mortgage to mortgage READY](https://docs.google.com/document/d/1qdoj3EIr_RdTCjoC1v12aijgX26LXJKowcPyjncIY3c/edit) | Ready | 20 | `1qdoj3EIr_RdTCjoC1v12aijgX26LXJKowcPyjncIY3c` |
+| 2 | [Off-plan–mortgage](https://docs.google.com/document/d/1tx7RSibxrjdPz3DWjCxzA7Fy_L8CHgIK4JbsJa8Fo9o/edit) — **v2, по чистовику** (06.10) | Off-plan | 18 | `1tx7RSibxrjdPz3DWjCxzA7Fy_L8CHgIK4JbsJa8Fo9o` |
+| 3 | [Cash to cash READY](https://docs.google.com/document/d/1OvFwfDrZ57blOIblZCSuNa53B6xUgdfQvxsQQ-qGEbQ/edit) — **v2, по чистовику** (06.10) | Ready | 18 | `1OvFwfDrZ57blOIblZCSuNa53B6xUgdfQvxsQQ-qGEbQ` |
+| 4 | [Cash to Mortgage READY](https://docs.google.com/document/d/1OG7MFlEDx3a8RyqJbjtqBjfvhj2aMUQIplJcyaPm2Zs/edit) — **v2, по чистовику** (06.10) | Ready | 19 | `1OG7MFlEDx3a8RyqJbjtqBjfvhj2aMUQIplJcyaPm2Zs` |
+| 5 | [Mortgage to cash READY](https://docs.google.com/document/d/1UTrKSLj69RrNQAgoavPCTUdU1CJ37sfK9IB9KcC6AyU/edit) — **v2, по чистовику** (06.10) | Ready | 18 | `1UTrKSLj69RrNQAgoavPCTUdU1CJ37sfK9IB9KcC6AyU` |
+| 6 | [Mortgage to mortgage READY](https://docs.google.com/document/d/1vty7EFqiiYQs2sgh8gHvxDDPexn8T63ZO4GQ3K1u8C0/edit) — **v2, по чистовику** (06.10) | Ready | 20 | `1vty7EFqiiYQs2sgh8gHvxDDPexn8T63ZO4GQ3K1u8C0` |
+
+Прежние №2–№6 (до пересборки 06.10): `1VKkYr8F…`, `1G8vUZTj…`, `1fsVQKEK…`, `1hhruVEi…`, `1qdoj3EI…` —
+лежат в той же папке, в реестре их больше нет (подробно — `docs/state.md`).
 | C3-1 | [С3 Cash](https://docs.google.com/document/d/1LQ44RjVSj0QrY8sp2IdHpfLyJoXqFInK5CmZCS4v6nY/edit) | C3 | 18 | `1LQ44RjVSj0QrY8sp2IdHpfLyJoXqFInK5CmZCS4v6nY` |
 | C3-2 | [С3 Mortgage](https://docs.google.com/document/d/1erVDJoIJPa_2Wj5SFT5HcGZSOBhww2GwfAaa5HfktbI/edit) | C3 | 19 | `1erVDJoIJPa_2Wj5SFT5HcGZSOBhww2GwfAaa5HfktbI` |
 

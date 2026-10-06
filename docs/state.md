@@ -3,12 +3,13 @@
 Оперативная память проекта: что сделано, что ждём, что дальше. Общий план —
 `plan.md`, правила и адреса — `project-memory.md`.
 
-Обновлено: 03.10.2026
+Обновлено: 06.10.2026
 
 ## Сейчас
 
-Четыре шаблона на движке v2 и на проде: №1 off-plan, №2 off-plan ипотека,
-№3 Ready cash to cash, №4 Ready cash to mortgage. В работе — №5 Ready mortgage to cash: размечен черновик, собран пакет, ждём «да» Алины на оригинал.
+Все шесть шаблонов MOU на движке v2. №2–№6 пересобраны 06.10 по чистовикам Даши (см. ниже) —
+новые документы вписаны в реестр в ветке `claude/exciting-shannon-2uya7o`; на сайте они появятся
+после слияния ветки в `main`, до этого прод работает на прежних №2–№4 (а №5, №6 — старым движком).
 
 Сквозная проверка 13.09: 8 договоров (по два сценария на каждый из №1–№4) созданы
 на проде через `/api/mou` и сверены с локальным рендером боевых шаблонов посимвольно,
@@ -38,6 +39,67 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 На Vercel удалены `MOU_TEMPLATES` и `MOU_TEMPLATE_DOC_ID` (03.10): список шаблонов
 берётся только из `lib/mou/config.js`. Не заводить их снова — старое значение в них
 молча вернуло бы сайт на старые копии шаблонов.
+
+## Пересборка №2–№6 по чистовикам (06.10)
+
+Чистовики Даши (docx 03.10) лежат на общем диске — бот видит их только с `supportsAllDrives`.
+Google-копии в папке «MOU (Prime Bridge)» («ЧИСТОВИК N (Google-копия docx 03.10, не править)»):
+№2 `1Sy4FpNvcO2ahf2uL3sU6Os-rZcI_GZEXIrvWYql56Bo`, №3 `17VDP2-Ca5DI_3FNbUkj1gYWDVEjSAg85INVhdkN4r4Y`,
+№4 `1Suj6HTQxfljkzRWQ0mHmq4NJ1EECTzyDeF1dF4S3mhs`, №5 `1EREXr3_5zj_o2Lq0M0AYLB-8wvHCWaUR1fWbryingxw`,
+№6 `1mB9S9exCjrUNZDK6Yj_dNs-xHfYuKMMahA69SxWxOFU`.
+
+Новые шаблоны («N. DRAFT … — НОВЫЙ (чистовик 03.10, v2)»), в реестре `lib/mou/config.js`:
+
+| # | Шаблон | ID | Правок | Комбинаций без замечаний |
+|---|--------|----|--------|--------------------------|
+| 2 | Off-plan ипотека | `1tx7RSibxrjdPz3DWjCxzA7Fy_L8CHgIK4JbsJa8Fo9o` | 162 | 9216 |
+| 3 | Ready cash to cash | `1OvFwfDrZ57blOIblZCSuNa53B6xUgdfQvxsQQ-qGEbQ` | 158 | 6144 |
+| 4 | Ready cash to mortgage | `1OG7MFlEDx3a8RyqJbjtqBjfvhj2aMUQIplJcyaPm2Zs` | 164 | 6144 |
+| 5 | Ready mortgage to cash | `1UTrKSLj69RrNQAgoavPCTUdU1CJ37sfK9IB9KcC6AyU` | 188 | 12288 |
+| 6 | Ready mortgage to mortgage | `1vty7EFqiiYQs2sgh8gHvxDDPexn8T63ZO4GQ3K1u8C0` | 168 | 6144 |
+
+Прежние шаблоны не тронуты и служат бэкапом: №2 `1VKkYr8F…`, №3 `1G8vUZTj…`, №4 `1fsVQKEK…`,
+№5 `1hhruVEi…`, №6 `1qdoj3EI…` (полные ID — в таблице «Шаблоны на движке v2» ниже). После слияния
+в `main` — переименовать прежние в «УСТАРЕЛО — …», у новых убрать «— НОВЫЙ (…)» из имени.
+
+Как собрано (для каждого): `markup-*.mjs` по Google-копии чистовика → `scripts/rebuild-from-clean.sh`
+(жирный из чистовика `fix-bold`, статьи о дефолте из №1 `copy-default-articles`, `apply-layout-fixes`,
+`fix-payment-text-plain`, `fix-signature-gap`, `fix-article4-gap`) → check-markup, check-scenarios,
+check-combinations — 0 замечаний; check-style — жирный совпадает с чистовиком (расхождения только
+выравнивание по ширине и отступы ст.7–8 из №1); текст «всё включено» сверен с чистовиком пословно
+(`render-text.mjs` + `dump-text.mjs` + `word-diff.py`): отличаются только подстановки и правила ниже.
+
+Правки разметки (`scripts/markup/*`): ищут уже «Agency» (`toAgency` в `offplan-edits.mjs` переводит все
+find/replace), «Security Deposit:», «Upon signing this Agreement», абзац Продавца без реквизитов чека
+размечается (в чистовиках он есть), образцы 000,000 / 000000 / 00.00.2026 — в конфиге `*_CLEAN`.
+`article78: "copy"` — статьи 7–8 не размечаются, их целиком приносит copy-default-articles.
+Новые конфиги: `OFFPLAN_MORTGAGE_CLEAN`, `READY_CASH_CLEAN`, `READY_MORTGAGE_CLEAN`,
+`READY_MORTGAGE_CASH_CLEAN`, `READY_MORTGAGE_MORTGAGE_CLEAN`; dry-run: `node scripts/markup/dry-run.mjs clean-N`.
+
+Что поправлено в чистовиках при разметке (текст Даши иначе не трогали):
+- №3: в строке Security deposit стоял текст строки Agency Fee — заменён образцом строки депозита
+  (её всё равно собирает движок). Подпись «Security deposit:» со строчной оставлена, как в чистовике.
+- №4, №6: убран абзац «The Seller shall cooperate with the Buyer’s financing bank…» (решение 05.10;
+  чистовики 03.10 его ещё содержали). В №2 он остаётся.
+- №2, №4, №6: «Mortgage Pre-Approval for an amount equal to the agreed Selling Price» → без суммы
+  (решение 04.09 / 13.09, как было в живых №2/№4).
+- №5, №6: у подписи агентства Продавца стояла дата Покупателя; в №6 плейсхолдеры подписей
+  агентств были испорчены скриптом Agency (`{{seller_Agency_name}}`) — возвращены.
+- №2: точка в конце ст.4 в чистовике уже есть — старая правка её больше не добавляет.
+- Скобка ADM Fee в №3–№6 по-прежнему приводится к «valuation, whatever comes higher)».
+
+Следствие переноса статей 7–8 из №1: в №2–№6 распределение liquidated damages («This amount shall be
+distributed as follows: a) 80% … b) 20%») теперь показывается и без депозитов — как в №1 (чистовик 1.2).
+
+Движок и форма: набор статей `ready-mortgage-mortgage-v2` (20 статей) для №6; в реестре у №5
+`sellerMortgage`, у №6 `ready + mortgage + sellerMortgage`, суммы по умолчанию из чистовиков
+(№6: ADM Electronic 1,392, Mortgage Release Fee 960, без Unit Verification). Выбор Buyer Funds в
+форме — только у №5 (в №6 у Покупателя ипотека). Проверки знают №6: флаги `--ready --mortgage --seller-mortgage`.
+
+Вопросы Даше (оставлено как в чистовике):
+- №2: «ADM Verification Certificate» вместо «ADM Valuation Certificate» (в №4–№6 — Valuation) — опечатка?
+- №2: «by Manager's Cheque or Cheque» в строке суммы Продавцу (было «by Manager's Cheque»).
+- №3: «Security deposit:» со строчной (в остальных «Security Deposit:»).
 
 ## №1: правый край текста 16,75 см (05.10)
 
@@ -260,15 +322,11 @@ check-scenarios (теперь ловит и ПРОПАВШУЮ пустую ст
 Разметка неидемпотентна: повторный прогон по уже размеченному документу его сломает.
 Перед прогоном по оригиналу бэкап делается сам (`--original`).
 
-## №5 Ready mortgage to cash — черновик
+## №5 Ready mortgage to cash
 
-Черновик `1-zyRMRg_qjbjRt5TtEBZW4gZaSkdStLHZjaRj48gvoc` (185 правок, стиль — 0 расхождений,
-сценарии — 0), пакет 19 договоров `1SdMGVK92gK0cylUTl1Pf_lyBlhtFUbnG` — совпадает с рендером.
-Разметка: `node scripts/markup-ready-mortgage-cash.mjs [--original]`, затем
-`fix-bold.mjs <шаблон> <бэкап>` (без `--mortgage`: ст.7–8 как в №3). Проверки — с флагами
-`--ready --seller-mortgage`. В реестр `lib/mou/config.js` не вписан — до разметки оригинала;
-при вписывании: `sellerMortgage: true`, articles `ready-mortgage-cash-v2`, defaults как у №3
-плюс `mortgageReleaseFee: "960"`.
+С 06.10 — пересобран по чистовику (см. «Пересборка №2–№6»), вписан в реестр. Прежний черновик
+`1-zyRMRg_qjbjRt5TtEBZW4gZaSkdStLHZjaRj48gvoc` и пакет `1SdMGVK92gK0cylUTl1Pf_lyBlhtFUbnG` — по старой
+редакции, устарели.
 
 ## Папки с тестовыми договорами
 
@@ -280,7 +338,8 @@ check-scenarios (теперь ловит и ПРОПАВШУЮ пустую ст
 - №3 Ready cash to cash, 18 договоров: `1lGuaPXKl2cE0HvzJCTk7bS2GxvqSwnJB`
 - №4 Ready cash to mortgage, 18 договоров: `1TSfJWJYJLvpUtdw6Tf_tncpY7XwFW2C4` (сверены с боевым)
 
-Устаревшие пакеты переименовываются в «УСТАРЕЛО — …», а не удаляются.
+Устаревшие пакеты переименовываются в «УСТАРЕЛО — …», а не удаляются. Пакеты №2–№4 выше собраны
+по прежним шаблонам (до пересборки 06.10).
 
 ## Ждём ответа Миши
 
@@ -324,11 +383,12 @@ check-scenarios (теперь ловит и ПРОПАВШУЮ пустую ст
 
 ## Дальше
 
-1. №5 Ready mortgage to cash `1hhruVEiqBbNhib4NNmtTX-gNvGwpCw6rsMJ76Iqhk1g` — черновик и пакет
-   готовы (см. выше), ждём «да» на разметку оригинала.
-2. №6 Ready mortgage to mortgage `1qdoj3EIr_RdTCjoC1v12aijgX26LXJKowcPyjncIY3c` — 20 статей,
-   ADM Electronic 1,392, строка Unit Verification есть.
-3. C3-1 и C3-2 — нужен блок стороны-юрлица, его ещё нет.
+1. Слить ветку `claude/exciting-shannon-2uya7o` в `main` — сайт переключится на новые №2–№6.
+   Затем: переименовать файлы (см. «Пересборка №2–№6»), проверить на проде по договору каждого шаблона
+   (Load Draft → Create MOU), тестовые договоры — в корзину.
+2. Ответы Даши на три вопроса по чистовикам (раздел «Пересборка №2–№6»).
+3. При желании — пакеты тестовых договоров по новым №2–№6 (`generate-batch.mjs`, сверка `verify-batch.mjs`).
+4. C3-1 и C3-2 — нужен блок стороны-юрлица, его ещё нет.
 
 Бот к Google с 03.10 работает от d.kim@primebridge.estate: проект Google Cloud «MOU App»
 (`prime-bridge-ad-site`, аккаунт adminad@primebridge.estate), consent screen Internal —

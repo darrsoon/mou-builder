@@ -91,7 +91,23 @@ function article78Mortgage(D) {
   ];
 }
 
+// «Agency» вместо «Agent» (Даша, 06.10.2026): чистовики и живые шаблоны уже в новой
+// редакции, поэтому правки ищут и вставляют «Agency». Правило то же, что в
+// scripts/fix-agency-wording.mjs: внутри плейсхолдеров ({{seller_agent_name}}) не трогаем.
+const AGENT_RE = /(?<![A-Za-z_])([Aa])gen(ts?)(?![A-Za-z_}])/g;
+export function toAgency(s) {
+  if (typeof s !== "string") return s;
+  return s.replace(AGENT_RE, (_, a, tail) => (tail === "ts" ? `${a}gencies` : "Agency"));
+}
+const TEXT_FIELDS = ["find", "replace", "within", "insertBefore", "cellAfter"];
+
 export function buildEdits(D) {
+  return buildEditsRaw(D).map((e) => Object.fromEntries(
+    Object.entries(e).map(([k, v]) => [k, TEXT_FIELDS.includes(k) ? toAgency(v) : v]),
+  ));
+}
+
+function buildEditsRaw(D) {
   return [
   // правки, которые надо сделать до общих: у документа свои разделители и ссылки
   ...(D.pre || []),
@@ -205,40 +221,44 @@ export function buildEdits(D) {
     { find: D.admFeePayee, replace: "{{adm_fee_payee}}" },
   ]),
 
-  { find: "Security deposit:", replace: "{{#row any_deposit}}Security deposit:" },
+  // подпись строки в чистовиках с заглавной («Security Deposit:»), в №3 — строчная
+  { find: D.securityDepositLabel || "Security Deposit:",
+    replace: `{{#row any_deposit}}${D.securityDepositLabel || "Security Deposit:"}` },
   // строку целиком собирает движок: при проценте — «10% of the Selling Price…»,
   // при фиксированной сумме — «Security Deposit…». Разметка по кускам это не умела.
-  { find: "AED 000,000.00 / (10% of the Selling Price issued by the Buyer to the Seller)",
+  { find: "AED 000,000.00 / (10% of the Selling Price, Security Deposit cheque issued by the Buyer in favour of the Seller)",
     replace: "{{#if buyer_deposit}}{{buyer_security_deposit_table_line}}{{/if}}", note: "строка депозита Покупателя" },
-  { find: "AED 000,000.00 / (10% of the Selling Price issued by the Seller to the Buyer)",
+  { find: "AED 000,000.00 / (10% of the Selling Price, Security Deposit cheque issued by the Seller in favour of the Buyer)",
     replace: "{{#if seller_deposit}}{{seller_security_deposit_table_line}}{{/if}}", note: "строка депозита Продавца" },
 
   { find: "Agency Fee:", replace: "{{#row any_agent_fee}}Agency Fee:" },
-  { find: "AED 00,000.00", replace: "{{#if buyer_agent_fee}}AED {{agency_fee_buyer}}", within: "to The Buyer’s Agent" },
-  { find: "to The Buyer’s Agent on the Transfer Date", replace: "to The Buyer’s Agent on the Transfer Date{{/if}}" },
-  { find: "AED 00,000.00", replace: "{{#if seller_agent_fee}}AED {{agency_fee_seller}}", within: "to The Seller’s Agent" },
-  { find: "to The Seller’s Agent on the Transfer Date", replace: "to The Seller’s Agent on the Transfer Date{{/if}}" },
+  { find: "AED 00,000.00", replace: "{{#if buyer_agent_fee}}AED {{agency_fee_buyer}}", within: "to the Buyer’s Agent" },
+  { find: "to the Buyer’s Agent on the Transfer Date", replace: "to the Buyer’s Agent on the Transfer Date{{/if}}" },
+  { find: "AED 00,000.00", replace: "{{#if seller_agent_fee}}AED {{agency_fee_seller}}", within: "to the Seller’s Agent" },
+  { find: "to the Seller’s Agent on the Transfer Date", replace: "to the Seller’s Agent on the Transfer Date{{/if}}" },
 
   // ═══ ст. 5 — срок
   { find: "15 January 2026", replace: "{{reservation_deadline_long}}" },
 
   // ═══ ст. 6 — депозитные чеки
   // Покупатель, абзац без реквизитов чека
-  { find: "Upon signing this agreement", replace: "{{#if buyer_deposit}}{{#if !buyer_cheque_details}}Upon signing this agreement",
-    within: "will be held by The Seller’s Agency" },
-  { find: "AED 000,000 ", replace: "AED {{buyer_deposit_amount}} ", within: "will be held by The Seller’s Agency" },
-  // держатель уже содержит «as stakeholder» — забираем эти слова в плейсхолдер
-  { find: "The Seller’s Agency as stakeholder", replace: "{{buyer_deposit_holder}}",
-    within: "will be held by The Seller’s Agency" },
+  // абзац без реквизитов — первый с «…Security Deposit cheque. This cheque» (у реквизитов там «in favour of»)
+  { find: "Upon signing this Agreement", replace: "{{#if buyer_deposit}}{{#if !buyer_cheque_details}}Upon signing this Agreement",
+    within: "the Buyer undertakes to pay a sum of AED 000,000 as a holding Security Deposit cheque. This cheque" },
+  { find: "AED 000,000 ", replace: "AED {{buyer_deposit_amount}} ", within: "{{#if !buyer_cheque_details}}" },
+  // держатель уже содержит «the … as stakeholder» — забираем эти слова в плейсхолдер
+  { find: "the Buyer’s Agency as stakeholder", replace: "{{buyer_deposit_holder}}",
+    within: "{{#if !buyer_cheque_details}}" },
   { find: "in accordance with the terms of this MOU.", replace: "in accordance with the terms of this MOU.{{/if}}",
     within: "{{buyer_deposit_holder}} until" },
 
   // Покупатель, абзац с реквизитами чека
-  { find: "Upon signing this agreement", replace: "{{#if buyer_cheque_details}}Upon signing this agreement", within: "cheque No." },
-  { find: "AED 528,013", replace: "AED {{buyer_deposit_amount}}", within: "cheque No." },
+  { find: "Upon signing this Agreement", replace: "{{#if buyer_cheque_details}}Upon signing this Agreement", within: "cheque No." },
+  // образцы значений в чистовиках разные: 528,013 / 174369 / 14.04.2026 или 000,000 / 000000 / 00.00.2026
+  { find: D.buyerChequeAmount || "AED 528,013", replace: "AED {{buyer_deposit_amount}}", within: "cheque No." },
   { find: "Name Surname", replace: "{{buyer_cheque_in_favour_of}}", within: "cheque No." },
-  { find: "174369", replace: "{{buyer_cheque_number}}" },
-  { find: "14.04.2026", replace: "{{buyer_cheque_date}}" },
+  { find: D.buyerChequeNumber || "174369", replace: "{{buyer_cheque_number}}", within: "{{buyer_cheque_in_favour_of}}" },
+  { find: D.buyerChequeDate || "14.04.2026", replace: "{{buyer_cheque_date}}", within: "{{buyer_cheque_in_favour_of}}" },
   { find: "First Abu Dhabi Bank", replace: "{{buyer_cheque_bank}}" },
   { find: "Name Surname", replace: "{{buyer_cheque_drawn_by}}", within: "cheque No." },
   { find: ", on behalf of the Buyer, provided that such third party",
@@ -248,23 +268,22 @@ export function buildEdits(D) {
     replace: "acceptable to {{#if any_agent}}the Agent and {{/if}}the Parties",
     note: "чек от третьего лица: Агент под условием (Покупатель)" },
   { find: "the funds are provided on behalf of the Buyer.", replace: "the funds are provided on behalf of the Buyer{{/if}}." },
-  { find: "Buyer’s Agent as stakeholder", replace: "{{buyer_deposit_holder}}", within: "cheque No." },
+  { find: "the Buyer’s Agent as stakeholder", replace: "{{buyer_deposit_holder}}", within: "cheque No." },
   { find: "in accordance with the terms of this MOU.", replace: "in accordance with the terms of this MOU.{{/if}}{{/if}}",
     within: "cheque No." },
 
-  // Продавец: в документе есть только абзац с реквизитами.
-  // Вставляем перед ним зеркальный абзац без реквизитов — как у Покупателя
-  // (текст согласован в эталоне templates/offplan-v2-template.md).
-  { find: "Similarly, upon signing",
-    insertBefore: "{{#if seller_deposit}}{{#if !seller_cheque_details}}{{seller_deposit_intro}} the Seller undertakes to pay a sum of AED "
-      + "{{seller_deposit_amount}} as a holding Security Deposit cheque. This cheque is to secure the purchase of the Property "
-      // закрывающий маркер — в начале следующего абзаца: тогда при известных реквизитах
-      // удаляется вставленный абзац целиком, а пустая строка перед «Similarly» остаётся
-      + "and will be held by {{seller_deposit_holder}} until the Transfer Date in accordance with the terms of this MOU.\n{{/if}}",
+  // Продавец: в чистовиках (03.10) абзац без реквизитов уже есть, через пустую строку
+  // перед абзацем с реквизитами. Пустую строку между ними убираем: закрывающий маркер —
+  // в начале следующего абзаца, тогда при известных реквизитах удаляется абзац без
+  // реквизитов целиком, а пустая строка перед ним остаётся (как в №1).
+  { find: "Similarly, upon signing this Agreement,", nth: 0,
+    replace: "{{#if seller_deposit}}{{#if !seller_cheque_details}}{{seller_deposit_intro}}",
     note: "абзац Продавца без реквизитов чека" },
-
-  // Продавец, абзац с реквизитами чека
-  { find: "Similarly, upon signing this agreement,", replace: "{{#if seller_cheque_details}}{{seller_deposit_intro}}" },
+  { find: "AED 000,000 ", replace: "AED {{seller_deposit_amount}} ", within: "{{#if !seller_cheque_details}}" },
+  { find: "the Seller’s Agency as stakeholder", replace: "{{seller_deposit_holder}}", within: "{{#if !seller_cheque_details}}" },
+  { find: "in accordance with the terms of this MOU.\n\nSimilarly, upon signing this Agreement,",
+    replace: "in accordance with the terms of this MOU.\n{{/if}}{{#if seller_cheque_details}}{{seller_deposit_intro}}",
+    note: "Продавец: закрыть абзац без реквизитов, открыть с реквизитами" },
   { find: "AED 000,000 ", replace: "AED {{seller_deposit_amount}} ", within: "Petr Petrov" },
   { find: "Petr Petrov", replace: "{{seller_cheque_in_favour_of}}" },
   { find: "000020", replace: "{{seller_cheque_number}}" },
@@ -277,7 +296,7 @@ export function buildEdits(D) {
     replace: "acceptable to {{#if any_agent}}the Agent and {{/if}}the Parties",
     note: "чек от третьего лица: Агент под условием (Продавец)" },
   { find: "the funds are provided on behalf of the Seller.", replace: "the funds are provided on behalf of the Seller{{/if}}." },
-  { find: "Seller’s Agent as stakeholder", replace: "{{seller_deposit_holder}}", within: "{{seller_cheque_drawn_by}}" },
+  { find: "the Seller’s Agent as stakeholder", replace: "{{seller_deposit_holder}}", within: "{{seller_cheque_drawn_by}}" },
   { find: "in accordance with the terms of this MOU.", replace: "in accordance with the terms of this MOU.{{/if}}{{/if}}",
     within: "{{seller_cheque_drawn_by}}" },
 
@@ -288,7 +307,9 @@ export function buildEdits(D) {
     replace: "cheque{{#if both_deposits}}s{{/if}} shall be returned to {{deposit_return_parties}} or cancelled" },
   { find: "shall not be presented for payment.", replace: "shall not be presented for payment.{{/if}}" },
 
-  ...(D.article78 === "mortgage" ? [] : [
+  // article78: "copy" — статьи о дефолте не размечаем: после разметки их целиком переносит
+  // из №1 scripts/copy-default-articles.mjs (чистовики 03.10, Даша 06.10.2026)
+  ...(D.article78 ? [] : [
   // ═══ ст. 7 — дефолт Покупателя
   { find: "__", replace: "{{#if !buyer_deposit}}", nth: 0 },
   { find: "AED 528,013", replace: "AED {{buyer_liquidated_damages_amount}}", within: "Upon Buyer Default" },
@@ -319,7 +340,9 @@ export function buildEdits(D) {
     replace: "No unilateral instruction from either Party shall authorize its release.{{/if}}" },
 
   // ═══ ст. 15 — уведомление о споре
-  { find: "via agents\u2019 email", replace: "via {{#if any_agent}}agents\u2019 {{/if}}email" },
+  // в №2 «via agency email», в остальных «via agencies’ email»
+  { find: `via ${D.disputeEmailWord || "agencies\u2019"} email`,
+    replace: `via {{#if any_agent}}${D.disputeEmailWord || "agencies\u2019"} {{/if}}email` },
   { find: D.disputeCopyTail,
     replace: "{{#if any_agent}}, with a copy of such email or letter delivered to {{agencies_word}} for their reference{{/if}}" },
   // решение заказчика: без агентств абзац об освобождении агентства от ответственности уходит целиком
@@ -372,7 +395,7 @@ export function buildEdits(D) {
   { find: "Article {{article_deposit_release_number}}", insertBefore: "{{#if any_deposit}}", note: "открыть ст.9 целиком" },
   { find: "No unilateral instruction from either Party shall authorize its release.{{/if}}",
     replace: "No unilateral instruction from either Party shall authorize its release.{{/if}}{{/if}}", note: "закрыть ст.9 целиком" },
-  ...(D.article78 === "mortgage" ? [] : [
+  ...(D.article78 ? [] : [
   // ═══ варианты «без агентства» — как в эталоне templates/offplan-v2-template.md
   // ст. 7: без агентства продавца всё достаётся Продавцу, строка b) исчезает
   { find: "a) 80% (AED {{buyer_deposit_80_percent_amount}}) to the Seller; and", insertBefore: "{{#if seller_agent}}" },
@@ -419,7 +442,7 @@ export function buildEdits(D) {
     replace: "The Buyer and Seller shall {{#if any_agent}}fully cooperate with their respective Agents by providing{{/if}}"
       + "{{#if !any_agent}}provide{{/if}} all required information", note: "ст.14 AML" },
 
-  ...(D.article78 === "mortgage" ? article78Mortgage(D) : [
+  ...(D.article78 === "copy" ? [] : D.article78 === "mortgage" ? article78Mortgage(D) : [
   // Шаблон 1.2 (депозитов нет ни у кого) — главный для этого случая:
   // там нет ни фразы про Security Deposit, ни распределения 80/20.
   // Хвост абзаца у документов разный (пробелы, мягкий перенос, пустой абзац между),

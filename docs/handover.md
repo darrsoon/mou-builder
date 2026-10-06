@@ -25,9 +25,13 @@ Google `a.tsokur@primebridge.estate`), **новый владелец** — Да�
 | № | Шаблон | ID документа |
 |---|---|---|
 | 1 | Off-plan | `1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k` |
-| 2 | Off-plan ипотека | `1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0` |
-| 3 | Ready cash to cash | `1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk` |
-| 4 | Ready cash to mortgage | `1fsVQKEKGYNng0ND1kkensdIqUOOQ7h_KgobDCoKwN-E` |
+| 2 | Off-plan ипотека | `1tx7RSibxrjdPz3DWjCxzA7Fy_L8CHgIK4JbsJa8Fo9o` |
+| 3 | Ready cash to cash | `1OvFwfDrZ57blOIblZCSuNa53B6xUgdfQvxsQQ-qGEbQ` |
+| 4 | Ready cash to mortgage | `1OG7MFlEDx3a8RyqJbjtqBjfvhj2aMUQIplJcyaPm2Zs` |
+| 5 | Ready mortgage to cash | `1UTrKSLj69RrNQAgoavPCTUdU1CJ37sfK9IB9KcC6AyU` |
+| 6 | Ready mortgage to mortgage | `1vty7EFqiiYQs2sgh8gHvxDDPexn8T63ZO4GQ3K1u8C0` |
+
+№2–№6 пересобраны по чистовикам 06.10.2026 (на сайте — после слияния ветки в `main`).
 
 Остальные шаблоны, бэкапы и папки с тестовыми договорами — в `docs/state.md`.
 

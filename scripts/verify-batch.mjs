@@ -22,7 +22,7 @@ const CASES = READY ? [...SCENARIOS, ...READY_SCENARIOS, ...(SELLER_MORTGAGE ? S
 const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 const folderId = positional[0];
 const templateId = positional[1] || (MORTGAGE
-  ? "1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0"
+  ? "1tx7RSibxrjdPz3DWjCxzA7Fy_L8CHgIK4JbsJa8Fo9o"
   : "1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k");
 if (!folderId) throw new Error("укажи ID папки с тестовыми договорами");
 
