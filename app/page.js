@@ -453,7 +453,7 @@ function depositSectionStatus(form, side) {
   return makeSectionStatus(missing);
 }
 
-function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage = false, isReadyTemplate = false, hasUnitVerification = false, hasSellerMortgage = false) {
+function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage = false, isReadyTemplate = false, hasUnitVerification = false, hasSellerMortgage = false, titleDeedDefault = "") {
   const isReady = String(form.unitStatus || "").toLowerCase() === "ready";
   const agreementMissing = missingFields(form, [
     ["agreementDate", "Agreement Date"],
@@ -515,8 +515,9 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
 
   // всё, что печатается в таблице Property Details (Даша, 06.10.2026: «все обязательные поля»);
   // Additional Information может быть пустой
+  // в off-plan (№1, №2) Title Deed всегда «N/A» — пустое поле сайт заполняет сам, не считаем его
   const propertyRequired = [
-    ["titleDeedNumber", "Title Deed Number"],
+    ...(titleDeedDefault ? [] : [["titleDeedNumber", "Title Deed Number"]]),
     ["propertyLocation", "Property Location"],
     ["bedrooms", "Bedrooms"],
     ["areaM2", "Area"],
@@ -620,8 +621,8 @@ export default function HomePage() {
   // квартира в ипотеке у Продавца (№5): сбор за снятие ипотеки, банк и деньги Покупателя
   const hasSellerMortgage = !!selectedTemplate?.sellerMortgage;
   const sectionStatuses = useMemo(
-    () => buildSectionStatuses(form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage),
-    [form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage],
+    () => buildSectionStatuses(form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage, selectedTemplate?.defaults?.titleDeedNumber || ""),
+    [form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage, selectedTemplate],
   );
 
   // Суммы сборов по умолчанию — свои у каждого шаблона, взяты из его исходника
@@ -1120,7 +1121,7 @@ export default function HomePage() {
           </Section>
 
           <Section title="Property" status={sectionStatuses.property}>
-            <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={form.titleDeedNumber} onChange={patch} />
+            <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={form.titleDeedNumber} onChange={patch} placeholder={selectedTemplate?.defaults?.titleDeedNumber || ""} />
             <Field id="propertyLocation" label="Property Location / Island" tip={tips.propertyLocation} value={form.propertyLocation} onChange={patch} />
             <Field id="bedrooms" label="Bedrooms" tip={tips.bedrooms} value={form.bedrooms} onChange={patch} list="bedroomsList" options={lists.bedroom || []} />
             <Field id="areaM2" label="Area, sq.m" tip={tips.areaM2} value={form.areaM2} onChange={patch} onBlur={(id, value) => patch(id, formatArea(value))} placeholder="Например 67.20" />
