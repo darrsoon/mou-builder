@@ -64,6 +64,8 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 Шаблон «8. Commission Agreement (2 agencies)»: «agrees to pay Third Party» → «agrees to pay the Third
 Party»; абзац «…the Third Party shall / each be the sole recipient…» был разорван на два — склеен.
 В «7» (1 agency) таких мест нет.
+Верхнее поле «8» — 3,5 см (99.2 pt), как у «7» (было 3,0 см: на 2-й странице текст начинался вплотную
+к логотипу). Тестовое соглашение на 2 агентства — по-прежнему 2 страницы.
 
 ## WHEREAS B: «agrees to purchase the Property» без запятой (07.10)
 
