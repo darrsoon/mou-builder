@@ -581,6 +581,11 @@ export default function HomePage() {
     if (status === "authenticated") loadInit();
   }, [status]);
 
+  // Строка разделов закреплена под верхней панелью (Даша, 07.10.2026). Высоты обеих панелей
+  // меняются (перенос чипов, ширина окна) — отдаём их в CSS: отступ строки разделов, Preview
+  // и прокрутки к разделу считаются от них.
+  useStickyHeights(status === "authenticated");
+
   useEffect(() => {
     if (status !== "authenticated") return;
     if (!init.config) return;
@@ -1441,6 +1446,28 @@ function ResultBox({ result }) {
 // Якорь секции: из заголовка делаем стабильный id для прокрутки из чипов.
 function sectionAnchor(title) {
   return "sec-" + String(title || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function useStickyHeights(enabled) {
+  useEffect(() => {
+    if (!enabled) return undefined;
+    const root = document.documentElement;
+    const update = () => {
+      const topbar = document.querySelector(".topbar");
+      const nav = document.querySelector(".sectionNav");
+      const topbarSticky = topbar && window.getComputedStyle(topbar).position === "sticky";
+      root.style.setProperty("--topbar-h", `${topbarSticky ? topbar.offsetHeight : 0}px`);
+      root.style.setProperty("--nav-h", `${nav ? nav.offsetHeight : 0}px`);
+    };
+    update();
+    const observer = new window.ResizeObserver(update);
+    for (const el of document.querySelectorAll(".topbar, .sectionNav")) observer.observe(el);
+    window.addEventListener("resize", update);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [enabled]);
 }
 
 function SectionNav({ items }) {
