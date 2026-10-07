@@ -89,7 +89,7 @@
 | 6 | [Mortgage to mortgage READY](https://docs.google.com/document/d/1vty7EFqiiYQs2sgh8gHvxDDPexn8T63ZO4GQ3K1u8C0/edit) — **v2, по чистовику** (06.10) | Ready | 20 | `1vty7EFqiiYQs2sgh8gHvxDDPexn8T63ZO4GQ3K1u8C0` |
 
 Прежние №2–№6 (до пересборки 06.10): `1VKkYr8F…`, `1G8vUZTj…`, `1fsVQKEK…`, `1hhruVEi…`, `1qdoj3EI…` —
-лежат в той же папке, в реестре их больше нет (подробно — `docs/state.md`).
+лежат в той же папке. В реестре пока новый только №2; №3–№6 подключим после Off-plan (`docs/state.md`).
 | C3-1 | [С3 Cash](https://docs.google.com/document/d/1LQ44RjVSj0QrY8sp2IdHpfLyJoXqFInK5CmZCS4v6nY/edit) | C3 | 18 | `1LQ44RjVSj0QrY8sp2IdHpfLyJoXqFInK5CmZCS4v6nY` |
 | C3-2 | [С3 Mortgage](https://docs.google.com/document/d/1erVDJoIJPa_2Wj5SFT5HcGZSOBhww2GwfAaa5HfktbI/edit) | C3 | 19 | `1erVDJoIJPa_2Wj5SFT5HcGZSOBhww2GwfAaa5HfktbI` |
 

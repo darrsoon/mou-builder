@@ -3,13 +3,16 @@
 Оперативная память проекта: что сделано, что ждём, что дальше. Общий план —
 `plan.md`, правила и адреса — `project-memory.md`.
 
-Обновлено: 06.10.2026
+Обновлено: 07.10.2026
 
 ## Сейчас
 
-Все шесть шаблонов MOU на движке v2. №2–№6 пересобраны 06.10 по чистовикам Даши (см. ниже) —
-новые документы вписаны в реестр в ветке `claude/exciting-shannon-2uya7o`; на сайте они появятся
-после слияния ветки в `main`, до этого прод работает на прежних №2–№4 (а №5, №6 — старым движком).
+**Порядок (Даша, 07.10): сначала до конца доводим Off-plan (№1, №2), потом готовые объекты (№3–№6).**
+Вопросы по готовым шаблонам задаём Даше, только когда до них дойдём (список — «Отложенные вопросы»).
+
+№2–№6 пересобраны 06.10 по чистовикам Даши (см. ниже). В реестр в ветке `claude/exciting-shannon-2uya7o`
+вписан только новый №2; №3–№6 в реестре прежние (на сайте — прежние №3, №4 на v2, №5, №6 старым движком),
+новые документы №3–№6 ждут своей очереди.
 
 Сквозная проверка 13.09: 8 договоров (по два сценария на каждый из №1–№4) созданы
 на проде через `/api/mou` и сверены с локальным рендером боевых шаблонов посимвольно,
@@ -96,10 +99,29 @@ distributed as follows: a) 80% … b) 20%») теперь показываетс
 (№6: ADM Electronic 1,392, Mortgage Release Fee 960, без Unit Verification). Выбор Buyer Funds в
 форме — только у №5 (в №6 у Покупателя ипотека). Проверки знают №6: флаги `--ready --mortgage --seller-mortgage`.
 
-Вопросы Даше (оставлено как в чистовике):
-- №2: «ADM Verification Certificate» вместо «ADM Valuation Certificate» (в №4–№6 — Valuation) — опечатка?
-- №2: «by Manager's Cheque or Cheque» в строке суммы Продавцу (было «by Manager's Cheque»).
+Вопросы по №2 (Off-plan ипотека, оставлено как в чистовике) — задать сейчас:
+- «ADM Verification Certificate» вместо «ADM Valuation Certificate» (в №4–№6 — Valuation) — опечатка?
+- «by Manager's Cheque or Cheque» в строке суммы Продавцу (было «by Manager's Cheque»).
+
+### Отложенные вопросы (готовые объекты — задать, когда дойдём до №3–№6)
 - №3: «Security deposit:» со строчной (в остальных «Security Deposit:»).
+- (из «Ждём ответа Миши» ниже — Bailing, админ-сбор 575, Type of Area — тоже про готовые объекты.)
+
+### Записи реестра для №3–№6 (вписать в `lib/mou/config.js`, когда дойдём)
+```js
+{ id: "1OvFwfDrZ57blOIblZCSuNa53B6xUgdfQvxsQQ-qGEbQ", label: "3. Ready — cash to cash", docTitle: "Cash to Cash Memorandum of Understanding (MOU)",
+  engine: "v2", articles: "ready-cash-v2", ready: true,
+  defaults: { admElectronicFee: "919", admValuationFee: "1,037", developerNocFee: "2,750", communityNocFee: "1,050" } },
+{ id: "1OG7MFlEDx3a8RyqJbjtqBjfvhj2aMUQIplJcyaPm2Zs", label: "4. Ready — cash to mortgage", docTitle: "Cash to Mortgage Memorandum of Understanding (MOU)",
+  engine: "v2", articles: "ready-mortgage-v2", ready: true, mortgage: true, unitVerification: true,
+  defaults: { admElectronicFee: "1,392", admValuationFee: "1,037", developerNocFee: "2,750", communityNocFee: "1,050", unitVerificationFee: "103.50" } },
+{ id: "1UTrKSLj69RrNQAgoavPCTUdU1CJ37sfK9IB9KcC6AyU", label: "5. Ready — mortgage to cash", docTitle: "Mortgage to Cash Memorandum of Understanding (MOU)",
+  engine: "v2", articles: "ready-mortgage-cash-v2", ready: true, sellerMortgage: true,
+  defaults: { admElectronicFee: "919", admValuationFee: "1,037", developerNocFee: "2,750", communityNocFee: "1,050", mortgageReleaseFee: "960" } },
+{ id: "1vty7EFqiiYQs2sgh8gHvxDDPexn8T63ZO4GQ3K1u8C0", label: "6. Ready — mortgage to mortgage", docTitle: "Mortgage to Mortgage Memorandum of Understanding (MOU)",
+  engine: "v2", articles: "ready-mortgage-mortgage-v2", ready: true, mortgage: true, sellerMortgage: true,
+  defaults: { admElectronicFee: "1,392", admValuationFee: "1,037", developerNocFee: "2,750", communityNocFee: "1,050", mortgageReleaseFee: "960" } },
+```
 
 ## №1: правый край текста 16,75 см (05.10)
 
@@ -383,11 +405,14 @@ check-scenarios (теперь ловит и ПРОПАВШУЮ пустую ст
 
 ## Дальше
 
-1. Слить ветку `claude/exciting-shannon-2uya7o` в `main` — сайт переключится на новые №2–№6.
-   Затем: переименовать файлы (см. «Пересборка №2–№6»), проверить на проде по договору каждого шаблона
-   (Load Draft → Create MOU), тестовые договоры — в корзину.
-2. Ответы Даши на три вопроса по чистовикам (раздел «Пересборка №2–№6»).
-3. При желании — пакеты тестовых договоров по новым №2–№6 (`generate-batch.mjs`, сверка `verify-batch.mjs`).
+Off-plan (сейчас):
+1. Ответы Даши по №2 (ADM Verification Certificate, «Manager's Cheque or Cheque») и по №1
+   («purchase, the Property» и «third-party» против чистовика 1.2 — раздел «№1 без депозитов»).
+2. Слить ветку в `main` — сайт переключится на новый №2. Проверить на проде (Load Draft → Create MOU),
+   тестовый договор — в корзину; прежний №2 переименовать в «УСТАРЕЛО — …», у нового убрать «— НОВЫЙ (…)».
+
+Готовые объекты (потом):
+3. Отложенные вопросы, вписать №3–№6 в реестр (записи выше), переименовать файлы, проверка на проде.
 4. C3-1 и C3-2 — нужен блок стороны-юрлица, его ещё нет.
 
 Бот к Google с 03.10 работает от d.kim@primebridge.estate: проект Google Cloud «MOU App»
