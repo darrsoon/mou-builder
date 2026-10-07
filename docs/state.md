@@ -67,6 +67,10 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 В коде: процент депозита (`*_deposit_basis`, `buildDepositTableLine`) и `adm_admin_fee` («+ AED 575») больше не
 выделяются. В шаблонах: `scripts/fix-highlight-parens.mjs` снимает жёлтое со скобки «(» после суммы Agency Fee
 (залита в чистовике), применено ко всем 8, добавлено в `apply-layout-fixes.mjs`. Пример №1 проверен в PDF.
+Строка Security Deposit в готовых шаблонах (и в №2) была одним плейсхолдером `{{*_security_deposit_table_line}}`,
+залитым в чистовике жёлтым и жирным, — вся строка выходила жёлтой и жирной. `scripts/fix-deposit-line-style.mjs`
+снимает с плейсхолдера жирный и жёлтое (7 шаблонов, в apply-layout-fixes), а `buildDepositTableLine` размечает
+как в №1: `<<⟦AED сумма⟧ />>`, жирные Selling Price / Security Deposit / Buyer / Seller. Пример №3 проверен в PDF.
 Жёлтым пока остаются «75%» в подписи Remaining balance и метка «Transfer Fee:» (в шаблоне залита) — спросить Алину.
 
 Строка Additional Information остаётся в две строки: подпись «Number of Car Parking Spaces:»
