@@ -397,7 +397,9 @@ test("Off-plan: Title Deed Number по умолчанию N/A, в готовых
   const ready = MOU_TEMPLATES.find((t) => t.ready);
   assert.equal(offplan.defaults.titleDeedNumber, "N/A");
   assert.equal(formForTemplate({ titleDeedNumber: "" }, offplan).titleDeedNumber, "N/A");
-  assert.equal(formForTemplate({ titleDeedNumber: "TD-1" }, offplan).titleDeedNumber, "TD-1");
+  // 07.10.2026: в Off-plan всегда «N/A», даже если в черновике остался номер
+  assert.equal(formForTemplate({ titleDeedNumber: "TD-1" }, offplan).titleDeedNumber, "N/A");
+  assert.equal(formForTemplate({ titleDeedNumber: "TD-1" }, ready).titleDeedNumber, "TD-1");
   assert.equal(formForTemplate({ titleDeedNumber: "" }, ready).titleDeedNumber, "");
 });
 

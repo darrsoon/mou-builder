@@ -296,7 +296,7 @@ const tips = {
   tenancyEndDate: "До какой даты действует договор аренды.",
   admValuationFee: "ADM Valuation Certificate — сертификат оценки ADREC. Сумма по умолчанию — из выбранного шаблона, можно поменять.",
   transferFeeLabel: "Название строки: Transfer Fee или NOC Fee.",
-  titleDeedNumber: "Номер title deed (документа о праве собственности). Если для Off-Plan его нет, оставьте пустым.",
+  titleDeedNumber: "Номер Title Deed (документа о праве собственности). В Off-plan (№1, №2) его нет — всегда N/A. В готовых объектах обязателен.",
   propertyLocation: "Можно указать только остров/район, например Yas Island. Abu Dhabi, UAE добавится автоматически.",
   bedrooms: "Как должно быть в договоре: Studio, 1 Bedroom, 2 Bedrooms и т.д.",
   areaM2: "Площадь в квадратных метрах, всегда с точкой и двумя знаками: 67.20. Можно ввести 67,2 или 67 — формат поправится сам.",
@@ -539,7 +539,7 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
 
   // всё, что печатается в таблице Property Details (Даша, 06.10.2026: «все обязательные поля»);
   // Additional Information может быть пустой
-  // Title Deed пустой — сайт сам пишет «N/A» (во всех шаблонах), поэтому не считаем его
+  // Title Deed: в Off-plan всегда «N/A», в готовых объектах номер обязателен (Даша, 07.10.2026)
   const propertyRequired = [
     ["propertyLocation", "Property Location"],
     ["bedrooms", "Bedrooms"],
@@ -549,6 +549,8 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
     ["parkingSpaces", isReadyTemplate ? "Parking Space No." : "Parking Spaces"],
   ];
   if (isReadyTemplate) propertyRequired.push(["projectNumber", "Project No."]);
+  // «N/A» только у шаблонов с этим умолчанием в реестре (№1, №2); у остальных — номер
+  if (!titleDeedDefault) propertyRequired.push(["titleDeedNumber", "Title Deed Number"]);
   // объект сдан в аренду: без суммы и срока в статье остаются дырки
   if (isReadyTemplate && form.propertyRented === "Yes") {
     propertyRequired.push(["annualRent", "Annual Rent"], ["tenancyEndDate", "Tenancy Contract Until"]);
@@ -1177,7 +1179,11 @@ export default function HomePage() {
           </Section>
 
           <Section title="Property" status={sectionStatuses.property}>
-            <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={form.titleDeedNumber} onChange={patch} placeholder="N/A" />
+            {/* Title Deed (Даша, 07.10.2026): в №1–№2 (Off-plan) всегда «N/A», поле не правится;
+                в готовых объектах — номер обязателен */}
+            {!selectedTemplate?.defaults?.titleDeedNumber
+              ? <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={form.titleDeedNumber} onChange={patch} invalid={!hasValue(form.titleDeedNumber)} />
+              : <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={selectedTemplate.defaults.titleDeedNumber} onChange={() => {}} readOnly />}
             <Field id="propertyLocation" label="Property Location / Island" tip={tips.propertyLocation} value={form.propertyLocation} onChange={patch} />
             <Field id="bedrooms" label="Bedrooms" tip={tips.bedrooms} value={form.bedrooms} onChange={patch} list="bedroomsList" options={lists.bedroom || []} />
             <Field id="areaM2" label="Area, sq.m" tip={tips.areaM2} value={form.areaM2} onChange={patch} onBlur={(id, value) => patch(id, formatArea(value))} placeholder="Например 67.20" />

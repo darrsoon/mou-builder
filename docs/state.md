@@ -57,6 +57,13 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 07.10: Off-plan закрыт — решения Даши: «Manager's Cheque or Cheque» в №2 и «ADM Verification Certificate»
 оставляем как в чистовике, «third party reason» в №1 — как в драфте 1. Всё в `main`. Дальше — №3–№6.
 
+## Title Deed: №1–№2 — N/A, остальные — номер (07.10)
+
+Даша: «в 1, 2 нужно N/A, в остальных случаях нужен номер». У шаблонов с умолчанием `titleDeedNumber: "N/A"`
+в реестре (№1, №2) поле в форме только для чтения со значением N/A, formForTemplate ставит N/A всегда
+(даже если в черновике остался номер). У всех остальных (№3–№6, в т.ч. старые №5/№6 и C3) Title Deed
+Number обязателен: без него раздел Property — «Needs info», договор не создаётся (строгий режим).
+
 ## Off-plan: поле «Remaining Balance %» (07.10)
 
 В Payments — поле процента в строке «Remaining balance of N% of the Original Price». Считается само:
@@ -258,7 +265,7 @@ Payment Table по колонкам как Property Details (левая 8,43 с�
 - «Agent» → «Agency» по тексту шаблонов №1–№6 (тело и колонтитулы, «the Agent», «Agents» → «Agencies»,
   «agents’» → «agencies’»): `scripts/fix-agency-wording.mjs <id>`. C3 НЕ трогать (Даша): старый движок
   (lib/google/docs.js) ищет в их тексте фразы со словом «Agent». Commission Agreement — «Agent» не было.
-- Title Deed пустой — в договор «N/A» во всех шаблонах (normalizeForm), в форме не считается обязательным.
+- Title Deed пустой — в договор «N/A» во всех шаблонах (normalizeForm). С 07.10: в №1–№2 всегда N/A, в остальных обязателен.
 - Даша дала чистовики (docx, 03.10) как эталон для №2–№6: №2 `1dFoxeFeI27gIuinjKcFtRtuI_EheRH1e`,
   №3 `1gnwGupIsGfqCCVqfqOPFfTipZRCg9CVB`, №4 `1PF9rWkaiEcdBhlaG66pp9bLgyLsIdC9J`,
   №5 `1b4vthq_LJOxddmEeWRtoAjN0khkyDIqy`, №6 `1_4UtEmXwXtvikjlHmLu6t38X8Dp6mAlM`. Живые №2–№5 — старая
