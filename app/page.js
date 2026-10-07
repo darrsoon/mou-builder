@@ -15,7 +15,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { getArticleDefsForTemplate } from "@/lib/mou/articles";
-import { formatArea } from "@/lib/mou/helpers";
+import { formatArea, partyHasEid, EID_PATTERN } from "@/lib/mou/helpers";
 import Holidays from "date-holidays";
 import { IMaskInput } from "react-imask";
 
@@ -66,6 +66,7 @@ const initialParty = () => ({
   name: "",
   nationality: "",
   passport: "",
+  hasEid: false,
   eid: "",
   ownershipPercent: "100",
   hasPoa: false,
@@ -330,7 +331,8 @@ const tips = {
   partyName: "Полное имя стороны так, как должно быть в MOU.",
   nationality: "Nationality (гражданство) на английском, как в passport.",
   passport: "Passport number (номер паспорта). Если пусто, не попадет в party block.",
-  eid: "Emirates ID (ID в ОАЭ). Если пусто, не попадет в party block.",
+  eid: "Emirates ID (ID в ОАЭ) полностью: 784-XXXX-XXXXXXX-X. Обязателен, если отмечено «Has Emirates ID».",
+  hasEid: "Есть ли у стороны Emirates ID. Отмечено — номер обязателен и попадёт в договор; нет — EID в договоре не будет.",
   ownershipPercent: "Ownership % (доля владения). Для Seller и Buyer отдельно сумма должна быть 100%.",
   poa: "Yes (да), если вместо стороны подписывает представитель по POA / Power of Attorney (доверенности).",
   salutation: "Обращение перед именем в тексте договора (например Mr., Mrs., Ms.).",
@@ -361,6 +363,8 @@ function partySectionStatus(parties) {
     if (!hasValue(party.name)) missing.push(`${label}: Name`);
     if (!hasValue(party.nationality)) missing.push(`${label}: Nationality`);
     if (!hasValue(party.passport)) missing.push(`${label}: Passport`);
+    // Emirates ID — только если отмечена галочка, и номер целиком (Даша, 07.10.2026)
+    if (partyHasEid(party) && !EID_PATTERN.test(String(party.eid || ""))) missing.push(`${label}: EID`);
     if (!hasValue(party.ownershipPercent)) missing.push(`${label}: Ownership %`);
     if (party.hasPoa) {
       if (!hasValue(party.poaName)) missing.push(`${label}: POA Name`);
@@ -1897,7 +1901,8 @@ function PartySection({ title, type, parties, setForm, lists, status }) {
             <Field id={`${type}-${index}-name`} label="Name Surname" tip={tips.partyName} value={party.name} onChange={(_, v) => setParty(index, "name", v)} />
             <Field id={`${type}-${index}-nationality`} label="Nationality" tip={tips.nationality} value={party.nationality} onChange={(_, v) => setParty(index, "nationality", v)} list={`${type}-${index}-nationalities`} options={orderedOptions(lists.nationalities, PRIORITY_NATIONALITIES)} />
             <Field id={`${type}-${index}-passport`} label="Passport" tip={tips.passport} value={party.passport} onChange={(_, v) => setParty(index, "passport", v)} />
-            <EidField id={`${type}-${index}-eid`} label="EID" tip={tips.eid} value={party.eid} onChange={(_, v) => setParty(index, "eid", v)} />
+            <CheckboxField id={`${type}-${index}-hasEid`} label="Has Emirates ID" tip={tips.hasEid} checked={partyHasEid(party)} onChange={(_, v) => setParty(index, "hasEid", v)} />
+            {partyHasEid(party) && <EidField id={`${type}-${index}-eid`} label="EID" tip={tips.eid} value={party.eid} onChange={(_, v) => setParty(index, "eid", v)} />}
             <Field id={`${type}-${index}-ownership`} label="Ownership %" tip={tips.ownershipPercent} value={party.ownershipPercent} onChange={(_, v) => setParty(index, "ownershipPercent", v)} list={`${type}-${index}-ownerships`} options={lists.ownership_percent || []} />
             <SelectField id={`${type}-${index}-poa`} label="POA?" tip={tips.poa} value={party.hasPoa ? "Yes" : "No"} onChange={(_, v) => setParty(index, "hasPoa", v === "Yes")} options={["No", "Yes"]} />
           </div>
