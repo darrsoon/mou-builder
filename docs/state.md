@@ -447,8 +447,8 @@ check-scenarios (теперь ловит и ПРОПАВШУЮ пустую ст
 
 Off-plan (сейчас):
 1. Ответы Даши по №2 (Off-plan mortgage): «Manager's Cheque or Cheque» в строке суммы Продавцу.
-   (07.10: «ADM Verification Certificate» исправлено на «ADM Valuation Certificate» — в шаблоне и в
-   конфиге разметки.) В №2 по его чистовику «any third-party reason» с дефисом и без «or»
+   (07.10, решение Даши: в №2 строка «ADM Verification Certificate: AED 925.75 / to be paid by the Buyer
+   to DMT ADREC – REVENUE ACCOU upon request by Bank transfer or Card» — как в чистовике, не Valuation.) В №2 по его чистовику «any third-party reason» с дефисом и без «or»
    перед ним — выровнять с №1, если Даша скажет.
 2. Слить ветку в `main` — сайт переключится на новый №2. Проверить на проде (Load Draft → Create MOU),
    тестовый договор — в корзину; прежний №2 переименовать в «УСТАРЕЛО — …», у нового убрать «— НОВЫЙ (…)».
