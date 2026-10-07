@@ -20,7 +20,6 @@ const steps = [
   ["fix-fee-cells.mjs"],
   ["fix-highlight-parens.mjs"],
   ["fix-deposit-line-style.mjs"],
-  ["fix-pin-table-headers.mjs"],
   ["fix-signature-headings.mjs"],
   ["fix-keep-with-next.mjs"],
 ];
