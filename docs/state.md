@@ -71,6 +71,10 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 залитым в чистовике жёлтым и жирным, — вся строка выходила жёлтой и жирной. `scripts/fix-deposit-line-style.mjs`
 снимает с плейсхолдера жирный и жёлтое (7 шаблонов, в apply-layout-fixes), а `buildDepositTableLine` размечает
 как в №1: `<<⟦AED сумма⟧ />>`, жирные Selling Price / Security Deposit / Buyer / Seller. Пример №3 проверен в PDF.
+Шапка таблицы не висит одна внизу страницы (Алина, 07.10: «PROPERTY DETAILS» без строк): `scripts/fix-pin-table-headers.mjs`
+закрепляет шапку PROPERTY DETAILS и PAYMENT TABLE — Google Docs тогда переносит таблицу вместе с Article на следующую
+страницу, у разорванной таблицы шапка повторяется. keepWithNext в ячейке шапки не помогает (проверено на копии №1).
+Применено ко всем 8, в apply-layout-fixes; генерация с закреплёнными шапками проверена (№1, №3).
 Жёлтым пока остаются «75%» в подписи Remaining balance и метка «Transfer Fee:» (в шаблоне залита) — спросить Алину.
 
 Строка Additional Information остаётся в две строки: подпись «Number of Car Parking Spaces:»
