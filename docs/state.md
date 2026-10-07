@@ -194,8 +194,10 @@ Payment Table по колонкам как Property Details (левая 8,43 с�
   было под {{#if any_deposit}} — без депозитов пропадало. Условие снято (`scripts/fix-ld-distribution.mjs`),
   проверка: check-scenarios + check-combinations (9216, 0);
 - Location: «Yas Island, Abu Dhabi» → «…, Abu Dhabi, UAE» (formatPropertyLocation);
-- остались только расхождения редакции №1 и чистовика: «purchase, the Property» (в 1.2 без запятой) и
-  «third-party» (в 1.2 «third party») — не трогали, ждём решения Даши.
+- 07.10: «purchase, the Property» уже совпадает с 1.2; «any third-party reason» в первых абзацах статей
+  о дефолте → «any third party reason», как в драфте №1 (docx `1aX_h4yU…`) и 1.2 (решение 07.10).
+  «third-party, or other fees» и «third-party offers» — с дефисом, как в драфте. Теперь вариант «Ни у
+  кого» №1 совпадает с 1.2 пословно (кроме подстановок и строк, которые зависят от данных сделки).
 В №2–№4 распределение без депозитов ещё под условием — по просьбе.
 
 ## AGENTS из формы + способ оплаты обычным шрифтом (06.10)
@@ -406,8 +408,10 @@ check-scenarios (теперь ловит и ПРОПАВШУЮ пустую ст
 ## Дальше
 
 Off-plan (сейчас):
-1. Ответы Даши по №2 (ADM Verification Certificate, «Manager's Cheque or Cheque») и по №1
-   («purchase, the Property» и «third-party» против чистовика 1.2 — раздел «№1 без депозитов»).
+1. Ответы Даши по №2 (Off-plan mortgage): «ADM Verification Certificate» — предлагаем вернуть
+   «ADM Valuation Certificate» (та же сумма 925.75 и получатель, что у Valuation в прежнем №2);
+   «Manager's Cheque or Cheque». В №2 по его чистовику «any third-party reason» с дефисом и без «or»
+   перед ним — выровнять с №1, если Даша скажет.
 2. Слить ветку в `main` — сайт переключится на новый №2. Проверить на проде (Load Draft → Create MOU),
    тестовый договор — в корзину; прежний №2 переименовать в «УСТАРЕЛО — …», у нового убрать «— НОВЫЙ (…)».
 
