@@ -82,7 +82,7 @@ PAYMENT TABLE нет первой строки таблицы, заголовк�
 стороны — кодом (`deposit_return_parties` в mv: «Buyer and to the Seller» / «Buyer» / «Seller»), окончание «s» —
 жёлтым в шаблоне (`scripts/fix-cheques-highlight.mjs`, все 8, в apply-layout-fixes). Проверено на примерах №1
 (оба чека и только Buyer).
-Жёлтым пока остаются «75%» в подписи Remaining balance и метка «Transfer Fee:» (в шаблоне залита) — спросить Алину.
+«75%» в подписи Remaining balance и метка «Transfer Fee:» остаются жёлтыми — решение Алины 07.10.
 
 Строка Additional Information остаётся в две строки: подпись «Number of Car Parking Spaces:»
 не помещается в колонку ~4 см. Если нужно в одну — расширить колонку.
