@@ -88,8 +88,8 @@
 | 5 | [Mortgage to cash READY](https://docs.google.com/document/d/1UTrKSLj69RrNQAgoavPCTUdU1CJ37sfK9IB9KcC6AyU/edit) — **v2, по чистовику** (06.10) | Ready | 18 | `1UTrKSLj69RrNQAgoavPCTUdU1CJ37sfK9IB9KcC6AyU` |
 | 6 | [Mortgage to mortgage READY](https://docs.google.com/document/d/1vty7EFqiiYQs2sgh8gHvxDDPexn8T63ZO4GQ3K1u8C0/edit) — **v2, по чистовику** (06.10) | Ready | 20 | `1vty7EFqiiYQs2sgh8gHvxDDPexn8T63ZO4GQ3K1u8C0` |
 
-Прежние №2–№6 (до пересборки 06.10): `1VKkYr8F…`, `1G8vUZTj…`, `1fsVQKEK…`, `1hhruVEi…`, `1qdoj3EI…` —
-лежат в той же папке. В реестре пока новый только №2; №3–№6 подключим после Off-plan (`docs/state.md`).
+Прежние №3–№6 (до пересборки 06.10): `1G8vUZTj…`, `1fsVQKEK…`, `1hhruVEi…`, `1qdoj3EI…` — лежат в той же
+папке; прежний №2 (`1VKkYr8F…`) — в корзине Диска с 07.10. В реестре пока новый только №2; №3–№6 подключим после Off-plan (`docs/state.md`).
 | C3-1 | [С3 Cash](https://docs.google.com/document/d/1LQ44RjVSj0QrY8sp2IdHpfLyJoXqFInK5CmZCS4v6nY/edit) | C3 | 18 | `1LQ44RjVSj0QrY8sp2IdHpfLyJoXqFInK5CmZCS4v6nY` |
 | C3-2 | [С3 Mortgage](https://docs.google.com/document/d/1erVDJoIJPa_2Wj5SFT5HcGZSOBhww2GwfAaa5HfktbI/edit) | C3 | 19 | `1erVDJoIJPa_2Wj5SFT5HcGZSOBhww2GwfAaa5HfktbI` |
 

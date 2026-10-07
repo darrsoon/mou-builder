@@ -51,6 +51,8 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 Пакеты по 16 договоров (см. «Папки с тестовыми договорами») созданы кодом сайта и сверены
 `verify-batch.mjs` — все совпадают с рендером, маркеров нет, жирный на месте.
 Найдено и исправлено: в №2 «ADREC» в конце ст.4 потерял жирный после правки двойной точки.
+07.10: в №1 держатель чека «{{buyer/seller_deposit_holder}}» жёлтый во всех четырёх местах (был только в
+двух) — как в №2 (Даша: «с покупателем тоже»).
 `generate-batch.mjs` теперь переносит договоры в папку тестов (раньше они оставались и в «Готовых MOU»).
 Осталось по Off-plan: «Manager's Cheque or Cheque» в №2 (вопрос Даше), дефис «third party reason»
 (в эталоне без дефиса, грамматически с ним — решает Даша), слияние ветки в `main` и проверка №2 на проде.
@@ -143,7 +145,7 @@ Google-копии в папке «MOU (Prime Bridge)» («ЧИСТОВИК N (Go
 | 5 | Ready mortgage to cash | `1UTrKSLj69RrNQAgoavPCTUdU1CJ37sfK9IB9KcC6AyU` | 188 | 12288 |
 | 6 | Ready mortgage to mortgage | `1vty7EFqiiYQs2sgh8gHvxDDPexn8T63ZO4GQ3K1u8C0` | 168 | 6144 |
 
-Прежние шаблоны не тронуты и служат бэкапом: №2 `1VKkYr8F…`, №3 `1G8vUZTj…`, №4 `1fsVQKEK…`,
+Прежние шаблоны не тронуты и служат бэкапом (кроме №2 — он в корзине с 07.10): №2 `1VKkYr8F…`, №3 `1G8vUZTj…`, №4 `1fsVQKEK…`,
 №5 `1hhruVEi…`, №6 `1qdoj3EI…` (полные ID — в таблице «Шаблоны на движке v2» ниже). После слияния
 в `main` — переименовать прежние в «УСТАРЕЛО — …», у новых убрать «— НОВЫЙ (…)» из имени.
 
@@ -418,7 +420,7 @@ check-scenarios (теперь ловит и ПРОПАВШУЮ пустую ст
 | # | Шаблон | Размечен | Бэкап до разметки | Правок |
 |---|--------|----------|-------------------|--------|
 | 1 | Off-plan `1qedPsMWpFLRFqjxPwuK53fXY_43AkkSC5bGc_rAXG0k` | 30.08 | `1KThc8Zq0G50zppR_cRGech6nhyyZSsTwzdw2_uM2RTo` | 170 |
-| 2 | Off-plan ипотека `1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0` | 05.09 | `12Zcp4G28uLcBEh0XtF1ulgAotC8uju6UV6oPBRMCcU8` | 179 |
+| 2 | Off-plan ипотека `1VKkYr8FoFlLlHOVx_aoasdgZzYtB8hP4zaioqm4OaB0` (прежний, в корзине с 07.10) | 05.09 | `12Zcp4G28uLcBEh0XtF1ulgAotC8uju6UV6oPBRMCcU8` | 179 |
 | 3 | Ready cash to cash `1G8vUZTjrnBjSdstRNyEuoypRVVoRg8udywTu5g-e1Jk` | 08.09 | `121Mwvo-6GlqkEJ3fMZ52DsdF4XrvdTVm9UpcY6L_0o4` | 178 |
 | 4 | Ready cash to mortgage `1fsVQKEKGYNng0ND1kkensdIqUOOQ7h_KgobDCoKwN-E` | 13.09 | `1HxLbN1-SpgGVej2avkZLFkDMgMM6i2d_hoylOJyPWEA` | 182 |
 
@@ -495,9 +497,8 @@ Off-plan (сейчас):
    (07.10, решение Даши: в №2 строка «ADM Verification Certificate: AED 925.75 / to be paid by the Buyer
    to DMT ADREC – REVENUE ACCOU upon request by Bank transfer or Card» — как в чистовике, не Valuation.) В №2 по его чистовику «any third-party reason» с дефисом и без «or»
    перед ним — выровнять с №1, если Даша скажет.
-2. ✅ 07.10 ветка залита в `main` (9306447): на сайте новый №2, закреплённая строка разделов, галочка
-   Emirates ID, склеенные заголовки подписей. Осталось: проверить №2 на проде (Load Draft → Create MOU),
-   тестовый договор — в корзину; прежний №2 переименовать в «УСТАРЕЛО — …», у нового убрать «— НОВЫЙ (…)».
+2. ✅ 07.10 ветка залита в `main`: на сайте новый №2. Прежний №2 (`1VKkYr8F…`) — в корзине Диска (Даша:
+   «ненужное можно удалить»), новый переименован в «2. DRAFT Off-plan–mortgage_».
 
 Готовые объекты (потом):
 3. Отложенные вопросы, вписать №3–№6 в реестр (записи выше), переименовать файлы, проверка на проде.
