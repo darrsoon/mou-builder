@@ -54,8 +54,8 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 07.10: в №1 держатель чека «{{buyer/seller_deposit_holder}}» жёлтый во всех четырёх местах (был только в
 двух) — как в №2 (Даша: «с покупателем тоже»).
 `generate-batch.mjs` теперь переносит договоры в папку тестов (раньше они оставались и в «Готовых MOU»).
-Осталось по Off-plan: «Manager's Cheque or Cheque» в №2 (вопрос Даше), дефис «third party reason»
-(в эталоне без дефиса, грамматически с ним — решает Даша), слияние ветки в `main` и проверка №2 на проде.
+07.10: Off-plan закрыт — решения Даши: «Manager's Cheque or Cheque» в №2 и «ADM Verification Certificate»
+оставляем как в чистовике, «third party reason» в №1 — как в драфте 1. Всё в `main`. Дальше — №3–№6.
 
 ## Commission Agreement: подсветка и правки шаблона «8» (07.10)
 
@@ -493,7 +493,7 @@ check-scenarios (теперь ловит и ПРОПАВШУЮ пустую ст
 ## Дальше
 
 Off-plan (сейчас):
-1. Ответы Даши по №2 (Off-plan mortgage): «Manager's Cheque or Cheque» в строке суммы Продавцу.
+1. ✅ №2 (Off-plan mortgage): «by Manager's Cheque or Cheque» в строке суммы Продавцу — оставляем (Даша, 07.10).
    (07.10, решение Даши: в №2 строка «ADM Verification Certificate: AED 925.75 / to be paid by the Buyer
    to DMT ADREC – REVENUE ACCOU upon request by Bank transfer or Card» — как в чистовике, не Valuation.) В №2 по его чистовику «any third-party reason» с дефисом и без «or»
    перед ним — выровнять с №1, если Даша скажет.
