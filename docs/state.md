@@ -78,6 +78,10 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 PAYMENT TABLE нет первой строки таблицы, заголовку Article перед ней ставится «С новой страницы» (до 3 проходов).
 Сбой проверки договор не ломает. +~2 с на договор. keepWithNext в ячейке шапки Google Docs не учитывает
 (проверено на копии №1). Тест: `test/orphan-headers.test.js`.
+Абзац о возврате чеков («the Security Deposit cheque(s) shall be returned to …») выделяется по выбранным депозитам:
+стороны — кодом (`deposit_return_parties` в mv: «Buyer and to the Seller» / «Buyer» / «Seller»), окончание «s» —
+жёлтым в шаблоне (`scripts/fix-cheques-highlight.mjs`, все 8, в apply-layout-fixes). Проверено на примерах №1
+(оба чека и только Buyer).
 Жёлтым пока остаются «75%» в подписи Remaining balance и метка «Transfer Fee:» (в шаблоне залита) — спросить Алину.
 
 Строка Additional Information остаётся в две строки: подпись «Number of Car Parking Spaces:»

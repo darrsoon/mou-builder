@@ -325,7 +325,7 @@ test("buildReplacementsV2: agencies_word, intro, return parties, подписи"
   const r = buildReplacementsV2(data, calculate(data), {});
   assert.equal(r.agencies_word, "Agencies");
   assert.equal(r.seller_deposit_intro, "Similarly, upon signing this <<Agreement>>,");
-  assert.equal(r.deposit_return_parties, "the <<Buyer>> and to the <<Seller>>");
+  assert.equal(r.deposit_return_parties, "the \u27E6<<Buyer>> and to the <<Seller>>\u27E7"); // жёлтым — по выбранным депозитам
   // имена из формы помечены для жёлтой подсветки (\u27E6…\u27E7)
   assert.ok(r.buyer_signature_block.includes("<<Name:>> \u27E6Petr Petrov\u27E7 <<Signature:>>"));
   assert.ok(r.buyer_signature_block.includes("<<Name:>> \u27E6Anna Petrova\u27E7"));
@@ -338,7 +338,7 @@ test("buildReplacementsV2: agencies_word, intro, return parties, подписи"
   const r2 = buildReplacementsV2(singleAgent, calculate(singleAgent), {});
   assert.equal(r2.agencies_word, "the Agency");
   assert.equal(r2.seller_deposit_intro, "Upon signing this <<Agreement>>,");
-  assert.equal(r2.deposit_return_parties, "the <<Seller>>");
+  assert.equal(r2.deposit_return_parties, "the \u27E6<<Seller>>\u27E7");
 });
 
 test("normalizeForm: новые поля v2 с дефолтами", () => {
