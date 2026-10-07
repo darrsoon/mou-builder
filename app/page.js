@@ -119,6 +119,7 @@ const initialForm = {
   transferThresholdPercent: "",
   thresholdTopUpAmount: "",
   remainingDeveloperBalance: "",
+  remainingBalancePercent: "",
   transferFee: "",
   sellerAgentEnabled: "Yes",
   buyerAgentEnabled: "Yes",
@@ -312,6 +313,7 @@ const tips = {
   amountToSellerChequeInFavourOf: "Имя/фамилия или компания, в пользу кого будет выписан Manager's Cheque для Seller.",
   transferThresholdPercent: "Есть в MOU. Transfer Threshold % (порог для передачи) — процент Original Price, который должен быть оплачен developer, чтобы получить transfer/assignment. Например 20, 30 или 40.",
   thresholdTopUpAmount: "Есть в MOU. Threshold Top-up (доплата до порога) — доплата developer, чтобы на transfer date было оплачено достаточно для передачи. Пример: Original Price 1,000,000, threshold 30%, уже оплачено 200,000. Нужно довести до 300,000, значит top-up = 100,000.",
+  remainingBalancePercent: "Есть в MOU: «Remaining balance of N% of the Original Price». Считается сам — доля Remaining Developer Balance от Original Price (пример: 1,090,666 из 1,390,666 = 78.43%). Можно вписать свой процент — в договор пойдёт он.",
   remainingDeveloperBalance: "Есть в MOU. Remaining Developer Balance (остаток рассрочки застройщику) — что Buyer будет платить developer уже после transfer по payment plan. Пример: Original Price 1,000,000, Seller уже оплатил 200,000, top-up 100,000. Остаток developer = 700,000.",
   transferFee: "Сумма Transfer/NOC Fee (сбор за передачу/NOC). Обычно подтягивается из PROJECTS, но можно изменить.",
   sellerAgentName: "Agency name (название агентства) со стороны Seller. По умолчанию PRIME BRIDGE.",
@@ -1256,6 +1258,7 @@ export default function HomePage() {
             {!isCashToCash && <Field id="transferThresholdPercent" label="Transfer Threshold %" tip={tips.transferThresholdPercent} value={form.transferThresholdPercent} onChange={patch} list="thresholdList" options={lists.transfer_threshold_percent || []} />}
             {!isCashToCash && <AutoMoneyField id="thresholdTopUpAmount" label="Threshold Top-up to Developer" tip={tips.thresholdTopUpAmount} value={form.thresholdTopUpAmount} autoValue={preview?.summary?.thresholdTopUpAmount} onChange={patch} placeholder="Посчитается автоматически" />}
             {!isCashToCash && <AutoMoneyField id="remainingDeveloperBalance" label="Remaining Developer Balance" tip={tips.remainingDeveloperBalance} value={form.remainingDeveloperBalance} autoValue={preview?.summary?.remainingDeveloperBalance} onChange={patch} placeholder="Посчитается автоматически" />}
+            {!isCashToCash && <AutoMoneyField id="remainingBalancePercent" label="Remaining Balance %" tip={tips.remainingBalancePercent} value={form.remainingBalancePercent} autoValue={preview?.summary?.remainingBalancePercent} onChange={patch} placeholder="Посчитается автоматически" prefix="" suffix="%" />}
             <AutoMoneyField id="transferFee" label="Transfer / NOC Fee" tip={tips.transferFee} value={form.transferFee} onChange={patch} />
           </Section>
 
@@ -1660,7 +1663,8 @@ function EidField({ id, label, tip, value, onChange, invalid = false }) {
   );
 }
 
-function AutoMoneyField({ id, label, tip, value, autoValue, onChange, placeholder }) {
+// prefix/suffix — подпись к посчитанному значению: «AED 1,090,666» или «78.43%»
+function AutoMoneyField({ id, label, tip, value, autoValue, onChange, placeholder, prefix = "AED ", suffix = "" }) {
   const hasManualValue = String(value || "").trim() !== "";
   const hasAutoValue = String(autoValue || "").trim() !== "";
 
@@ -1685,7 +1689,7 @@ function AutoMoneyField({ id, label, tip, value, autoValue, onChange, placeholde
     return formattedInteger;
   };
 
-  const displayValue = hasManualValue ? formatWithCommas(value) : hasAutoValue ? `AED ${formatWithCommas(autoValue)}` : "";
+  const displayValue = hasManualValue ? formatWithCommas(value) : hasAutoValue ? `${prefix}${formatWithCommas(autoValue)}${suffix}` : "";
 
   const handleChange = (e) => {
     const val = e.target.value;

@@ -57,6 +57,13 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 07.10: Off-plan закрыт — решения Даши: «Manager's Cheque or Cheque» в №2 и «ADM Verification Certificate»
 оставляем как в чистовике, «third party reason» в №1 — как в драфте 1. Всё в `main`. Дальше — №3–№6.
 
+## Off-plan: поле «Remaining Balance %» (07.10)
+
+В Payments — поле процента в строке «Remaining balance of N% of the Original Price». Считается само:
+доля Remaining Developer Balance от Original Price (1,090,666 из 1,390,666 = 78.43%); можно вписать
+своё — в договор пойдёт оно (`remainingBalancePercent` в normalizeForm/calculate, summary для формы).
+AutoMoneyField получил prefix/suffix (у процента — «78.43%» вместо «AED …»). Тест в mou-core.test.js.
+
 ## Commission Agreement: подсветка и правки шаблона «8» (07.10)
 
 Подсветка вставленного — как в MOU (`highlightValues: true` в /api/commission): даты, юнит, цена,

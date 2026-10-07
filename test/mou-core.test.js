@@ -765,3 +765,11 @@ test("шаблон для генерации: без выбора при нес�
   // один шаблон в реестре — старый режим без выбора
   assert.equal(resolveTemplate("", [{ id: "a" }]).id, "a");
 });
+
+test("Remaining balance %: по умолчанию доля остатка от Original Price, из формы — своё значение", async () => {
+  const { normalizeForm, calculate, buildReplacementsV2 } = await import("../lib/mou/core.js");
+  const f = { sellingPrice: "1,700,000", originalPrice: "1,390,666", paidAmountToDeveloper: "300,000", transferThresholdPercent: "20", unitStatus: "Off-plan" };
+  const pct = (extra) => { const d = normalizeForm({ ...f, ...extra }); return buildReplacementsV2(d, calculate(d), {}).remaining_balance_percent; };
+  assert.equal(pct({}), "78.43");
+  assert.equal(pct({ remainingBalancePercent: "80" }), "80");
+});
