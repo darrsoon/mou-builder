@@ -1050,8 +1050,14 @@ export default function HomePage() {
       </header>
 
       {message && <StatusLine text={message} type={message.includes("created") || message.includes("loaded") ? "ok" : actionErrors.length ? "error" : "info"} />}
-      {/* оба документа сразу — ссылки уже на нижней панели, плашки не нужны (Даша, 05.10) */}
-      {result && !Array.isArray(result) && <ResultBox result={result} />}
+      {/* плашки «… created / Open Google Doc» нет: ссылки на документы — на нижней панели (Даша, 05.10 и 07.10).
+          Остаётся только предупреждение, если в документе что-то не подставилось. */}
+      {result && [].concat(result).some((r) => r.remainingPlaceholders?.length) && (
+        <StatusLine
+          type="error"
+          text={`Остались placeholders: ${[].concat(result).flatMap((r) => r.remainingPlaceholders || []).join(", ")}`}
+        />
+      )}
 
       <SectionNav items={navItems} />
 
@@ -1453,22 +1459,6 @@ function ActionErrorBox({ errors }) {
     </section>
   );
 }
-
-function ResultBox({ result }) {
-  return (
-    <section className="resultBox">
-      <div>
-        <strong>{result.kind || "MOU"} created</strong>
-        <p>{result.title}</p>
-        {result.remainingPlaceholders?.length ? <p className="warningText">Остались placeholders: {result.remainingPlaceholders.join(", ")}</p> : null}
-      </div>
-      <a className="openDoc" href={result.url} target="_blank" rel="noreferrer">
-        Open Google Doc <ExternalLink size={18} />
-      </a>
-    </section>
-  );
-}
-
 
 // Якорь секции: из заголовка делаем стабильный id для прокрутки из чипов.
 function sectionAnchor(title) {
