@@ -3,6 +3,7 @@
 // Генерация — тем же кодом, что и сайт.
 import { getBotClients } from "./google-bot.mjs";
 import { createMouDocument } from "../lib/google/docs.js";
+import { MOU_CONFIG } from "../lib/mou/config.js";
 import { normalizeForm, calculate, buildFlags, buildReplacementsV2, formForTemplate } from "../lib/mou/core.js";
 import { buildArticleNumbers, getArticleDefsForTemplate } from "../lib/mou/articles.js";
 import { baseFor, templateFor, SCENARIOS, READY_SCENARIOS, SELLER_MORTGAGE_SCENARIOS } from "./batch-scenarios.mjs";
@@ -47,9 +48,11 @@ for (const [name, over] of CASES) {
   const doc = await createMouDocument({
     drive, docs, title: name, data, rules: [], replacements, flags, templateId, engine: "v2",
   });
+  // переносим, а не добавляем вторую папку: тестовые договоры не должны лежать в «Готовых MOU»
   await drive.files.update({
     fileId: doc.id,
     addParents: folder.data.id,
+    removeParents: MOU_CONFIG.outputFolderId,
     fields: "id",
   });
   const rest = doc.remainingPlaceholders.length ? `  ⚠ НЕ ПОДСТАВЛЕНО: ${doc.remainingPlaceholders.join(", ")}` : "";
