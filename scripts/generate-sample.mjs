@@ -1,9 +1,12 @@
-// Боевая генерация локально, ботовыми ключами: node scripts/generate-sample.mjs <templateId> [сценарий]
-// Гоняет ровно тот же код, что и сайт (createMouDocument, engine v2).
+// Боевая генерация локально, ботовыми ключами: node scripts/generate-sample.mjs <templateId> [сценарий] [--mortgage]
+// Гоняет ровно тот же код, что и сайт (formForTemplate, createMouDocument, engine v2).
+// --mortgage — шаблон №2 (Off-plan mortgage): ADM-сборы ипотеки, 18 статей.
 import { getBotClients } from "./google-bot.mjs";
 import { createMouDocument } from "../lib/google/docs.js";
-import { normalizeForm, calculate, buildFlags, buildReplacementsV2, buildDraftTitle } from "../lib/mou/core.js";
-import { buildArticleNumbers, ARTICLE_DEFS_OFFPLAN_V2 } from "../lib/mou/articles.js";
+import { normalizeForm, calculate, buildFlags, buildReplacementsV2, buildDraftTitle, formForTemplate } from "../lib/mou/core.js";
+import { buildArticleNumbers, getArticleDefsForTemplate } from "../lib/mou/articles.js";
+import { templateFor, MORTGAGE_FIELDS } from "./batch-scenarios.mjs";
+import { MOU_TEMPLATES } from "../lib/mou/config.js";
 
 const BASE = {
   agreementDate: "30/08/2026", reservationDeadline: "30/09/2026",
@@ -49,21 +52,23 @@ const SCENARIOS = {
   "seller-deposit-only": { buyerDepositEnabled: "No" },
 };
 
-const templateId = process.argv[2];
-const key = process.argv[3] || "full";
+const MORTGAGE = process.argv.includes("--mortgage");
+const [templateId, key = "full"] = process.argv.slice(2).filter((a) => !a.startsWith("--"));
+// описание шаблона — из реестра сайта (там и имя файла docTitle), для черновика вне реестра — по флагу
+const TEMPLATE = MOU_TEMPLATES.find((t) => t.id === templateId) || templateFor(MORTGAGE);
 if (!templateId) throw new Error("укажи ID шаблона");
 if (!SCENARIOS[key]) throw new Error(`сценарии: ${Object.keys(SCENARIOS).join(", ")}`);
 
 const { docs, drive } = getBotClients();
-const form = { ...BASE, ...SCENARIOS[key] };
-const data = normalizeForm(form);
+const form = { ...BASE, ...(MORTGAGE ? MORTGAGE_FIELDS : {}), ...SCENARIOS[key] };
+const data = normalizeForm(formForTemplate(form, TEMPLATE));
 const calc = calculate(data);
 const flags = buildFlags(data, calc);
-const numbers = buildArticleNumbers(data, [], ARTICLE_DEFS_OFFPLAN_V2);
+const numbers = buildArticleNumbers(data, [], getArticleDefsForTemplate(TEMPLATE));
 const replacements = buildReplacementsV2(data, calc, numbers);
 
 const doc = await createMouDocument({
-  drive, docs, title: `ТЕСТ ${key} — ${buildDraftTitle(data)}`,
+  drive, docs, title: `ТЕСТ ${key} — ${buildDraftTitle(data, TEMPLATE)}`,
   data, rules: [], replacements, flags, templateId, engine: "v2",
 });
 
