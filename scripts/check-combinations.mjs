@@ -355,8 +355,7 @@ for (const c of combos) {
   inRow("ADM Fee", "2% from the Selling Price", e.admFee);
   if (MORTGAGE && !READY) {
     inRow("ADM Electronic Fee", "ADM Electronic Fee:", ADM_ELECTRONIC);
-    // в чистовике №2 (03.10) строка называется «ADM Verification Certificate»
-    inRow("ADM Valuation Certificate", ["ADM V", "Certificate:"], ADM_VALUATION);
+    inRow("ADM Valuation Certificate", "ADM Valuation Certificate:", ADM_VALUATION);
   }
   if (READY) {
     inRow("Developer NOC Fee", "Developer NOC Fee:", DEVELOPER_NOC);

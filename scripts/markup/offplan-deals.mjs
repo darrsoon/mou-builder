@@ -184,5 +184,7 @@ export const OFFPLAN_MORTGAGE_CLEAN = {
     // разделители вокруг абзацев Продавца в ст.6 — пустой строкой, как в чистовике №5
     { find: "letter.\n__\nSimilarly", replace: "letter.\n\nSimilarly", note: "ст.6: разделитель перед Продавцом" },
     { find: "MOU.\n___\nSimilarly", replace: "MOU.\n\nSimilarly", note: "ст.6: разделитель между абзацами Продавца" },
+    // в чистовике «ADM Verification Certificate» — опечатка, как в №4–№6: Valuation (07.10)
+    { find: "ADM Verification Certificate:", replace: "ADM Valuation Certificate:", note: "ст.4: ADM Valuation Certificate" },
   ],
 };
