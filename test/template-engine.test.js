@@ -326,8 +326,9 @@ test("buildReplacementsV2: agencies_word, intro, return parties, подписи"
   assert.equal(r.agencies_word, "Agencies");
   assert.equal(r.seller_deposit_intro, "Similarly, upon signing this <<Agreement>>,");
   assert.equal(r.deposit_return_parties, "the <<Buyer>> and to the <<Seller>>");
-  assert.ok(r.buyer_signature_block.includes("<<Name:>> Petr Petrov <<Signature:>>"));
-  assert.ok(r.buyer_signature_block.includes("<<Name:>> Anna Petrova"));
+  // имена из формы помечены для жёлтой подсветки (\u27E6…\u27E7)
+  assert.ok(r.buyer_signature_block.includes("<<Name:>> \u27E6Petr Petrov\u27E7 <<Signature:>>"));
+  assert.ok(r.buyer_signature_block.includes("<<Name:>> \u27E6Anna Petrova\u27E7"));
   // дату не ставим, пока её не ввели; Date — переносом внутри абзаца
   assert.ok(r.buyer_signature_block.includes("\u000b<<Date:>>\n") || r.buyer_signature_block.endsWith("\u000b<<Date:>>"));
   assert.equal(r.seller_signature_date, "");

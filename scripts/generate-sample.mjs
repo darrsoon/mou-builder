@@ -69,7 +69,7 @@ const replacements = buildReplacementsV2(data, calc, numbers);
 
 const doc = await createMouDocument({
   drive, docs, title: `ТЕСТ ${key} — ${buildDraftTitle(data, TEMPLATE)}`,
-  data, rules: [], replacements, flags, templateId, engine: "v2",
+  data, rules: [], replacements, flags, templateId, engine: "v2", highlightValues: true,
 });
 
 console.log("сценарий:", key);

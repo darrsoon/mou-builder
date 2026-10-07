@@ -46,7 +46,7 @@ for (const [name, over] of CASES) {
   const numbers = buildArticleNumbers(data, [], DEFS);
   const replacements = buildReplacementsV2(data, calc, numbers);
   const doc = await createMouDocument({
-    drive, docs, title: name, data, rules: [], replacements, flags, templateId, engine: "v2",
+    drive, docs, title: name, data, rules: [], replacements, flags, templateId, engine: "v2", highlightValues: true,
   });
   // переносим, а не добавляем вторую папку: тестовые договоры не должны лежать в «Готовых MOU»
   await drive.files.update({

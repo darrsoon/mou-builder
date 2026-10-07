@@ -51,6 +51,8 @@ export async function POST(request) {
       const flags = buildFlags(data, calc);
       document = await createMouDocument({
         drive, docs, title, data, rules, replacements, flags, templateId, engine,
+        // всё, что вставлено из формы, — жёлтым (Даша, 07.10.2026)
+        highlightValues: true,
       });
     } else {
       rules = await readRules(sheets);

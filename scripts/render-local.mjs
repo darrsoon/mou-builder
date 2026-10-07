@@ -3,6 +3,7 @@
 import { buildConditionalPlan, buildRowPlan } from "../lib/google/template-engine.js";
 import { normalizeForm, calculate, buildFlags, buildReplacementsV2, formForTemplate } from "../lib/mou/core.js";
 import { buildArticleNumbers } from "../lib/mou/articles.js";
+import { stripValueMarks } from "../lib/mou/helpers.js";
 
 const key = (seg, i) => `${seg || ""}:${i}`;
 
@@ -67,7 +68,8 @@ export function renderLocal(doc, idx, form, articleDefs, template = { engine: "v
 
   const substituteMarked = (s) => s
     .replace(/\{\{#row\s+!?[a-z0-9_]+\}\}/g, "")
-    .replace(/\{\{([a-z0-9_]+)\}\}/g, (m, k) => (k in repl ? String(repl[k] ?? "") : m));
+    // метки вставленных значений (жёлтая подсветка) в тексте договора не остаются
+    .replace(/\{\{([a-z0-9_]+)\}\}/g, (m, k) => (k in repl ? stripValueMarks(repl[k] ?? "") : m));
   const substitute = (s) => substituteMarked(s).replace(/<<|>>/g, "");
 
   const kept = idx.chars.filter((c) => !deleted.has(key(c.seg, c.i))).map((c) => c.c).join("");
