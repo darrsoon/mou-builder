@@ -345,6 +345,8 @@ export const READY_CASH_CLEAN = {
     { find: "AED 00,000.00 (VAT inclusive) / to be paid by the Seller to the Seller’s Agency on the Transfer Date", nth: 0,
       replace: "AED 000,000.00 / (10% of the Selling Price, Security Deposit cheque issued by the Seller in favour of the Buyer)",
       note: "строка депозита Продавца вместо копии Agency Fee" },
+    // «agrees to purchase the Property» без запятой (Даша, 07.10.2026)
+    { find: "agrees to purchase, the", replace: "agrees to purchase the", note: "WHEREAS B: без запятой" },
     // разделители «____» вокруг абзацев Продавца в ст.6 — пустой строкой, как в чистовике №5
     { find: "MOU.\n____\nSimilarly", replace: "MOU.\n\nSimilarly", note: "ст.6: разделитель перед Продавцом" },
     { find: "MOU.\n____\nSimilarly", replace: "MOU.\n\nSimilarly", note: "ст.6: разделитель между абзацами Продавца" },
@@ -427,6 +429,8 @@ export const READY_MORTGAGE_MORTGAGE_CLEAN = {
     { find: "Article 11\u000b", replace: "Article 11\n", note: "ст.11: заголовок отдельным абзацем" },
     PREAPPROVAL_EDIT,
     REMOVE_COOPERATE,
+    // «agrees to purchase the Property» без запятой (Даша, 07.10.2026)
+    { find: "agrees to purchase, the", replace: "agrees to purchase the", note: "WHEREAS B: без запятой" },
   ],
   extra: [
     ...TENANCY_EDITS,
