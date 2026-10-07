@@ -1263,8 +1263,8 @@ export default function HomePage() {
             )}
             {!isCashToCash && <Field id="transferThresholdPercent" label="Transfer Threshold %" tip={tips.transferThresholdPercent} value={form.transferThresholdPercent} onChange={patch} list="thresholdList" options={lists.transfer_threshold_percent || []} />}
             {!isCashToCash && <AutoMoneyField id="thresholdTopUpAmount" label="Threshold Top-up to Developer" tip={tips.thresholdTopUpAmount} value={form.thresholdTopUpAmount} autoValue={preview?.summary?.thresholdTopUpAmount} onChange={patch} placeholder="Посчитается автоматически" />}
-            {!isCashToCash && <AutoMoneyField id="remainingDeveloperBalance" label="Remaining Developer Balance" tip={tips.remainingDeveloperBalance} value={form.remainingDeveloperBalance} autoValue={preview?.summary?.remainingDeveloperBalance} onChange={patch} placeholder="Посчитается автоматически" />}
             {!isCashToCash && <AutoMoneyField id="remainingBalancePercent" label="Remaining Balance %" tip={tips.remainingBalancePercent} value={form.remainingBalancePercent} autoValue={preview?.summary?.remainingBalancePercent} onChange={patch} placeholder="Посчитается автоматически" prefix="" suffix="%" />}
+            {!isCashToCash && <AutoMoneyField id="remainingDeveloperBalance" label="Remaining Developer Balance" tip={tips.remainingDeveloperBalance} value={form.remainingDeveloperBalance} autoValue={preview?.summary?.remainingDeveloperBalance} onChange={patch} placeholder="Посчитается автоматически" />}
             <AutoMoneyField id="transferFee" label="Transfer / NOC Fee" tip={tips.transferFee} value={form.transferFee} onChange={patch} />
           </Section>
 
