@@ -686,8 +686,9 @@ export default function HomePage() {
       ["Buyer", sectionStatuses.buyers],
       ["Payments", sectionStatuses.payments],
       ["Agency", sectionStatuses.agency],
-      ["Security Deposit - Buyer", sectionStatuses.buyerDeposit],
+      // сначала Продавец, потом Покупатель (Даша, 07.10.2026)
       ["Security Deposit - Seller", sectionStatuses.sellerDeposit],
+      ["Security Deposit - Buyer", sectionStatuses.buyerDeposit],
       ["Articles", sectionStatuses.articles],
     ];
     for (const [title, status] of order) {
@@ -1288,8 +1289,8 @@ export default function HomePage() {
             </div>
           </Section>
 
-          <DepositSection side="buyer" title="Security Deposit - Buyer" form={form} patch={patch} lists={lists} status={sectionStatuses.buyerDeposit} preview={preview} />
           <DepositSection side="seller" title="Security Deposit - Seller" form={form} patch={patch} lists={lists} status={sectionStatuses.sellerDeposit} preview={preview} />
+          <DepositSection side="buyer" title="Security Deposit - Buyer" form={form} patch={patch} lists={lists} status={sectionStatuses.buyerDeposit} preview={preview} />
 
           <Section title="Articles" status={sectionStatuses.articles} defaultOpen={false}>
             {/* без выбранного шаблона показывался старый список на 27 статей — он
