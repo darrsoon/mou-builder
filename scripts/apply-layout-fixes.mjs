@@ -16,6 +16,7 @@ const steps = [
   ["fix-forfeited-gap.mjs"],
   ["fix-default-gaps.mjs"],
   ["fix-nodeposit-gaps.mjs"],
+  ["fix-signature-headings.mjs"],
   ["fix-keep-with-next.mjs"],
 ];
 for (const [script, ...args] of steps) {
