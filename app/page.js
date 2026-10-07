@@ -331,7 +331,7 @@ const tips = {
   partyName: "Полное имя стороны так, как должно быть в MOU.",
   nationality: "Nationality (гражданство) на английском, как в passport.",
   passport: "Passport number (номер паспорта). Если пусто, не попадет в party block.",
-  eid: "Emirates ID (ID в ОАЭ) полностью: 784-XXXX-XXXXXXX-X. Обязателен, если отмечено «Has Emirates ID».",
+  eid: "Emirates ID (ID в ОАЭ) полностью: 784-XXXX-XXXXXXX-X. Обязателен, если отмечено «Has Emirates ID»; у представителя по POA — всегда.",
   hasEid: "Есть ли у стороны Emirates ID. Отмечено — номер обязателен и попадёт в договор; нет — EID в договоре не будет.",
   ownershipPercent: "Ownership % (доля владения). Для Seller и Buyer отдельно сумма должна быть 100%.",
   poa: "Yes (да), если вместо стороны подписывает представитель по POA / Power of Attorney (доверенности).",
@@ -342,34 +342,45 @@ function hasValue(value) {
   return String(value ?? "").trim() !== "";
 }
 
+// missing — подписи незаполненных полей: показываются по наведению на плашку и в списке
+// «MOU was not created», когда кнопка создания нажата с пропусками
 function makeSectionStatus(missing, optional = false) {
-  if (optional) return { state: "optional", label: "Optional", missingCount: 0 };
-  if (!missing.length) return { state: "complete", label: "Complete", missingCount: 0 };
-  return { state: "missing", label: `Needs info (${missing.length})`, missingCount: missing.length };
+  if (optional) return { state: "optional", label: "Optional", missingCount: 0, missing: [] };
+  if (!missing.length) return { state: "complete", label: "Complete", missingCount: 0, missing: [] };
+  return { state: "missing", label: `Needs info (${missing.length})`, missingCount: missing.length, missing };
 }
 
 function missingFields(source, fields) {
   return fields.filter(([key]) => !hasValue(source[key])).map(([, label]) => label);
 }
 
-function partySectionStatus(parties) {
+// Незаполненные поля стороны: ключ поля → подпись. Все поля стороны обязательны (Даша, 07.10.2026);
+// EID — только с галочкой «Has Emirates ID», номер целиком; поля доверенности — только при POA.
+function partyMissingFields(party) {
+  const missing = {};
+  if (!hasValue(party.salutation)) missing.salutation = "Title";
+  if (!hasValue(party.name)) missing.name = "Name";
+  if (!hasValue(party.nationality)) missing.nationality = "Nationality";
+  if (!hasValue(party.passport)) missing.passport = "Passport";
+  if (partyHasEid(party) && !EID_PATTERN.test(String(party.eid || ""))) missing.eid = "EID";
+  if (!hasValue(party.ownershipPercent)) missing.ownershipPercent = "Ownership %";
+  if (party.hasPoa) {
+    if (!hasValue(party.poaName)) missing.poaName = "POA Name";
+    if (!hasValue(party.poaNationality)) missing.poaNationality = "POA Nationality";
+    if (!hasValue(party.poaPassport)) missing.poaPassport = "POA Passport";
+    if (!EID_PATTERN.test(String(party.poaEid || ""))) missing.poaEid = "POA EID";
+  }
+  return missing;
+}
+
+function partySectionStatus(parties, who = "Party") {
   const missing = [];
   const list = Array.isArray(parties) ? parties : [];
 
   if (!list.length) missing.push("At least one party");
 
   list.forEach((party, index) => {
-    const label = `Party ${index + 1}`;
-    if (!hasValue(party.name)) missing.push(`${label}: Name`);
-    if (!hasValue(party.nationality)) missing.push(`${label}: Nationality`);
-    if (!hasValue(party.passport)) missing.push(`${label}: Passport`);
-    // Emirates ID — только если отмечена галочка, и номер целиком (Даша, 07.10.2026)
-    if (partyHasEid(party) && !EID_PATTERN.test(String(party.eid || ""))) missing.push(`${label}: EID`);
-    if (!hasValue(party.ownershipPercent)) missing.push(`${label}: Ownership %`);
-    if (party.hasPoa) {
-      if (!hasValue(party.poaName)) missing.push(`${label}: POA Name`);
-      if (!hasValue(party.poaPassport)) missing.push(`${label}: POA Passport`);
-    }
+    for (const label of Object.values(partyMissingFields(party))) missing.push(`${who} ${index + 1}: ${label}`);
   });
 
   const total = list.reduce((sum, party) => sum + (Number(String(party.ownershipPercent || "").replace(",", ".")) || 0), 0);
@@ -545,8 +556,8 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
     agreement: makeSectionStatus(agreementMissing),
     project: makeSectionStatus(missingFields(form, projectRequired)),
     property: makeSectionStatus(missingFields(form, propertyRequired)),
-    sellers: partySectionStatus(form.sellers),
-    buyers: partySectionStatus(form.buyers),
+    sellers: partySectionStatus(form.sellers, "Seller"),
+    buyers: partySectionStatus(form.buyers, "Buyer"),
     payments: makeSectionStatus(missingFields(form, paymentsRequired)),
     // реквизиты агентства печатаются в договоре; должность пустая — Manager
     agency: makeSectionStatus(["seller", "buyer"].flatMap((side) => {
@@ -664,7 +675,8 @@ export default function HomePage() {
   const navItems = useMemo(() => {
     const items = [];
     if (hasTemplateChoice) {
-      items.push({ title: "Template", state: templateId ? "complete" : "missing", missingCount: templateId ? 0 : 1 });
+      items.push({ title: "Template", state: templateId ? "complete" : "missing", missingCount: templateId ? 0 : 1,
+        missing: templateId ? [] : ["Template"] });
     }
     const order = [
       ["Agreement", sectionStatuses.agreement],
@@ -679,7 +691,7 @@ export default function HomePage() {
       ["Articles", sectionStatuses.articles],
     ];
     for (const [title, status] of order) {
-      items.push({ title, state: status?.state || "optional", missingCount: status?.missingCount || 0 });
+      items.push({ title, state: status?.state || "optional", missingCount: status?.missingCount || 0, missing: status?.missing || [] });
     }
     return items;
   }, [sectionStatuses, templateId, hasTemplateChoice]);
@@ -758,6 +770,16 @@ export default function HomePage() {
 
     if (hasTemplateChoice && !templateId) {
       setActionErrors(["Выберите шаблон договора в разделе Template."]);
+      return false;
+    }
+    // Строгий режим (Даша, 07.10.2026): договор не создаётся, пока в разделах есть пропуски.
+    // Показываем, чего не хватает, и прокручиваем к первому разделу с пропуском.
+    if (missingTotal > 0) {
+      const withGaps = navItems.filter((item) => item.missingCount > 0);
+      setActionErrors(withGaps.flatMap((item) => (item.missing.length ? item.missing : [item.title])
+        .map((field) => (field.startsWith(item.title) ? field : `${item.title}: ${field}`))));
+      setMessage(`Заполните обязательные поля: ${missingTotal}`);
+      document.getElementById(sectionAnchor(withGaps[0].title))?.scrollIntoView({ behavior: "smooth", block: "start" });
       return false;
     }
     return true;
@@ -1482,6 +1504,7 @@ function SectionNav({ items }) {
           key={item.title}
           type="button"
           className={`navChip ${item.state}`}
+          title={item.missing?.length ? `Не заполнено:\n${item.missing.join("\n")}` : undefined}
           onClick={() => document.getElementById(sectionAnchor(item.title))?.scrollIntoView({ behavior: "smooth", block: "start" })}
         >
           {item.title}
@@ -1496,7 +1519,7 @@ function ActionBar({ missingTotal, sellingPrice, busy, disabled, onCreate, onCre
   return (
     <div className="actionBar">
       <div className="actionBarInfo">
-        <strong>{missingTotal ? `Не заполнено полей: ${missingTotal}` : "Все обязательные поля заполнены"}</strong>
+        <strong>{missingTotal ? `Не заполнено полей: ${missingTotal} — договор не создастся, пока они пустые` : "Все обязательные поля заполнены"}</strong>
         {sellingPrice ? <span>Selling Price — AED {sellingPrice}</span> : null}
         {/* ссылки на созданные документы — рядом с кнопками, отдельно MOU и Commission Agreement */}
         {results.length ? (
@@ -1531,7 +1554,7 @@ function Section({ title, children, status, grid = true, className = "", default
       <button className="sectionTitle" type="button" aria-expanded={open} onClick={() => setOpen((current) => !current)}>
         <span className={`sectionChevron ${open ? "open" : ""}`}><ChevronDown size={16} /></span>
         <span className="sectionName">{title}</span>
-        <span className={`sectionStatus ${statusState}`}>{statusLabel}</span>
+        <span className={`sectionStatus ${statusState}`} title={status?.missing?.length ? `Не заполнено:\n${status.missing.join("\n")}` : undefined}>{statusLabel}</span>
       </button>
       {open && <div className={grid ? "grid" : "sectionBody"}>{children}</div>}
     </section>
@@ -1609,9 +1632,9 @@ function Tooltip({ text }) {
   );
 }
 
-function Field({ id, label, tip, value, onChange, onBlur, list, options, placeholder, readOnly = false }) {
+function Field({ id, label, tip, value, onChange, onBlur, list, options, placeholder, readOnly = false, invalid = false }) {
   return (
-    <div className="field">
+    <div className={`field${invalid ? " invalid" : ""}`}>
       <Label label={label} tip={tip} />
       {options?.length ? (
         <ComboInput id={id} value={value || ""} options={options} onChange={(next) => onChange(id, next)} />
@@ -1630,9 +1653,9 @@ function Field({ id, label, tip, value, onChange, onBlur, list, options, placeho
   );
 }
 
-function EidField({ id, label, tip, value, onChange }) {
+function EidField({ id, label, tip, value, onChange, invalid = false }) {
   return (
-    <div className="field">
+    <div className={`field${invalid ? " invalid" : ""}`}>
       <Label label={label} tip={tip} />
       <IMaskInput
         id={id}
@@ -1710,9 +1733,9 @@ function DateField({ id, label, tip, value, onChange }) {
   );
 }
 
-function SelectField({ id, label, tip, value, onChange, options, disabled }) {
+function SelectField({ id, label, tip, value, onChange, options, disabled, invalid = false }) {
   return (
-    <div className="field">
+    <div className={`field${invalid ? " invalid" : ""}`}>
       <Label label={label} tip={tip} />
       <CustomSelect id={id} value={value || ""} options={options} onChange={(next) => onChange(id, next)} disabled={disabled} />
     </div>
@@ -1878,7 +1901,9 @@ function PartySection({ title, type, parties, setForm, lists, status }) {
 
   return (
     <Section title={title} status={status} grid={false} className="full">
-      {parties.map((party, index) => (
+      {parties.map((party, index) => {
+        const gaps = partyMissingFields(party);
+        return (
         <div className="partyCard" key={`${type}-${index}`}>
           <div className="partyHead">
             <h3>{title} {index + 1}</h3>
@@ -1891,6 +1916,7 @@ function PartySection({ title, type, parties, setForm, lists, status }) {
               tip={tips.salutation}
               value={party.salutation || ""}
               onChange={(_, v) => setParty(index, "salutation", v)}
+              invalid={Boolean(gaps.salutation)}
               options={[
                 { value: "", label: "Select..." },
                 "Mr.",
@@ -1898,24 +1924,25 @@ function PartySection({ title, type, parties, setForm, lists, status }) {
                 "Ms.",
               ]}
             />
-            <Field id={`${type}-${index}-name`} label="Name Surname" tip={tips.partyName} value={party.name} onChange={(_, v) => setParty(index, "name", v)} />
-            <Field id={`${type}-${index}-nationality`} label="Nationality" tip={tips.nationality} value={party.nationality} onChange={(_, v) => setParty(index, "nationality", v)} list={`${type}-${index}-nationalities`} options={orderedOptions(lists.nationalities, PRIORITY_NATIONALITIES)} />
-            <Field id={`${type}-${index}-passport`} label="Passport" tip={tips.passport} value={party.passport} onChange={(_, v) => setParty(index, "passport", v)} />
+            <Field id={`${type}-${index}-name`} label="Name Surname" tip={tips.partyName} value={party.name} onChange={(_, v) => setParty(index, "name", v)} invalid={Boolean(gaps.name)} />
+            <Field id={`${type}-${index}-nationality`} label="Nationality" tip={tips.nationality} value={party.nationality} onChange={(_, v) => setParty(index, "nationality", v)} invalid={Boolean(gaps.nationality)} list={`${type}-${index}-nationalities`} options={orderedOptions(lists.nationalities, PRIORITY_NATIONALITIES)} />
+            <Field id={`${type}-${index}-passport`} label="Passport" tip={tips.passport} value={party.passport} onChange={(_, v) => setParty(index, "passport", v)} invalid={Boolean(gaps.passport)} />
             <CheckboxField id={`${type}-${index}-hasEid`} label="Has Emirates ID" tip={tips.hasEid} checked={partyHasEid(party)} onChange={(_, v) => setParty(index, "hasEid", v)} />
-            {partyHasEid(party) && <EidField id={`${type}-${index}-eid`} label="EID" tip={tips.eid} value={party.eid} onChange={(_, v) => setParty(index, "eid", v)} />}
-            <Field id={`${type}-${index}-ownership`} label="Ownership %" tip={tips.ownershipPercent} value={party.ownershipPercent} onChange={(_, v) => setParty(index, "ownershipPercent", v)} list={`${type}-${index}-ownerships`} options={lists.ownership_percent || []} />
+            {partyHasEid(party) && <EidField id={`${type}-${index}-eid`} label="EID" tip={tips.eid} value={party.eid} onChange={(_, v) => setParty(index, "eid", v)} invalid={Boolean(gaps.eid)} />}
+            <Field id={`${type}-${index}-ownership`} label="Ownership %" tip={tips.ownershipPercent} value={party.ownershipPercent} onChange={(_, v) => setParty(index, "ownershipPercent", v)} invalid={Boolean(gaps.ownershipPercent)} list={`${type}-${index}-ownerships`} options={lists.ownership_percent || []} />
             <SelectField id={`${type}-${index}-poa`} label="POA?" tip={tips.poa} value={party.hasPoa ? "Yes" : "No"} onChange={(_, v) => setParty(index, "hasPoa", v === "Yes")} options={["No", "Yes"]} />
           </div>
           {party.hasPoa && (
             <div className="grid poaGrid">
-              <Field id={`${type}-${index}-poaName`} label="POA Name Surname" tip="Имя представителя по Power of Attorney (доверенности)." value={party.poaName} onChange={(_, v) => setParty(index, "poaName", v)} />
-              <Field id={`${type}-${index}-poaNationality`} label="POA Nationality" tip={tips.nationality} value={party.poaNationality} onChange={(_, v) => setParty(index, "poaNationality", v)} list={`${type}-${index}-poa-nationalities`} options={orderedOptions(lists.nationalities, PRIORITY_NATIONALITIES)} />
-              <Field id={`${type}-${index}-poaPassport`} label="POA Passport" tip={tips.passport} value={party.poaPassport} onChange={(_, v) => setParty(index, "poaPassport", v)} />
-              <EidField id={`${type}-${index}-poaEid`} label="POA EID" tip={tips.eid} value={party.poaEid} onChange={(_, v) => setParty(index, "poaEid", v)} />
+              <Field id={`${type}-${index}-poaName`} label="POA Name Surname" tip="Имя представителя по Power of Attorney (доверенности)." value={party.poaName} onChange={(_, v) => setParty(index, "poaName", v)} invalid={Boolean(gaps.poaName)} />
+              <Field id={`${type}-${index}-poaNationality`} label="POA Nationality" tip={tips.nationality} value={party.poaNationality} onChange={(_, v) => setParty(index, "poaNationality", v)} invalid={Boolean(gaps.poaNationality)} list={`${type}-${index}-poa-nationalities`} options={orderedOptions(lists.nationalities, PRIORITY_NATIONALITIES)} />
+              <Field id={`${type}-${index}-poaPassport`} label="POA Passport" tip={tips.passport} value={party.poaPassport} onChange={(_, v) => setParty(index, "poaPassport", v)} invalid={Boolean(gaps.poaPassport)} />
+              <EidField id={`${type}-${index}-poaEid`} label="POA EID" tip={tips.eid} value={party.poaEid} onChange={(_, v) => setParty(index, "poaEid", v)} invalid={Boolean(gaps.poaEid)} />
             </div>
           )}
         </div>
-      ))}
+      );
+      })}
       <div className="sectionFooter">
         <button className="secondary iconText" type="button" onClick={addParty}><Plus size={16} /> Add {title}</button>
         <span className={Math.round(total * 100) / 100 === 100 ? "okText" : "warningText"}>Ownership total (итого доля): {Math.round(total * 100) / 100}%</span>
@@ -2007,7 +2034,12 @@ function DepositSection({ side, title, form, patch, lists, status, preview }) {
 }
 
 function Preview({ preview, actionErrors }) {
-  if (!preview) return <div className="emptyPreview">Preview will appear after data loads.</div>;
+  // список пропусков после нажатия Create — даже если Preview ещё не посчитан
+  if (!preview) {
+    return actionErrors?.length
+      ? <div className="previewContent"><Notice title="MOU was not created" items={actionErrors} type="error" /></div>
+      : <div className="emptyPreview">Preview will appear after data loads.</div>;
+  }
   const validation = preview.validation || { errors: [], warnings: [] };
   const s = preview.summary || {};
 

@@ -718,6 +718,18 @@ label span:first-child {
   margin: 0;
 }
 
+/* галочка в карточке стороны — вровень с полями ввода соседней колонки, а не на всю высоту строки */
+.partyCard .checkField {
+  align-self: end;
+}
+
+/* пустое обязательное поле (Даша, 07.10.2026): тот же тон, что у плашки «Needs info» */
+.field.invalid input,
+.field.invalid .selectButton {
+  background: var(--warning-bg);
+  border-color: rgba(154, 91, 16, 0.35);
+}
+
 .partyCard {
   background: #fff;
   border: 1px solid var(--line);
