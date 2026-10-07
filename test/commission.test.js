@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { buildCommission, validateCommission } from "../lib/mou/commission.js";
 import { COMMISSION_TEMPLATES } from "../lib/mou/config.js";
+import { stripValueMarks } from "../lib/mou/helpers.js";
 
 const PB = { name: "PRIME BRIDGE REAL ESTATE BROKERAGE - L.L.C - S.P.C", position: "Manager",
   representative: "Mikhail Slobodchikov", license: "CN-6410679", address: "Office 6, Ar Raha 8 St, MUSAFFAH, Abu Dhabi, 20335" };
@@ -25,8 +26,8 @@ test("Commission: Продавец платит одному агентству,
   assert.equal(buildCommission({ ...base, caDate: "05/12/2026", caAgencies: [PB] }).replacements.ca_date_header, "5 December, 2026");
   assert.equal(b.replacements.payment_term, "full on the day of transfer");
   assert.equal(b.flags.payer_is_company, false);
-  assert.equal(b.replacements.first_party_signature, "<<Name:>> Petr Petrov   <<Signature:>> ________________\u000b<<Date:>>");
-  assert.equal(b.replacements.second_party_signature,
+  assert.equal(stripValueMarks(b.replacements.first_party_signature), "<<Name:>> Petr Petrov   <<Signature:>> ________________\u000b<<Date:>>");
+  assert.equal(stripValueMarks(b.replacements.second_party_signature),
     "<<Name:>> Manager Mikhail Slobodchikov   <<Signature:>> ________________\u000b<<Date:>>\u000b<<Company Stamp>>");
 });
 
@@ -48,7 +49,7 @@ test("Commission: компания платит компании — одно а
     caAgencies: [PB, PB] });
   assert.equal(b.templateId, COMMISSION_TEMPLATES.oneAgency);
   assert.equal(b.flags.payer_is_company, true);
-  assert.match(b.replacements.payer_party_block, /^<<OTHER REAL ESTATE>>, represented by the Manager Mikhail Slobodchikov, authorized by the Economic license #CN-1,/);
+  assert.match(stripValueMarks(b.replacements.payer_party_block), /^<<OTHER REAL ESTATE>>, represented by the Manager Mikhail Slobodchikov, authorized by the Economic license #CN-1,/);
   assert.match(b.replacements.first_party_signature, /<<Company Stamp>>/);
 });
 
@@ -65,4 +66,9 @@ test("Имена файлов: «<договор> <юнит>»", async () => {
   const data = normalizeForm({ unitNumber: "Manarat-B1-01-00" });
   assert.equal(buildDraftTitle(data, MOU_TEMPLATES[0]), "Off-plan Memorandum of Understanding (MOU) Manarat-B1-01-00");
   assert.equal(buildCommission({ ...base, caAgencies: [PB] }).title, "Commission Agreement Manarat-B1-01-00");
+});
+
+test("Commission: значения в блоке компании и подписях помечены для жёлтой подсветки", () => {
+  const b = buildCommission({ ...base, caAgencies: [PB] });
+  assert.ok(b.replacements.second_party_signature.includes("\u27E6"));
 });

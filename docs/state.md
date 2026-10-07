@@ -55,6 +55,16 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 Осталось по Off-plan: «Manager's Cheque or Cheque» в №2 (вопрос Даше), дефис «third party reason»
 (в эталоне без дефиса, грамматически с ним — решает Даша), слияние ветки в `main` и проверка №2 на проде.
 
+## Commission Agreement: подсветка и правки шаблона «8» (07.10)
+
+Подсветка вставленного — как в MOU (`highlightValues: true` в /api/commission): даты, юнит, цена,
+стороны, реквизиты агентств (название, должность, представитель, лицензия, адрес — companyBlock),
+комиссии и суммы прописью, срок оплаты, имена в подписях. Роль «Seller/Buyer» (payer_role) — без
+подсветки. Проверено PDF тестового соглашения на 2 агентства.
+Шаблон «8. Commission Agreement (2 agencies)»: «agrees to pay Third Party» → «agrees to pay the Third
+Party»; абзац «…the Third Party shall / each be the sole recipient…» был разорван на два — склеен.
+В «7» (1 agency) таких мест нет.
+
 ## WHEREAS B: «agrees to purchase the Property» без запятой (07.10)
 
 Даша: убрать запятую после «purchase» во всех №1–№6. Убрана в шаблонах сайта №1, №3, №4, №5, №6 (старые
@@ -72,8 +82,8 @@ check-scenarios по №1, №3, №4 сайта и новым №3, №6 — 0.
 В блоках сторон, подписей, строке депозита — только сами значения (имя, гражданство, паспорт, EID,
 доля, суммы, проценты), связки вроде «, nationality:» не красятся. Не красятся служебные подстановки:
 номера статей, agencies_word, вводная «Similarly…», держатель чека, кому возвращают чеки, Transfer Fee
-label и т.п. (`NOT_HIGHLIGHTED`). Только MOU (`highlightValues: true` в /api/mou, generate-sample,
-generate-batch); Commission Agreement — без подсветки, метки вырезаются. Если метка осталась —
+label и т.п. (`NOT_HIGHLIGHTED`). MOU (`highlightValues: true` в /api/mou, generate-sample,
+generate-batch) и Commission Agreement (/api/commission, с 07.10). Если метка осталась —
 генератор пишет «value mark left» в список неподставленного. Остальная жёлтая заливка — из самих
 шаблонов (например «the Seller’s Agency as stakeholder» в №1). Проверено PDF на примерах №1 и №2.
 

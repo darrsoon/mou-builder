@@ -25,6 +25,8 @@ export async function POST(request) {
       replacements: built.replacements,
       flags: built.flags,
       templateId: built.templateId,
+      // как в MOU: всё, что вставлено из формы, — жёлтым (Даша, 07.10.2026)
+      highlightValues: true,
     });
 
     await appendDraftLog(sheets, {
