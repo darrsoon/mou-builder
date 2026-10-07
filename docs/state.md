@@ -59,7 +59,7 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 
 Строка Additional Information остаётся в две строки: подпись «Number of Car Parking Spaces:»
 не помещается в колонку ~4 см. Если нужно в одну — расширить колонку.
-Проверки после правок (check-markup, check-scenarios, check-combinations): №1, №2, №3 на сайте — 0 замечаний; остальные — см. следующий коммит.
+Проверки после правок (check-markup, check-scenarios, check-combinations): все 8 шаблонов — 0 замечаний.
 
 ## Off-plan проверен целиком (07.10)
 
