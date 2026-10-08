@@ -43,6 +43,20 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 берётся только из `lib/mou/config.js`. Не заводить их снова — старое значение в них
 молча вернуло бы сайт на старые копии шаблонов.
 
+## №1 Off-plan готов — финальная сверка с эталонами (08.10)
+
+Алина: «off-plan обычный готов». Проверки №1: check-markup, check-scenarios — 0, check-combinations 9216 / 0.
+Пословная сверка (`render-text.mjs` + `dump-text.mjs` + `word-diff.py`, эталоны — Google-копии docx):
+- «всё включено» ↔ драфт 1 (`1aX_h4yU…`), «без депозитов» ↔ чистовик 1.2 (`1lXf-lodo…`): отличаются только
+  подставленные данные и три принятых правила:
+  1) определение «Liquidated Damages –» убирается, когда оба депозита есть (`{{#if !both_deposits}}`);
+  2) «Upon Buyer/Seller Default, the … shall pay AED … as liquidated damages» — только у стороны без своего
+     депозита (в драфте 1 этот кусок помечен «__ … __» как вариант; с депозитом — «The forfeited Security Deposit
+     shall be distributed»); без депозитов совпадает с 1.2 пословно;
+  3) «Manager's Cheque or Cash» в Payment Table — без точки (решение 06.10).
+- Разница по данным сделки: в 1.2 нет определения NOC fee, а метка «Transfer Fee / NOC Fee» есть; в драфте 1 есть
+  оба — оставлено как в драфте 1.
+
 ## «Manager’s Cheque» в PAYMENT TABLE — жёлтым (08.10)
 
 Алина: «Manager’s Cheque нужно выделить» (в ADM Electronic Fee №1 было без выделения, в чистовиках — вразнобой).

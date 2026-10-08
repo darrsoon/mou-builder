@@ -41,7 +41,8 @@
 - Определение Liquidated Damages удаляется, когда ОБА депозита включены.
   ⚠️ В текущих шаблонах это правило не отражено — см. отчёт аудита.
 - Ст. Buyer/Seller Default: предложение «shall pay AED X as liquidated damages, being an
-  amount equal to the Security Deposit» присутствует всегда. X = свой депозит, если есть,
+  amount equal to the Security Deposit» — ⚠️ сейчас (шаблон №1, сверено 08.10 с драфтом 1 и 1.2) только у
+  стороны без своего депозита; ниже — исходная формулировка правила: присутствует всегда. X = свой депозит, если есть,
   иначе депозит другой стороны. Лид-фраза: есть депозит → «The forfeited Security Deposit
   shall be distributed», нет → «This amount shall be distributed».
 - Распределение 80% стороне / 20% агенту другой стороны; нет агента → 100% стороне.
