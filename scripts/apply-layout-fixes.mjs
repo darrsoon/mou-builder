@@ -21,6 +21,7 @@ const steps = [
   ["fix-highlight-parens.mjs"],
   ["fix-deposit-line-style.mjs"],
   ["fix-cheques-highlight.mjs"],
+  ["fix-manager-cheque-highlight.mjs"],
   ["fix-signature-headings.mjs"],
   ["fix-keep-with-next.mjs"],
 ];

@@ -43,6 +43,12 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 берётся только из `lib/mou/config.js`. Не заводить их снова — старое значение в них
 молча вернуло бы сайт на старые копии шаблонов.
 
+## «Manager’s Cheque» в PAYMENT TABLE — жёлтым (08.10)
+
+Алина: «Manager’s Cheque нужно выделить» (в ADM Electronic Fee №1 было без выделения, в чистовиках — вразнобой).
+`scripts/fix-manager-cheque-highlight.mjs` выделяет каждое «Manager’s Cheque» в PAYMENT TABLE (все 8 шаблонов,
+в apply-layout-fixes). Пример №1 проверен в PDF.
+
 ## Логотип: с ним или без (08.10)
 
 Алина: в разделе Template — выбор «With logo / Without logo». Поле формы `withLogo` ("Yes" по умолчанию / "No").
