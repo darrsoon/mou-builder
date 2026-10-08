@@ -54,7 +54,7 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 - №2: после удаления дубля абзаца о банке у «Any prepaid service…» снят интервал после (12 pt) — был двойной отступ
   перед Article 13 (в `fix-mortgage-coop-dup.mjs`).
 Пустая строка после «THE SELLER» / «THE BUYER» — как в чистовиках (в №1 есть, в №2–№6 нет), не трогали.
-Пример №2 проверен в PDF.
+Пример №2 проверен в PDF. Проверки после правок: все 8 шаблонов — check-markup, check-scenarios, check-combinations — 0.
 
 ## №2 Off-plan mortgage — повторная сверка (08.10)
 
