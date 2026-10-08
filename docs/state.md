@@ -48,7 +48,8 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 Алина: в разделе Template — выбор «With logo / Without logo». Поле формы `withLogo` ("Yes" по умолчанию / "No").
 При "No" `createMouDocument({ withoutLogo })` после сборки удаляет плавающие картинки из колонтитулов
 (`removeHeaderLogo` в `lib/google/docs.js`; во всех шаблонах MOU и CA 7/8 это только логотип 153×43 pt).
-Действует и на MOU (оба движка), и на Commission Agreement. `generate-sample.mjs --no-logo` — проверка;
+MOU — поле `withLogo` в разделе Template (оба движка); Commission Agreement — отдельное поле `caWithLogo`
+в его разделе (Алина: «в commission тоже нужно отдельно спросить»). `generate-sample.mjs --no-logo` — проверка;
 пример №1 без логотипа проверен в PDF.
 
 ## Таблицы сжимаются, когда текста нет (07.10)

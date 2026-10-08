@@ -27,8 +27,8 @@ export async function POST(request) {
       templateId: built.templateId,
       // как в MOU: всё, что вставлено из формы, — жёлтым (Даша, 07.10.2026)
       highlightValues: true,
-      // логотип — как выбрано в разделе Template для MOU
-      withoutLogo: form.withLogo === "No",
+      // логотип — свой выбор в разделе Commission Agreement (Алина, 08.10.2026)
+      withoutLogo: form.caWithLogo === "No",
     });
 
     await appendDraftLog(sheets, {

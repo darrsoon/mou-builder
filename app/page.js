@@ -142,6 +142,8 @@ const initialForm = {
   caPayerCompany: emptyCaAgency(""),
   caAgencies: [emptyCaAgency(DEFAULT_AGENT)],
   caDate: "",
+  // логотип в Commission Agreement — отдельно от MOU (Алина, 08.10.2026)
+  caWithLogo: "Yes",
   caPaymentTerm: "on_transfer",
   caPaymentDays: "2",
   buyerChequeThirdParty: "No",
@@ -1098,7 +1100,7 @@ export default function HomePage() {
               <SelectField
                 id="withLogo"
                 label="Logo"
-                tip="С логотипом Prime Bridge в шапке документа или без него (MOU и Commission Agreement)."
+                tip="С логотипом Prime Bridge в шапке MOU или без него. Для Commission Agreement — отдельный выбор в его разделе."
                 value={form.withLogo || "Yes"}
                 onChange={patch}
                 options={[
@@ -1432,6 +1434,7 @@ function CommissionSection({ form, agentOptions, patchCa, patchCaAgency, patchCa
         <Field id="caPaymentDays" label="Business days" tip="Сколько рабочих дней после Transfer Date на оплату. В договоре: within 2 (two) business days following the Transfer Date" value={form.caPaymentDays ?? "2"} onChange={(_, v) => patchCa("caPaymentDays", v)} placeholder="2" />
       ) : null}
       <DateField id="caDate" label="Agreement date" tip="Дата Commission Agreement — по умолчанию сегодняшняя (дата создания), можно выбрать другую" value={form.caDate || todayFormValue()} onChange={(_, v) => patchCa("caDate", v)} />
+      <SelectField id="caWithLogo" label="Logo" tip="С логотипом Prime Bridge в шапке Commission Agreement или без него (отдельно от MOU)." value={form.caWithLogo || "Yes"} onChange={(_, v) => patchCa("caWithLogo", v)} options={[{ value: "Yes", label: "With logo" }, { value: "No", label: "Without logo" }]} />
 
       {isCompany ? (
         <div style={{ display: "grid", gap: "10px", alignContent: "start" }}>
