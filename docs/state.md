@@ -54,6 +54,7 @@ PROJECTS (Sea La Vie, C3 Garden Residence, Gate Towers). Подпись в та�
 - №3, №5, №6, прежний №4 и C3 — только определение NOC, уже верно;
 - тестовые сценарии: подпись «Transfer Fee / NOC Fee» (такой нет) заменена на «Transfer Fee»; тест флага noc_fee.
 Проверено на копиях: «Transfer Fee» → только определение Transfer Fee, «NOC Fee» → только NOC.
+Проверки после правки: №1, №2 (9216) и новый №4 (6144) — check-markup, check-scenarios, check-combinations — 0.
 
 ## №1 Off-plan готов — финальная сверка с эталонами (08.10)
 
