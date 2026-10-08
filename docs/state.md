@@ -54,6 +54,11 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 PROJECTS). Это ровно версия 7b13d2f (05.10). Причина отката 05.10 по переписке той сессии не названа
 («откати все обратно»); до этого: ключ к базе был владельческий (`neondb_owner`), не только чтение; защита Claude
 дважды блокировала работу с ним; на живой базе поиск не проверялся. Для возврата нужен ключ только на чтение от IT.
+Отложено (08.10, «давай потом»). План: в Neon через SQL Editor (не кнопкой Roles — та даёт neon_superuser)
+`CREATE ROLE mou_reader WITH LOGIN PASSWORD '…'; GRANT CONNECT ON DATABASE neondb TO mou_reader;
+GRANT USAGE ON SCHEMA public TO mou_reader; GRANT SELECT ON public.units, public.projects TO mou_reader;` →
+строку подключения mou_reader в Vercel mou-builder как `UNITS_DB_URL` (вносит Алина) → вернуть код 7b13d2f,
+проверить на Al Sidr-SL3-V-335 и что запись ключом невозможна.
 
 ## Филсы в расчётах (08.10)
 
