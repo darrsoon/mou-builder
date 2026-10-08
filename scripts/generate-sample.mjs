@@ -1,6 +1,7 @@
 // Боевая генерация локально, ботовыми ключами: node scripts/generate-sample.mjs <templateId> [сценарий] [--mortgage]
 // Гоняет ровно тот же код, что и сайт (formForTemplate, createMouDocument, engine v2).
 // --mortgage — шаблон №2 (Off-plan mortgage): ADM-сборы ипотеки, 18 статей.
+// --no-logo — как «Without logo» в разделе Template: логотип из колонтитула убирается.
 import { getBotClients } from "./google-bot.mjs";
 import { createMouDocument } from "../lib/google/docs.js";
 import { normalizeForm, calculate, buildFlags, buildReplacementsV2, buildDraftTitle, formForTemplate } from "../lib/mou/core.js";
@@ -70,6 +71,7 @@ const replacements = buildReplacementsV2(data, calc, numbers);
 const doc = await createMouDocument({
   drive, docs, title: `ТЕСТ ${key} — ${buildDraftTitle(data, TEMPLATE)}`,
   data, rules: [], replacements, flags, templateId, engine: "v2", highlightValues: true,
+  withoutLogo: process.argv.includes("--no-logo"),
 });
 
 console.log("сценарий:", key);

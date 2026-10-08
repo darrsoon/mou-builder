@@ -53,6 +53,7 @@ export async function POST(request) {
         drive, docs, title, data, rules, replacements, flags, templateId, engine,
         // всё, что вставлено из формы, — жёлтым (Даша, 07.10.2026)
         highlightValues: true,
+        withoutLogo: form.withLogo === "No",
       });
     } else {
       rules = await readRules(sheets);
@@ -61,6 +62,7 @@ export async function POST(request) {
       const replacements = buildReplacements(data, calc, articleNumbers);
       document = await createMouDocument({
         drive, docs, title, data, rules, replacements, templateId,
+        withoutLogo: form.withLogo === "No",
       });
     }
 

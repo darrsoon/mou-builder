@@ -77,6 +77,8 @@ const initialParty = () => ({
 });
 
 const initialForm = {
+  // логотип в колонтитуле MOU и Commission Agreement; «No» — убрать (Алина, 08.10.2026)
+  withLogo: "Yes",
   agreementDate: "",
   reservationDeadline: "",
   projectName: "",
@@ -1091,6 +1093,17 @@ export default function HomePage() {
                 options={[
                   { value: "", label: "Select template..." },
                   ...(init.config?.templates || []).map((t) => ({ value: t.id, label: t.label })),
+                ]}
+              />
+              <SelectField
+                id="withLogo"
+                label="Logo"
+                tip="С логотипом Prime Bridge в шапке документа или без него (MOU и Commission Agreement)."
+                value={form.withLogo || "Yes"}
+                onChange={patch}
+                options={[
+                  { value: "Yes", label: "With logo" },
+                  { value: "No", label: "Without logo" },
                 ]}
               />
             </Section>
