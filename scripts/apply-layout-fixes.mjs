@@ -23,6 +23,8 @@ const steps = [
   ["fix-cheques-highlight.mjs"],
   ["fix-manager-cheque-highlight.mjs"],
   ["fix-noc-definition.mjs"],
+  ["fix-signature-style.mjs"],
+  ["fix-terms-indent.mjs"],
   ["fix-signature-headings.mjs"],
   ["fix-keep-with-next.mjs"],
 ];
