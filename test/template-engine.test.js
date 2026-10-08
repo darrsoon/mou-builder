@@ -410,3 +410,12 @@ test("дата чека в договоре — через точки; подп�
   assert.ok(!r.buyer_signature_block.includes("\n\n"));
   assert.equal(r.buyer_signature_block.split("\n").length, 2);
 });
+
+test("noc_fee: NOC — по проекту (Transfer Fee Label из PROJECTS) и по готовности объекта (08.10)", () => {
+  const flag = (form) => buildFlags(normalizeForm(form), calculate(normalizeForm(form))).noc_fee;
+  assert.equal(flag({ unitStatus: "Off-Plan", transferFeeLabel: "Transfer Fee" }), false);
+  assert.equal(flag({ unitStatus: "Off-Plan", transferFeeLabel: "Modon Fee" }), false);
+  assert.equal(flag({ unitStatus: "Off-Plan", transferFeeLabel: "NOC Fee" }), true); // Sea La Vie, C3, Gate Towers
+  assert.equal(flag({ unitStatus: "Ready", transferFeeLabel: "Transfer Fee" }), true); // готовый — всегда NOC
+  assert.equal(normalizeForm({ unitStatus: "Ready", transferFeeLabel: "Transfer Fee" }).transferFeeLabel, "NOC Fee");
+});

@@ -12,7 +12,7 @@ export const BASE = {
   propertyType: "Apartment", unitNumber: "GB-1204", parkingSpaces: "1", titleDeedNumber: "N/A",
   sellingPrice: "1,670,000", originalPrice: "1,494,050",
   paidAmountToDeveloper: "373,512.50", transferThresholdPercent: "30",
-  admAdminFee: "575", transferFee: "4,000", transferFeeLabel: "Transfer Fee / NOC Fee",
+  admAdminFee: "575", transferFee: "4,000", transferFeeLabel: "Transfer Fee",
   buyerDefaultPenaltyAmount: "167,000", sellerDefaultPenaltyAmount: "167,000",
   agencyFeeSeller: "33,400", agencyFeeBuyer: "33,400",
   sellers: [{ salutation: "Mr.", name: "Ivan Petrov", nationality: "Russian Federation",

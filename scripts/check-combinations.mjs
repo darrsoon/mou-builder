@@ -68,7 +68,7 @@ const BASE = {
   ...(MORTGAGE
     ? { admAdminFee: "", admElectronicFee: String(ADM_ELECTRONIC), admValuationFee: String(ADM_VALUATION) }
     : { admAdminFee: String(ADM_ADMIN) }),
-  transferFee: String(TRANSFER_FEE), transferFeeLabel: "Transfer Fee / NOC Fee",
+  transferFee: String(TRANSFER_FEE), transferFeeLabel: "Transfer Fee",
   amountToSeller: String(AMOUNT_TO_SELLER), unitStatus: "Off-plan",
   developerName: "ALDAR DEVELOPMENT L.L.C – O.P.C", developerLegalName: "ALDAR PROPERTIES PJSC",
   escrowAccountName: "THE SOURCE ESCROW", propertyLocation: "Saadiyat Island",
@@ -366,7 +366,7 @@ for (const c of combos) {
     if (UNIT_VERIFICATION_ROW) inRow("Unit Verification", "Unit Verification / Search Certificate:", UNIT_VERIFICATION);
     if (SELLER_MORTGAGE) inRow("Mortgage Release Fee", "Mortgage Release Fee:", MORTGAGE_RELEASE);
   }
-  if (!READY) inRow("Transfer Fee", "Transfer Fee / NOC Fee:", TRANSFER_FEE);
+  if (!READY) inRow("Transfer Fee", "Transfer Fee:", TRANSFER_FEE);
   if (e.topUp > 0) inRow("добор порога", "Remaining balance to complete", e.topUp);
   if (e.buyerDep !== "") inRow("депозит Покупателя", "issued by the Buyer in favour of the Seller", e.buyerDep);
   if (e.sellerDep !== "") inRow("депозит Продавца", "issued by the Seller in favour of the Buyer", e.sellerDep);

@@ -67,6 +67,10 @@
 - Условие NOC берётся из колонки Transfer Fee Label вкладки PROJECTS (= «NOC Fee»),
   не по имени застройщика. Лейбл в таблице и фраза про NOC в определениях — из одного
   источника.
+- (08.10, Алина + комментарии Даши в драфте 1) NOC — у готовых объектов (всегда) и у проектов с «NOC Fee»
+  в PROJECTS: Sea La Vie (Nine Yards), C3 Garden Residence, Gate Towers. «Transfer Fee / NOC Fee» вместе не
+  бывает: либо «Transfer Fee», либо «NOC Fee». Есть NOC → в определениях только «NOC fee is a fee charged…»,
+  без «Transfer Fee – …»; нет NOC → только «Transfer Fee – …».
 
 ### Прочее
 - Ст. Effective Date: аннулирование MOU за 2 рабочих дня — фиксированный текст.

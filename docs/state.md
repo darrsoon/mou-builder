@@ -43,6 +43,18 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 берётся только из `lib/mou/config.js`. Не заводить их снова — старое значение в них
 молча вернуло бы сайт на старые копии шаблонов.
 
+## NOC / Transfer Fee — по проекту и готовности (08.10)
+
+Правило (Алина + комментарии Даши в драфте 1, см. project-memory): NOC — готовые объекты и проекты с «NOC Fee» в
+PROJECTS (Sea La Vie, C3 Garden Residence, Gate Towers). Подпись в таблице — одна из двух; при NOC в определениях
+только «NOC fee is…», без NOC — только «Transfer Fee – …».
+- №1, №2: «Transfer Fee – …» ушло под `{{#if !noc_fee}}` (`scripts/fix-noc-definition.mjs`, в apply-layout-fixes);
+- новый №4 (`1OG7MF…`): определение было обрезано («NOC — an official document…», пункт 5 аудита) —
+  восстановлено «NOC fee is a fee charged for issuing a No Objection Certificate (NOC) — …», жирный как в №3;
+- №3, №5, №6, прежний №4 и C3 — только определение NOC, уже верно;
+- тестовые сценарии: подпись «Transfer Fee / NOC Fee» (такой нет) заменена на «Transfer Fee»; тест флага noc_fee.
+Проверено на копиях: «Transfer Fee» → только определение Transfer Fee, «NOC Fee» → только NOC.
+
 ## №1 Off-plan готов — финальная сверка с эталонами (08.10)
 
 Алина: «off-plan обычный готов». Проверки №1: check-markup, check-scenarios — 0, check-combinations 9216 / 0.
