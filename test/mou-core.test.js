@@ -8,6 +8,7 @@ import {
 } from "../lib/google/docs.js";
 import { buildArticleNumbers, DEFAULT_RULES } from "../lib/mou/articles.js";
 import { buildFlags, buildPreview, buildReplacements, buildReplacementsV2, calculate, formatLongDate, normalizeForm, validateMou } from "../lib/mou/core.js";
+import { money } from "../lib/mou/helpers.js";
 
 function base(overrides = {}) {
   return normalizeForm({
@@ -772,4 +773,16 @@ test("Remaining balance %: по умолчанию доля остатка от 
   const pct = (extra) => { const d = normalizeForm({ ...f, ...extra }); return buildReplacementsV2(d, calculate(d), {}).remaining_balance_percent; };
   assert.equal(pct({}), "78.43");
   assert.equal(pct({ remainingBalancePercent: "80" }), "80");
+});
+
+test("филсы не теряются: SOA Saadiyat Lagoons (08.10)", () => {
+  const form = { unitStatus: "Off-Plan", originalPrice: "8,223,132.16", sellingPrice: "8,570,000", transferThresholdPercent: "20" };
+  const whole = calculate(normalizeForm({ ...form, paidAmountToDeveloper: "2,477,420.16" }));
+  assert.equal(money(whole.remainingDeveloperBalance), "5,745,712"); // = Balance в SOA
+  assert.equal(money(whole.amountToSeller), "2,824,288");
+  const r = buildReplacementsV2(normalizeForm({ ...form, paidAmountToDeveloper: "2,477,420.15" }),
+    calculate(normalizeForm({ ...form, paidAmountToDeveloper: "2,477,420.15" })), {});
+  assert.equal(r.remaining_developer_balance, "5,745,712.01");
+  assert.equal(r.amount_to_seller, "2,824,287.99");
+  assert.equal(r.remaining_balance_percent, "69.87");
 });
