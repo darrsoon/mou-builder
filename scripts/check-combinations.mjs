@@ -391,7 +391,8 @@ for (const c of combos) {
   // процент остатка застройщику — в подписи строки таблицы
   const pctLine = lineWith("of the Original Price to be paid to the Developer");
   if (pctLine && e.remainingPct !== "") {
-    const pct = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2, useGrouping: false }).format(e.remainingPct);
+    // посчитанный процент округляется до целого (Алина, 08.10.2026)
+    const pct = String(Math.round(e.remainingPct));
     if (!pctLine.includes(`${pct}%`)) {
       found.push(`процент остатка: ожидал ${pct}%, в строке «${pctLine.trim().slice(0, 70)}»`);
     }
