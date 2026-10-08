@@ -317,7 +317,7 @@ const tips = {
   amountToSellerChequeInFavourOf: "Имя/фамилия или компания, в пользу кого будет выписан Manager's Cheque для Seller.",
   transferThresholdPercent: "Есть в MOU. Transfer Threshold % (порог для передачи) — процент Original Price, который должен быть оплачен developer, чтобы получить transfer/assignment. Например 20, 30 или 40.",
   thresholdTopUpAmount: "Есть в MOU. Threshold Top-up (доплата до порога) — доплата developer, чтобы на transfer date было оплачено достаточно для передачи. Пример: Original Price 1,000,000, threshold 30%, уже оплачено 200,000. Нужно довести до 300,000, значит top-up = 100,000.",
-  remainingBalancePercent: "Есть в MOU: «Remaining balance of N% of the Original Price». Считается сам — доля Remaining Developer Balance от Original Price (пример: 1,090,666 из 1,390,666 = 78.43%). Можно вписать свой процент — в договор пойдёт он.",
+  remainingBalancePercent: "Есть в MOU: «Remaining balance of N% of the Original Price». Считается сам — доля Remaining Developer Balance от Original Price (пример: 1,090,666 из 1,390,666 = 78.43% → 78%, округляется до целого). Можно вписать свой процент — в договор пойдёт он.",
   remainingDeveloperBalance: "Есть в MOU. Remaining Developer Balance (остаток рассрочки застройщику) — что Buyer будет платить developer уже после transfer по payment plan. Пример: Original Price 1,000,000, Seller уже оплатил 200,000, top-up 100,000. Остаток developer = 700,000.",
   transferFee: "Сумма Transfer/NOC Fee (сбор за передачу/NOC). Обычно подтягивается из PROJECTS, но можно изменить.",
   sellerAgentName: "Agency name (название агентства) со стороны Seller. По умолчанию PRIME BRIDGE.",

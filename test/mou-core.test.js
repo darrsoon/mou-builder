@@ -771,7 +771,7 @@ test("Remaining balance %: по умолчанию доля остатка от 
   const { normalizeForm, calculate, buildReplacementsV2 } = await import("../lib/mou/core.js");
   const f = { sellingPrice: "1,700,000", originalPrice: "1,390,666", paidAmountToDeveloper: "300,000", transferThresholdPercent: "20", unitStatus: "Off-plan" };
   const pct = (extra) => { const d = normalizeForm({ ...f, ...extra }); return buildReplacementsV2(d, calculate(d), {}).remaining_balance_percent; };
-  assert.equal(pct({}), "78.43");
+  assert.equal(pct({}), "78"); // 78.43 → до целого (08.10)
   assert.equal(pct({ remainingBalancePercent: "80" }), "80");
 });
 
@@ -784,5 +784,5 @@ test("филсы не теряются: SOA Saadiyat Lagoons (08.10)", () => {
     calculate(normalizeForm({ ...form, paidAmountToDeveloper: "2,477,420.15" })), {});
   assert.equal(r.remaining_developer_balance, "5,745,712.01");
   assert.equal(r.amount_to_seller, "2,824,287.99");
-  assert.equal(r.remaining_balance_percent, "69.87");
+  assert.equal(r.remaining_balance_percent, "70"); // 69.87 → до целого (08.10)
 });
