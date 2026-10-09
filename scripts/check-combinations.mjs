@@ -271,7 +271,8 @@ for (const c of combos) {
     const m = text.match(new RegExp(`.{0,50}${re.source}.{0,50}`));
     if (m) found.push(`${msg} → …${m[0].replace(/\n/g, " ⏎ ")}…`);
   }
-  if (/\n[ \t]*\n[ \t]*\n/.test(outsideTables)) found.push("две пустые строки подряд");
+  // кроме двух пустых строк перед «THE SELLER» — так в драфте 1 (обновлён 09.10.2026)
+  if (/\n[ \t]*\n[ \t]*\n/.test(outsideTables.replace(/\n\n\n(THE SELLER)/g, "\n\n$1"))) found.push("две пустые строки подряд");
 
   // запрещённые упоминания
   if (e.buyerDep === "" && e.sellerDep === "") {

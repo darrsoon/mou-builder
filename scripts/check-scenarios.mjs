@@ -112,8 +112,10 @@ for (const { name, over, forbidden } of SCENARIOS) {
   const lost = gapless.filter((g) => !baseGapless.has(g));
   if (lost.length) found.push("нет пустой строки → " + lost.join(" | "));
   // мягкий перенос в начале абзаца (\v) — тоже пустая строка: «⏎ ⏎ \vThis amount» = две подряд
-  if (/\n[ \t]*\n[ \t]*[\n\v]/.test(outsideTables)) {
-    const m = outsideTables.match(/.{0,60}\n[ \t]*\n[ \t]*[\n\v].{0,60}/);
+  // кроме двух пустых строк перед «THE SELLER» — так в драфте 1 (обновлён 09.10.2026)
+  const noSigGap = outsideTables.replace(/\n\n\n(THE SELLER)/g, "\n\n$1");
+  if (/\n[ \t]*\n[ \t]*[\n\v]/.test(noSigGap)) {
+    const m = noSigGap.match(/.{0,60}\n[ \t]*\n[ \t]*[\n\v].{0,60}/);
     found.push("две пустые строки подряд → …" + m[0].replace(/\n/g, " ⏎ ") + "…");
   }
   if (cond.errors.length) found.push("ошибки движка: " + cond.errors.join("; "));
