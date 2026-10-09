@@ -53,7 +53,7 @@ Buyer / Seller’s Agency / Buyer’s Agency по одной пустой стр
 жирные заголовки и подписи полей, интервалы 0, 1.15, по ширине. Применено ко всем 8 шаблонам + fix-keep-with-next;
 в apply-layout-fixes (после fix-signature-headings, затем fix-signature-style). check-scenarios / check-combinations
 теперь не считают ошибкой две пустые строки перед «THE SELLER». Примеры (№1: оба агентства, только Продавца, без
-агентств; №3) проверены в PDF.
+агентств; №3) проверены в PDF. Проверки всех 8 шаблонов после пересборки — check-markup, check-scenarios, check-combinations — 0.
 ⚠️ Google-копия docx, сделанная сразу после сохранения, может быть промежуточной (файл сохранялся дважды за 40 с) —
 сверять по копии, сделанной после последнего modifiedTime.
 
