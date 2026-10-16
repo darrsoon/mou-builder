@@ -43,6 +43,14 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 берётся только из `lib/mou/config.js`. Не заводить их снова — старое значение в них
 молча вернуло бы сайт на старые копии шаблонов.
 
+## Предложение после Payment Table — термины жирным (16.10)
+
+Алина: «после п.4 нет выделений в предложении, смотри эталон». В драфте 1 в «The Selling Price, the amount payable to
+the Seller, and the Agency Fee set out in the Payment Table are final and binding … Parties … Commission Agreement»
+жирные все термины; в №2–№6 жирным было только «Payment Table», в №1 — кроме «Seller» в варианте без комиссии.
+`scripts/fix-final-binding-bold.mjs` — все 8 шаблонов (в №5/№6 своя формулировка без «amount payable to the Seller»,
+текст не трогали), в apply-layout-fixes.
+
 ## Блок подписей — по обновлённому драфту 1 (09.10)
 
 Алина обновила драфт 1 (docx `1aX_h4yU…`, 09.10 05:20): текст и жирный не менялись, изменён только блок подписей —
