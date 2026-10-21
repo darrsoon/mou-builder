@@ -63,6 +63,10 @@
 - В тексте используются роли («The Buyer's Agent»), не названия компаний.
 - `{{agencies_word}}`: два агента → «Agencies», один → «the Agency».
 
+### ADM Fee в готовых объектах
+- (Алина, 21.10.2026) 2% от Selling Price, без админ-сбора 575 — как в эталоне №3
+  («2% from the Selling Price or as per ADM valuation, whatever comes higher»); при оценке выше — сумму правят в форме.
+
 ### Title Deed
 - Правило (Алина, 21.10.2026): Title Deed выдают на готовые юниты — у любого Ready-объекта номер Title Deed есть
   всегда, «N/A» не бывает; поле обязательно. «N/A» — только Off-plan (№1, №2: в форме только для чтения).
