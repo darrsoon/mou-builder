@@ -1215,7 +1215,7 @@ export default function HomePage() {
             {/* Title Deed (Даша, 07.10.2026): в №1–№2 (Off-plan) всегда «N/A», поле не правится;
                 в готовых объектах — номер обязателен */}
             {!selectedTemplate?.defaults?.titleDeedNumber
-              ? <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={form.titleDeedNumber} onChange={patch} invalid={!hasValue(form.titleDeedNumber) || /^n\s*\/?\s*a$/i.test(String(form.titleDeedNumber).trim())} />
+              ? <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={form.titleDeedNumber} onChange={patch} autoComplete="off" invalid={!hasValue(form.titleDeedNumber) || /^n\s*\/?\s*a$/i.test(String(form.titleDeedNumber).trim())} />
               : <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={selectedTemplate.defaults.titleDeedNumber} onChange={() => {}} readOnly />}
             <Field id="propertyLocation" label="Property Location / Island" tip={tips.propertyLocation} value={form.propertyLocation} onChange={patch} />
             <Field id="bedrooms" label="Bedrooms" tip={tips.bedrooms} value={form.bedrooms} onChange={patch} list="bedroomsList" options={lists.bedroom || []} />
@@ -1666,7 +1666,7 @@ function Tooltip({ text }) {
   );
 }
 
-function Field({ id, label, tip, value, onChange, onBlur, list, options, placeholder, readOnly = false, invalid = false }) {
+function Field({ id, label, tip, value, onChange, onBlur, list, options, placeholder, readOnly = false, invalid = false, autoComplete }) {
   return (
     <div className={`field${invalid ? " invalid" : ""}`}>
       <Label label={label} tip={tip} />
@@ -1679,6 +1679,7 @@ function Field({ id, label, tip, value, onChange, onBlur, list, options, placeho
           placeholder={placeholder || ""}
           readOnly={readOnly}
           className={readOnly ? "readOnlyInput" : ""}
+          autoComplete={autoComplete}
           onChange={(e) => onChange(id, e.target.value)}
           onBlur={onBlur ? (e) => onBlur(id, e.target.value) : undefined}
         />
