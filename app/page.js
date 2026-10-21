@@ -555,6 +555,8 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
   if (isReadyTemplate) propertyRequired.push(["projectNumber", "Project No."]);
   // «N/A» только у шаблонов с этим умолчанием в реестре (№1, №2); у остальных — номер
   if (!titleDeedDefault) propertyRequired.push(["titleDeedNumber", "Title Deed Number"]);
+  // «N/A» у готового объекта не годится — номер есть всегда (21.10.2026)
+  const deedIsNA = !titleDeedDefault && /^n\s*\/?\s*a$/i.test(String(form.titleDeedNumber || "").trim());
   // объект сдан в аренду: без суммы и срока в статье остаются дырки
   if (isReadyTemplate && form.propertyRented === "Yes") {
     propertyRequired.push(["annualRent", "Annual Rent"], ["tenancyEndDate", "Tenancy Contract Until"]);
@@ -563,7 +565,7 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
   return {
     agreement: makeSectionStatus(agreementMissing),
     project: makeSectionStatus(missingFields(form, projectRequired)),
-    property: makeSectionStatus(missingFields(form, propertyRequired)),
+    property: makeSectionStatus([...missingFields(form, propertyRequired), ...(deedIsNA ? ["Title Deed Number (не N/A)"] : [])]),
     sellers: partySectionStatus(form.sellers, "Seller"),
     buyers: partySectionStatus(form.buyers, "Buyer"),
     payments: makeSectionStatus(missingFields(form, paymentsRequired)),
@@ -1205,7 +1207,7 @@ export default function HomePage() {
             {/* Title Deed (Даша, 07.10.2026): в №1–№2 (Off-plan) всегда «N/A», поле не правится;
                 в готовых объектах — номер обязателен */}
             {!selectedTemplate?.defaults?.titleDeedNumber
-              ? <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={form.titleDeedNumber} onChange={patch} invalid={!hasValue(form.titleDeedNumber)} />
+              ? <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={form.titleDeedNumber} onChange={patch} invalid={!hasValue(form.titleDeedNumber) || /^n\s*\/?\s*a$/i.test(String(form.titleDeedNumber).trim())} />
               : <Field id="titleDeedNumber" label="Title Deed Number" tip={tips.titleDeedNumber} value={selectedTemplate.defaults.titleDeedNumber} onChange={() => {}} readOnly />}
             <Field id="propertyLocation" label="Property Location / Island" tip={tips.propertyLocation} value={form.propertyLocation} onChange={patch} />
             <Field id="bedrooms" label="Bedrooms" tip={tips.bedrooms} value={form.bedrooms} onChange={patch} list="bedroomsList" options={lists.bedroom || []} />

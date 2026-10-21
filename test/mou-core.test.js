@@ -7,7 +7,7 @@ import {
   buildSignatureTableStyleRequests,
 } from "../lib/google/docs.js";
 import { buildArticleNumbers, DEFAULT_RULES } from "../lib/mou/articles.js";
-import { buildFlags, buildPreview, buildReplacements, buildReplacementsV2, calculate, formatLongDate, normalizeForm, validateMou } from "../lib/mou/core.js";
+import { buildFlags, buildPreview, buildReplacements, buildReplacementsV2, calculate, formatLongDate, formForTemplate, normalizeForm, validateMou } from "../lib/mou/core.js";
 import { money } from "../lib/mou/helpers.js";
 
 function base(overrides = {}) {
@@ -785,4 +785,16 @@ test("филсы не теряются: SOA Saadiyat Lagoons (08.10)", () => {
   assert.equal(r.remaining_developer_balance, "5,745,712.01");
   assert.equal(r.amount_to_seller, "2,824,287.99");
   assert.equal(r.remaining_balance_percent, "70"); // 69.87 → до целого (08.10)
+});
+
+test("Title Deed у готового объекта: без «N/A», номер обязателен (21.10)", () => {
+  const tpl = { ready: true, engine: "v2" };
+  const base = { unitStatus: "Off-Plan", sellingPrice: "1,000,000" };
+  assert.equal(normalizeForm(formForTemplate({ ...base, titleDeedNumber: "" }, tpl)).titleDeedNumber, "");
+  assert.equal(normalizeForm(formForTemplate({ ...base, titleDeedNumber: "N/A" }, tpl)).titleDeedNumber, "");
+  assert.equal(normalizeForm(formForTemplate({ ...base, titleDeedNumber: "22345/323" }, tpl)).titleDeedNumber, "22345/323");
+  const v = validateMou(normalizeForm(formForTemplate({ ...base, titleDeedNumber: "n/a" }, tpl)), { ready: true });
+  assert.ok(v.errors.some((e) => e.startsWith("Title Deed Number")));
+  // off-plan по-прежнему N/A
+  assert.equal(normalizeForm({ ...base, titleDeedNumber: "" }).titleDeedNumber, "N/A");
 });
