@@ -58,6 +58,8 @@ with the Buyer’s financing bank…» в статье AML: в эталоне е
 Статья об ипотеке («The Buyer confirms that he has obtained Mortgage Pre-Approval…») — жирным как в эталоне №4
 (Алина 21.10: Mortgage Pre-Approval, Article 5, MOU, Buyer; заодно Security Deposit, Buyer в конце, в №2 — Final
 Mortgage Approval): `scripts/fix-mortgage-article-bold.mjs`, №2, №4, №6, в apply-layout-fixes.
+«…amounts due to the Developer…» (статья об обязательствах Продавца) — «the» обычным (Алина 21.10, п.12 №4):
+`scripts/fix-the-developer-bold.mjs`, №2–№6, в apply-layout-fixes.
 
 ## №3 Ready cash-to-cash — эталон (21.10) — ГОТОВ (Алина 21.10: «все ок, готово»)
 
