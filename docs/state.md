@@ -53,6 +53,15 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 «остаётся неизменной для Aldar», Community NOC 1,050 — «фикс цена», Article 9 — «удаляем, если нет депозитов»
 (в №3 уже под any_deposit). Сделано: Developer NOC 2,750 форма подставляет только если застройщик — Aldar
 (по Developer Name из PROJECTS), для остальных поле пустое и обязательное.
+Решения Алины 21.10 по №3 (и общие):
+- Type of Area в готовых объектах — «Residential - Household Living» (getTypeOfArea по статусу Ready; C3 — как было);
+  formForTemplate для ready-шаблонов теперь всегда ставит unitStatus Ready;
+- уведомления «delivered to … for their reference» — как в эталонах №2/№3: оба агентства «Seller’s Agency and Buyer’s
+  Agency» (жирным), одно — только его название (`agencies_word`, все шаблоны);
+- «Security Deposit:» с заглавной (`scripts/fix-security-deposit-label.mjs`: новый №3, прежние №3 и №4);
+- новый №3 подключён на сайте: в реестре `1OvFwf…`, файл переименован (без «— НОВЫЙ»), прежний `1G8vUZ…` —
+  «УСТАРЕЛО — 3. DRAFT Cash to cash…». Пример договора по новому №3 проверен (номер статьи Vacant on Transfer,
+  Type of Area, NOC Aldar, уведомления).
 
 ## Предложение после Payment Table — термины жирным (16.10)
 
@@ -388,7 +397,7 @@ distributed as follows: a) 80% … b) 20%») теперь показываетс
 - «by Manager's Cheque or Cheque» в строке суммы Продавцу (было «by Manager's Cheque»).
 
 ### Отложенные вопросы (готовые объекты — задать, когда дойдём до №3–№6)
-- №3: «Security deposit:» со строчной (в остальных «Security Deposit:»).
+- ~~№3: «Security deposit:» со строчной~~ — решено 21.10: «Security Deposit:».
 - (из «Ждём ответа Миши» ниже — Bailing, админ-сбор 575, Type of Area — тоже про готовые объекты.)
 
 ### Записи реестра для №3–№6 (вписать в `lib/mou/config.js`, когда дойдём)
@@ -654,9 +663,7 @@ check-scenarios (теперь ловит и ПРОПАВШУЮ пустую ст
 
 1. «Bailing» в строке ADM Fee — что это должно значить.
 2. Нужен ли админ-сбор 575 в готовых объектах и в ипотеке.
-3. Type of Area в готовых объектах: в исходнике №3 стояло «Residential - Household
-   Living», сейчас так подставляется только для Garden Residence и C3, для остальных
-   «Residential». Пока оставлено как есть.
+3. ~~Type of Area~~ — решено 21.10: в готовых объектах «Residential - Household Living».
 
 Плюс вопрос 24 из ревью: включать ли артикль «the» в определяемый термин в шапке.
 

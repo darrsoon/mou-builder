@@ -323,7 +323,7 @@ test("buildReplacementsV2: agencies_word, intro, return parties, подписи"
     buyers: [{ name: "Petr Petrov", ownershipPercent: "50" }, { name: "Anna Petrova", ownershipPercent: "50" }],
   });
   const r = buildReplacementsV2(data, calculate(data), {});
-  assert.equal(r.agencies_word, "Agencies");
+  assert.equal(r.agencies_word, "<<Seller’s Agency>> and <<Buyer’s Agency>>"); // как в эталонах №2/№3 (21.10)
   assert.equal(r.seller_deposit_intro, "Similarly, upon signing this <<Agreement>>,");
   assert.equal(r.deposit_return_parties, "the \u27E6<<Buyer>> and to the <<Seller>>\u27E7"); // жёлтым — по выбранным депозитам
   // имена из формы помечены для жёлтой подсветки (\u27E6…\u27E7)
@@ -336,9 +336,16 @@ test("buildReplacementsV2: agencies_word, intro, return parties, подписи"
 
   const singleAgent = v2Form({ buyerAgentEnabled: "No", buyerDepositEnabled: "No" });
   const r2 = buildReplacementsV2(singleAgent, calculate(singleAgent), {});
-  assert.equal(r2.agencies_word, "the Agency");
+  assert.equal(r2.agencies_word, "<<Seller’s Agency>>");
   assert.equal(r2.seller_deposit_intro, "Upon signing this <<Agreement>>,");
   assert.equal(r2.deposit_return_parties, "the \u27E6<<Seller>>\u27E7");
+});
+
+test("Type of Area: готовые объекты — «Residential - Household Living» (21.10)", async () => {
+  const { getTypeOfArea } = await import("../lib/mou/core.js");
+  assert.equal(getTypeOfArea("The Source", "Ready"), "Residential - Household Living");
+  assert.equal(getTypeOfArea("Gardenia Bay", "Off-Plan"), "Residential");
+  assert.equal(getTypeOfArea("C3 Garden Residence", "Off-Plan"), "Residential - Household Living");
 });
 
 test("normalizeForm: новые поля v2 с дефолтами", () => {
