@@ -53,6 +53,7 @@ Equity Release) — поле Buyer Funds. Таблицы п.3/п.4 = этало�
 обычным, статьи 7–8 из №1).
 Новый №5 подключён на сайте (движок v2): реестр `1UTrKS…` (ready + sellerMortgage, articles ready-mortgage-cash-v2),
 файл без «— НОВЫЙ», прежний `1hhruVEi…` (старый движок) — «УСТАРЕЛО — 5. DRAFT …». Пример проверен.
+Проверки нового №5: check-markup, check-scenarios — 0; check-combinations 12288 / 0.
 
 ## №4 Ready cash-to-mortgage — эталон (21.10)
 
