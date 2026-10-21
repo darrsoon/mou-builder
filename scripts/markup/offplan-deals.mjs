@@ -146,9 +146,8 @@ export const OFFPLAN_MORTGAGE = {
     { find: "REVENUE ACCOU  after valuation", replace: "REVENUE ACCOU after valuation", note: "двойной пробел, ADM Electronic Fee" },
     { find: "simultaneously with the ownership transfer at ADREC",
       replace: "simultaneously with the ownership transfer at ADREC.", note: "точка в конце ст.4" },
-    // Миша, 04.09.2026: важен факт пре-одобрения, сумма не обязана равняться Selling Price
-    { find: "obtained Mortgage Pre-Approval for an amount equal to the agreed Selling Price and that",
-      replace: "obtained Mortgage Pre-Approval and that", note: "ст.10: сумма пре-одобрения" },
+    // ст.10 «Mortgage Pre-Approval for an amount equal to the agreed Selling Price» — как в эталонах (Алина, 21.10.2026;
+    // раньше фразу убирали — Миша 04.09, Алина 13.09)
   ],
   extra: [
     // возврат депозита при отказе банка — только если депозит Покупателя есть

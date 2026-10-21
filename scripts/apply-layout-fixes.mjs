@@ -24,6 +24,7 @@ const steps = [
   ["fix-manager-cheque-highlight.mjs"],
   ["fix-noc-definition.mjs"],
   ["fix-final-binding-bold.mjs"],
+  ["fix-preapproval-amount.mjs"],
   ["fix-mortgage-article-bold.mjs"],
   ["fix-the-developer-bold.mjs"],
   ["fix-terms-indent.mjs"],

@@ -31,7 +31,7 @@ import { OFFPLAN_MORTGAGE, THRESHOLD_ROW } from "../scripts/markup/offplan-deals
 
 test("список правок для ипотечного шаблона собирается целиком", () => {
   const edits = buildEdits(OFFPLAN_MORTGAGE);
-  assert.equal(edits.length, 182);
+  assert.equal(edits.length, 181); // −1: фраза о сумме пре-одобрения остаётся (21.10)
   for (const e of edits) {
     assert.ok(e.find || e.cellAfter, `правка без find: ${JSON.stringify(e)}`);
     assert.ok(e.replace !== undefined || e.insertBefore !== undefined || e.bold !== undefined,
@@ -98,7 +98,7 @@ import { ARTICLE_DEFS_READY_MORTGAGE_V2 } from "../lib/mou/articles.js";
 
 test("список правок для Ready cash-to-mortgage собирается целиком", () => {
   const edits = buildEdits(READY_MORTGAGE);
-  assert.equal(edits.length, 184);
+  assert.equal(edits.length, 183); // −1: фраза о сумме пре-одобрения остаётся (21.10)
   for (const e of edits) {
     assert.ok(e.find || e.cellAfter, `правка без find: ${JSON.stringify(e)}`);
     assert.ok(e.replace !== undefined || e.insertBefore !== undefined, `правка без замены: ${JSON.stringify(e)}`);
@@ -112,7 +112,7 @@ test("список правок для Ready cash-to-mortgage собираетс
   assert.ok(edits.some((e) => e.replace === "AED {{developer_noc_fee}}"));
   assert.ok(edits.some((e) => e.insertBefore === "{{#if property_rented}}"));
   // решение 13.09.2026: как в №2, сумма пре-одобрения из ст.10 убрана
-  assert.ok(edits.some((e) => e.replace === "obtained Mortgage Pre-Approval and that"));
+  assert.ok(!edits.some((e) => e.replace === "obtained Mortgage Pre-Approval and that")); // фраза о сумме — как в эталоне (21.10)
   // строк застройщику и порога в готовом объекте нет
   assert.ok(!edits.some((e) => e.find === "Remaining balance of 70% of the Original Price"));
 });
@@ -192,11 +192,11 @@ test("правки чистовиков: в find/within нет «Agent», ста
   assert.ok(buildEdits(READY_MORTGAGE_CASH_CLEAN).some((e) => e.find === "—-"));
 });
 
-test("№4 и №6 по чистовикам: абзац о содействии банку Покупателя убирается (05.10)", () => {
-  for (const D of [READY_MORTGAGE_CLEAN, READY_MORTGAGE_MORTGAGE_CLEAN]) {
-    assert.ok(buildEdits(D).some((e) => e.find?.startsWith("The Seller shall cooperate with the Buyer’s financing bank") && e.replace === ""));
-  }
-  assert.ok(!buildEdits(OFFPLAN_MORTGAGE_CLEAN).some((e) => e.find?.startsWith("The Seller shall cooperate")));
+test("абзац о содействии банку Покупателя: в №2 и №4 остаётся (эталоны, 21.10), в №6 пока убирается", () => {
+  const removes = (D) => buildEdits(D).some((e) => e.find?.startsWith("The Seller shall cooperate with the Buyer’s financing bank") && e.replace === "");
+  assert.ok(!removes(OFFPLAN_MORTGAGE_CLEAN));
+  assert.ok(!removes(READY_MORTGAGE_CLEAN));
+  assert.ok(removes(READY_MORTGAGE_MORTGAGE_CLEAN));
 });
 
 test("№6: 20 статей, ипотека Продавца как в №5, ипотека Покупателя как в №4", () => {
@@ -206,7 +206,7 @@ test("№6: 20 статей, ипотека Продавца как в №5, и�
   assert.equal(heads[0].find, "Article 20");
   assert.ok(edits.some((e) => e.replace === "{{seller_bank_name}}"));
   assert.ok(edits.some((e) => e.replace === "AED {{mortgage_release_fee}}"));
-  assert.ok(edits.some((e) => e.replace === "obtained Mortgage Pre-Approval and that"));
+  assert.ok(!edits.some((e) => e.replace === "obtained Mortgage Pre-Approval and that")); // фраза о сумме — как в эталоне (21.10)
   assert.equal(edits.filter((e) => e.find === "described in Articles 11 and 12").length, 2);
   // денег Покупателя на выбор (как в №5) нет — у него ипотека
   assert.ok(!edits.some((e) => e.insertBefore === "{{#if buyer_own_funds}}"));

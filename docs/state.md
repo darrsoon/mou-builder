@@ -64,6 +64,10 @@ Mortgage Approval): `scripts/fix-mortgage-article-bold.mjs`, №2, №4, №6, �
 Новая проверка `scripts/check-article-gaps.mjs` — перед каждым Article пустая строка или интервал; все 6 шаблонов — ок.
 Перед «THE SELLER» — одна пустая строка (Алина 21.10: «между п.19 и THE SELLER 1 строка»; было две по драфту 1 от 09.10):
 `fix-signature-layout.mjs` (константа BLANKS = 1), применено к 6 рабочим шаблонам.
+Ст.10 (ипотека Покупателя): «Mortgage Pre-Approval for an amount equal to the agreed Selling Price» — вернули, как в
+эталонах №2 и №4 (Алина 21.10; раньше убирали — Миша 04.09, Алина 13.09): `scripts/fix-preapproval-amount.mjs` (№2, №4,
+№6, в apply-layout-fixes), правила удаления в `scripts/markup/*-deals.mjs` убраны. Абзац о содействии банку Покупателя
+в разметке №4 больше не удаляется (решение 21.10); для №6 — пока удаляется, решить по эталону №6.
 
 ## №3 Ready cash-to-cash — эталон (21.10) — ГОТОВ (Алина 21.10: «все ок, готово»)
 
