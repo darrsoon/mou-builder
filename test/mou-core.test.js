@@ -798,3 +798,10 @@ test("Title Deed у готового объекта: без «N/A», номер 
   // off-plan по-прежнему N/A
   assert.equal(normalizeForm({ ...base, titleDeedNumber: "" }).titleDeedNumber, "N/A");
 });
+
+test("готовый объект: без предупреждения про пустой Original Price (21.10)", () => {
+  const d = normalizeForm({ unitStatus: "Ready", sellingPrice: "1,000,000" });
+  assert.ok(!validateMou(d, { ready: true }).warnings.some((w) => w.startsWith("Original Price")));
+  const off = normalizeForm({ unitStatus: "Off-Plan", sellingPrice: "1,000,000" });
+  assert.ok(validateMou(off, {}).warnings.some((w) => w.startsWith("Original Price")));
+});

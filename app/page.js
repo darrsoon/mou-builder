@@ -288,7 +288,7 @@ const tips = {
   admAdminFee: "Административная часть ADM Fee (сбора Abu Dhabi Municipality). Обычно подставляется автоматически, но ее можно исправить вручную.",
   admFee: "ADM Fee для ипотечной сделки: 2% от Selling Price или по оценке ADM (что выше). По умолчанию считается 2%, после оценки можно вписать свою сумму.",
   admElectronicFee: "ADM Electronic Fee — электронный сбор ADREC. Сумма по умолчанию — из выбранного шаблона, можно поменять.",
-  developerNocFee: "Сбор застройщика за NOC. Для проектов Aldar подставляется 2,750, для других застройщиков — вписать вручную.",
+  developerNocFee: "Сбор застройщика за NOC. Подставляется по проекту (PROJECTS, колонка Transfer Fee Ready); если там пусто — 2,750 для Aldar, для других застройщиков вписать вручную.",
   communityNocFee: "Сбор сообщества за NOC, платит Seller. Сумма по умолчанию — из выбранного шаблона, можно поменять.",
   unitVerificationFee: "Unit Verification / Search Certificate — справка Abu Dhabi Municipality, платит Seller. Сумма по умолчанию — из шаблона, можно поменять.",
   mortgageReleaseFee: "Mortgage Release Fee — сбор ADREC за снятие ипотеки с объекта, платит Seller. Сумма по умолчанию — из шаблона, можно поменять.",
@@ -499,7 +499,8 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
       ["transferThresholdPercent", "Transfer Threshold %"],
     );
   }
-  paymentsRequired.push(["transferFee", "Transfer / NOC Fee"]);
+  // у готовых объектов строки Transfer / NOC Fee в шаблоне нет — NOC идёт строками Developer / Community NOC Fee
+  if (!isReadyTemplate) paymentsRequired.push(["transferFee", "Transfer / NOC Fee"]);
   if (form.manualAmountToSeller === "Yes") paymentsRequired.push(["amountToSeller", "Amount to Seller"]);
   // в ипотечном шаблоне способ оплаты Продавцу зашит в текст («Manager's Cheque»),
   // поле ни на что не влияет — не показываем и не требуем; в готовых объектах
@@ -669,12 +670,19 @@ export default function HomePage() {
   // не трогали руками: пустые или равные умолчаниям предыдущего шаблона.
   // Developer NOC Fee 2,750 — «остаётся неизменной для Aldar» (комментарий в эталоне №3, Алина 21.10.2026):
   // для других застройщиков сумму не подставляем, её вписывают руками.
+  // Для готовых — по проекту (Алина, 21.10.2026): сумма из колонки «Transfer Fee Ready» в PROJECTS, если пусто —
+  // 2,750 для Aldar, иначе вписать руками.
   const isAldar = /aldar/i.test(form.developerName || "");
+  const projectNocReady = useMemo(() => {
+    const found = init.projects.find((p) => String(p.project_name || "").toLowerCase() === String(form.projectName || "").toLowerCase());
+    const raw = String(found?.transfer_fee_ready || "").replace(/,/g, "").trim();
+    return raw && !Number.isNaN(Number(raw)) ? new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(Number(raw)) : "";
+  }, [init.projects, form.projectName]);
   const templateDefaults = useMemo(() => {
     const d = { ...(selectedTemplate?.defaults || {}) };
-    if ("developerNocFee" in d && !isAldar) d.developerNocFee = "";
+    if ("developerNocFee" in d) d.developerNocFee = projectNocReady || (isAldar ? d.developerNocFee : "");
     return d;
-  }, [selectedTemplate, isAldar]);
+  }, [selectedTemplate, isAldar, projectNocReady]);
   const appliedDefaults = useRef({});
   useEffect(() => {
     if (!selectedTemplate) return;
@@ -1290,7 +1298,7 @@ export default function HomePage() {
             {!isCashToCash && <AutoMoneyField id="thresholdTopUpAmount" label="Threshold Top-up to Developer" tip={tips.thresholdTopUpAmount} value={form.thresholdTopUpAmount} autoValue={preview?.summary?.thresholdTopUpAmount} onChange={patch} placeholder="Посчитается автоматически" />}
             {!isCashToCash && <AutoMoneyField id="remainingBalancePercent" label="Remaining Balance %" tip={tips.remainingBalancePercent} value={form.remainingBalancePercent} autoValue={preview?.summary?.remainingBalancePercent} onChange={patch} placeholder="Посчитается автоматически" prefix="" suffix="%" />}
             {!isCashToCash && <AutoMoneyField id="remainingDeveloperBalance" label="Remaining Developer Balance" tip={tips.remainingDeveloperBalance} value={form.remainingDeveloperBalance} autoValue={preview?.summary?.remainingDeveloperBalance} onChange={patch} placeholder="Посчитается автоматически" />}
-            <AutoMoneyField id="transferFee" label="Transfer / NOC Fee" tip={tips.transferFee} value={form.transferFee} onChange={patch} />
+            {!isReadyTemplate && <AutoMoneyField id="transferFee" label="Transfer / NOC Fee" tip={tips.transferFee} value={form.transferFee} onChange={patch} />}
           </Section>
 
           <Section title="Agency" status={sectionStatuses.agency}>

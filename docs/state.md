@@ -66,6 +66,11 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
   normalizeForm даёт «N/A» по умолчанию только не-Ready; formForTemplate для ready превращает «N/A» в пусто;
   validateMou (ready) — ошибка без номера; в форме «N/A» подсвечивается и считается незаполненным. Тест в mou-core.
 Проверки после правок 21.10 (№1, №2, новый №3, №4 на сайте, новые №4–№6) — check-markup, check-scenarios, check-combinations — 0.
+- Готовые объекты, форма (Алина 21.10): поле «Transfer / NOC Fee» скрыто и не обязательно (в готовых шаблонах строки
+  нет, NOC — строками Developer / Community NOC Fee); Developer NOC Fee — по проекту: колонка «Transfer Fee Ready»
+  в PROJECTS (Gardenia Bay, Gate Towers 2700; Sea La Vie, AlJurf, Maysan, Reem Hills 5250), если пусто — 2,750 для
+  Aldar, иначе вручную; предупреждение «Original Price пустой» для готовых убрано (поле OP у них и так скрыто).
+  ⚠️ Gardenia Bay / Gate Towers (Aldar): в таблице 2700, в эталоне №3 для Aldar 2,750 — уточнить у Алины.
 
 ## Предложение после Payment Table — термины жирным (16.10)
 
