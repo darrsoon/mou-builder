@@ -73,6 +73,7 @@ Mortgage Approval): `scripts/fix-mortgage-article-bold.mjs`, №2, №4, №6, �
 после «Agency» в 80/20, в №4 скобка ADM Fee, аренда — по флагу); оформление (check-style) — только наши решения:
 заголовок 13 pt, отступы Terms как в №1, шапка PAYMENT TABLE, «the Developer» без жирного «the» (21.10),
 «Manager’s Cheque» в строке суммы Продавцу обычным (правило 06.10). Текст ст.10 и абзац о банке — как в эталонах.
+Проверки после правок ст.10 и пустой строки перед THE SELLER: №1–№6 — check-markup, check-scenarios, check-combinations — 0.
 
 ## №3 Ready cash-to-cash — эталон (21.10) — ГОТОВ (Алина 21.10: «все ок, готово»)
 
