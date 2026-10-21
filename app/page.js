@@ -288,7 +288,7 @@ const tips = {
   admAdminFee: "Административная часть ADM Fee (сбора Abu Dhabi Municipality). Обычно подставляется автоматически, но ее можно исправить вручную.",
   admFee: "ADM Fee для ипотечной сделки: 2% от Selling Price или по оценке ADM (что выше). По умолчанию считается 2%, после оценки можно вписать свою сумму.",
   admElectronicFee: "ADM Electronic Fee — электронный сбор ADREC. Сумма по умолчанию — из выбранного шаблона, можно поменять.",
-  developerNocFee: "Сбор застройщика за NOC. Сумма по умолчанию — из выбранного шаблона, можно поменять.",
+  developerNocFee: "Сбор застройщика за NOC. Для проектов Aldar подставляется 2,750, для других застройщиков — вписать вручную.",
   communityNocFee: "Сбор сообщества за NOC, платит Seller. Сумма по умолчанию — из выбранного шаблона, можно поменять.",
   unitVerificationFee: "Unit Verification / Search Certificate — справка Abu Dhabi Municipality, платит Seller. Сумма по умолчанию — из шаблона, можно поменять.",
   mortgageReleaseFee: "Mortgage Release Fee — сбор ADREC за снятие ипотеки с объекта, платит Seller. Сумма по умолчанию — из шаблона, можно поменять.",
@@ -665,10 +665,18 @@ export default function HomePage() {
   // или «готовый объект», — и шаблон, который одновременно и то и другое (№4),
   // получал бы чужой набор. При смене шаблона меняются только значения, которые
   // не трогали руками: пустые или равные умолчаниям предыдущего шаблона.
+  // Developer NOC Fee 2,750 — «остаётся неизменной для Aldar» (комментарий в эталоне №3, Алина 21.10.2026):
+  // для других застройщиков сумму не подставляем, её вписывают руками.
+  const isAldar = /aldar/i.test(form.developerName || "");
+  const templateDefaults = useMemo(() => {
+    const d = { ...(selectedTemplate?.defaults || {}) };
+    if ("developerNocFee" in d && !isAldar) d.developerNocFee = "";
+    return d;
+  }, [selectedTemplate, isAldar]);
   const appliedDefaults = useRef({});
   useEffect(() => {
     if (!selectedTemplate) return;
-    const next = selectedTemplate.defaults || {};
+    const next = templateDefaults;
     const prev = appliedDefaults.current;
     appliedDefaults.current = next;
     setForm((current) => {
@@ -678,7 +686,7 @@ export default function HomePage() {
       }
       return Object.keys(changes).length ? { ...current, ...changes } : current;
     });
-  }, [selectedTemplate]);
+  }, [selectedTemplate, templateDefaults]);
   const hasTemplateChoice = (init.config?.templates || []).length > 1;
   const navItems = useMemo(() => {
     const items = [];
