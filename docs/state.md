@@ -55,6 +55,9 @@ with the Buyer’s financing bank…» в статье AML: в эталоне е
 Новый №4 подключён на сайте: реестр `1OG7MF…`, файл без «— НОВЫЙ», прежний `1fsVQKEK…` — «УСТАРЕЛО — 4. DRAFT …».
 Пример проверен (Type of Area, номер статьи Vacant, NOC, абзац о банке, уведомления, Security Deposit).
 Проверки нового №4 после правки: check-markup, check-scenarios — 0; check-combinations 6144 / 0.
+Статья об ипотеке («The Buyer confirms that he has obtained Mortgage Pre-Approval…») — жирным как в эталоне №4
+(Алина 21.10: Mortgage Pre-Approval, Article 5, MOU, Buyer; заодно Security Deposit, Buyer в конце, в №2 — Final
+Mortgage Approval): `scripts/fix-mortgage-article-bold.mjs`, №2, №4, №6, в apply-layout-fixes.
 
 ## №3 Ready cash-to-cash — эталон (21.10) — ГОТОВ (Алина 21.10: «все ок, готово»)
 
