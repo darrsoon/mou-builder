@@ -54,6 +54,7 @@ with the Buyer’s financing bank…» в статье AML: в эталоне е
 возвращён (`scripts/fix-mortgage-coop-add.mjs`, только новый №4; №6 — когда дойдём).
 Новый №4 подключён на сайте: реестр `1OG7MF…`, файл без «— НОВЫЙ», прежний `1fsVQKEK…` — «УСТАРЕЛО — 4. DRAFT …».
 Пример проверен (Type of Area, номер статьи Vacant, NOC, абзац о банке, уведомления, Security Deposit).
+Проверки нового №4 после правки: check-markup, check-scenarios — 0; check-combinations 6144 / 0.
 
 ## №3 Ready cash-to-cash — эталон (21.10) — ГОТОВ (Алина 21.10: «все ок, готово»)
 
