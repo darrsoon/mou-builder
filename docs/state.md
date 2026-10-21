@@ -62,6 +62,8 @@ Mortgage Approval): `scripts/fix-mortgage-article-bold.mjs`, №2, №4, №6, �
 `scripts/fix-the-developer-bold.mjs`, №2–№6, в apply-layout-fixes.
 В №4 перед «Article 15» (Developer Approval) не было пустой строки — добавлена (Алина 21.10: «между пунктами пробел»).
 Новая проверка `scripts/check-article-gaps.mjs` — перед каждым Article пустая строка или интервал; все 6 шаблонов — ок.
+Перед «THE SELLER» — одна пустая строка (Алина 21.10: «между п.19 и THE SELLER 1 строка»; было две по драфту 1 от 09.10):
+`fix-signature-layout.mjs` (константа BLANKS = 1), применено к 6 рабочим шаблонам.
 
 ## №3 Ready cash-to-cash — эталон (21.10) — ГОТОВ (Алина 21.10: «все ок, готово»)
 

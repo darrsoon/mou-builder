@@ -1,6 +1,6 @@
 // Блок подписей — раскладка по драфту 1 (обновлён Алиной 09.10.2026), одинаково во всех шаблонах:
 //   …последний абзац
-//   (пустая строка) ×2
+//   (пустая строка) — одна (Алина, 21.10.2026; в драфте 1 от 09.10 было две)
 //   THE SELLER / Name: … Signature: … / Date:          — заголовок и строки без пустой строки между ними
 //   (пустая строка)
 //   THE BUYER / Name: … / Date:
@@ -20,6 +20,7 @@ const BUYER_AGENCY = "BUYER’S AGENCY\vCompany: {{buyer_agent_name}}\vRepresent
 export const BLOCK = "THE SELLER\v{{seller_signature_block}}\n\nTHE BUYER\v{{buyer_signature_block}}"
   + `{{#if seller_agent}}\n\n${SELLER_AGENCY}{{/if}}{{#if buyer_agent}}\n\n${BUYER_AGENCY}{{/if}}`;
 // жирное: заголовки и подписи полей
+const BLANKS = 1; // пустых строк перед «THE SELLER»
 const BOLD = ["THE SELLER", "THE BUYER", "SELLER’S AGENCY", "BUYER’S AGENCY", "Company: ", "Represented by: ",
   "  Signature: ", "    Signature: ", "Date: ", "Company Stamp"];
 
@@ -38,9 +39,9 @@ const bodyEnd = content[content.length - 1].endIndex;
 const oldText = paras.slice(si).map(pText).join("");
 const newText = `${BLOCK}\n`;
 
-// уже как надо: блок совпадает и перед ним ровно две пустые строки
+// уже как надо: блок совпадает и перед ним ровно BLANKS пустых строк
 const blanksBefore = (() => { let n = 0; for (let k = si - 1; k >= 0 && pText(paras[k]) === "\n"; k -= 1) n += 1; return n; })();
-if (oldText.replace(/\n+$/, "") === BLOCK && blanksBefore === 2) {
+if (oldText.replace(/\n+$/, "") === BLOCK && blanksBefore === BLANKS) {
   console.log("блок подписей уже по драфту 1");
   process.exit(0);
 }
@@ -59,26 +60,26 @@ const requests = [
 ];
 await docs.documents.batchUpdate({ documentId, requestBody: { requests } });
 
-// 2) пустые строки перед «THE SELLER» — ровно две
+// 2) пустые строки перед «THE SELLER» — ровно BLANKS
 content = await load();
 let ps = content.filter((b) => b.paragraph);
 const i2 = ps.findLastIndex((b) => /^THE SELLER/.test(pText(b)));
 let n = 0; for (let k = i2 - 1; k >= 0 && pText(ps[k]) === "\n"; k -= 1) n += 1;
-if (n < 2) {
-  await docs.documents.batchUpdate({ documentId, requestBody: { requests: [{ insertText: { location: { index: ps[i2].startIndex }, text: "\n".repeat(2 - n) } }] } });
-} else if (n > 2) {
-  await docs.documents.batchUpdate({ documentId, requestBody: { requests: [{ deleteContentRange: { range: { startIndex: ps[i2 - n].startIndex, endIndex: ps[i2 - 2].startIndex } } }] } });
+if (n < BLANKS) {
+  await docs.documents.batchUpdate({ documentId, requestBody: { requests: [{ insertText: { location: { index: ps[i2].startIndex }, text: "\n".repeat(BLANKS - n) } }] } });
+} else if (n > BLANKS) {
+  await docs.documents.batchUpdate({ documentId, requestBody: { requests: [{ deleteContentRange: { range: { startIndex: ps[i2 - n].startIndex, endIndex: ps[i2 - BLANKS].startIndex } } }] } });
 }
 
-// 3) оформление блока (и двух пустых строк перед ним): шрифт как у текста договора, жирное — подписи полей,
+// 3) оформление блока (и пустых строк перед ним): шрифт как у текста договора, жирное — подписи полей,
 //    интервалы до/после 0, межстрочный 1.15, по ширине
 content = await load();
 ps = content.filter((b) => b.paragraph);
 const i3 = ps.findLastIndex((b) => /^THE SELLER/.test(pText(b)));
-const from = ps[i3 - 2].startIndex;
+const from = ps[i3 - BLANKS].startIndex;
 const blockStart = ps[i3].startIndex;
 const to = content[content.length - 1].endIndex - 1;
-const ref = ps[i3 - 3].paragraph.elements.find((e) => e.textRun)?.textStyle || {};
+const ref = ps[i3 - BLANKS - 1].paragraph.elements.find((e) => e.textRun)?.textStyle || {};
 const style = [
   { updateParagraphStyle: { range: { startIndex: from, endIndex: to + 1 },
     paragraphStyle: { spaceAbove: { magnitude: 0, unit: "PT" }, spaceBelow: { magnitude: 0, unit: "PT" }, lineSpacing: 115, alignment: "JUSTIFIED" },
