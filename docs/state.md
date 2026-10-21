@@ -60,6 +60,8 @@ with the Buyer’s financing bank…» в статье AML: в эталоне е
 Mortgage Approval): `scripts/fix-mortgage-article-bold.mjs`, №2, №4, №6, в apply-layout-fixes.
 «…amounts due to the Developer…» (статья об обязательствах Продавца) — «the» обычным (Алина 21.10, п.12 №4):
 `scripts/fix-the-developer-bold.mjs`, №2–№6, в apply-layout-fixes.
+В №4 перед «Article 15» (Developer Approval) не было пустой строки — добавлена (Алина 21.10: «между пунктами пробел»).
+Новая проверка `scripts/check-article-gaps.mjs` — перед каждым Article пустая строка или интервал; все 6 шаблонов — ок.
 
 ## №3 Ready cash-to-cash — эталон (21.10) — ГОТОВ (Алина 21.10: «все ок, готово»)
 
