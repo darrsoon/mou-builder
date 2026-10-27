@@ -54,6 +54,13 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 №4, Article 6: перед депозитом Продавца стоял абзац-разделитель «____» из черновика (Алина 27.10: «чёрточки не
 нужны») — убран в шаблоне `1OG7MF…` и в разметке (READY_MORTGAGE.pre). Проверки №4 — 0.
 
+Commission Agreement — сколько угодно к одному MOU (Алина 27.10: «чтобы можно было сделать ещё 1 commission agreement
+в 1 MOU… даже не одно, а просто +»): кнопка «+ Add Commission Agreement» добавляет блок «Commission Agreement 2, 3…»
+(по умолчанию платит Buyer, агентство — PRIME BRIDGE из AGENTS), у каждого своя кнопка Create и Remove. Поля — в
+`form.caExtra[]` с теми же именами (caPayer, caAgencies…); запрос `/api/commission` с `caSlot: 2, 3…`, сервер берёт поля
+через `commissionForm` (lib/mou/commission.js), в журнал — форма целиком. «Create MOU and Commission Agreement» создаёт
+MOU и все соглашения. Раздел общий для всех шаблонов. Проверено в браузере (локально, Google подменён).
+
 ## №6 Ready mortgage-to-mortgage — эталон (27.10)
 
 Эталон №6 — docx `1_4UtEmXwXtvikjlHmLu6t38X8Dp6mAlM` (чистовик 03.10). Комментарии: дата — дата составления;

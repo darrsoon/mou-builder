@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildCommission, validateCommission } from "../lib/mou/commission.js";
+import { buildCommission, commissionForm, validateCommission } from "../lib/mou/commission.js";
 import { COMMISSION_TEMPLATES } from "../lib/mou/config.js";
 import { stripValueMarks } from "../lib/mou/helpers.js";
 
@@ -71,4 +71,22 @@ test("Имена файлов: «<договор> <юнит>»", async () => {
 test("Commission: значения в блоке компании и подписях помечены для жёлтой подсветки", () => {
   const b = buildCommission({ ...base, caAgencies: [PB] });
   assert.ok(b.replacements.second_party_signature.includes("\u27E6"));
+});
+
+test("Commission: ещё соглашения к тому же MOU берут поля из caExtra (caSlot: 2, 3…)", () => {
+  const BUYER_AGENCY = { ...PB, name: "D D A REAL ESTATE L.L.C", fee: "20,475" };
+  const form = { ...base, caPayer: "Seller", caAgencies: [PB], caExtra: [
+    { caPayer: "Buyer", caAgencies: [BUYER_AGENCY], caWithLogo: "No" },
+    { caPayer: "Company", caAgencies: [{ ...PB, fee: "5,000" }] },
+  ] };
+  assert.equal(commissionForm(form), form); // без caSlot — первое
+  const second = commissionForm({ ...form, caSlot: 2 });
+  assert.equal(second.caPayer, "Buyer");
+  assert.equal(second.caWithLogo, "No");
+  const b = buildCommission(second);
+  assert.equal(b.replacements.payer_role, "Buyer");
+  assert.equal(b.replacements.payer_name, "Anna Ivanova");
+  assert.equal(b.replacements.agency1_fee, "20,475");
+  assert.equal(commissionForm({ ...form, caSlot: 3 }).caPayer, "Company");
+  assert.equal(commissionForm({ ...form, caSlot: 4 }).caPayer, "Seller"); // такого нет — форма как есть
 });

@@ -1,14 +1,16 @@
 import { getGoogleClients, jsonError } from "@/lib/google/client";
 import { createMouDocument } from "@/lib/google/docs";
 import { appendDraftLog, syncAgents } from "@/lib/google/sheets";
-import { buildCommission, validateCommission } from "@/lib/mou/commission";
+import { buildCommission, commissionForm, validateCommission } from "@/lib/mou/commission";
 import { getMainPartyName } from "@/lib/mou/core";
 import { money } from "@/lib/mou/helpers";
 
 // Commission Agreement к MOU: та же форма, свой шаблон (7 или 8), тот же движок v2.
 export async function POST(request) {
   try {
-    const form = await request.json();
+    // в журнал — форма как есть (оба соглашения), в договор — поля выбранного (caSlot: 2 — второе)
+    const raw = await request.json();
+    const form = commissionForm(raw);
     const validation = validateCommission(form);
     if (!validation.ok) {
       return Response.json({ ok: false, error: validation.errors.join("\n"), validation }, { status: 422 });
@@ -39,7 +41,7 @@ export async function POST(request) {
       buyerName: getMainPartyName(built.data.buyers),
       sellingPrice: money(built.data.sellingPrice),
       docUrl: document.url,
-      formJson: JSON.stringify(form || {}),
+      formJson: JSON.stringify(raw || {}),
     });
 
     // новые агентства / представители (и компания-плательщик) — в AGENTS; сбой договор не отменяет
