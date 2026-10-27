@@ -98,7 +98,7 @@ import { ARTICLE_DEFS_READY_MORTGAGE_V2 } from "../lib/mou/articles.js";
 
 test("список правок для Ready cash-to-mortgage собирается целиком", () => {
   const edits = buildEdits(READY_MORTGAGE);
-  assert.equal(edits.length, 183); // −1: фраза о сумме пре-одобрения остаётся (21.10)
+  assert.equal(edits.length, 184); // −1: фраза о сумме пре-одобрения остаётся (21.10); +1: разделитель «____» в ст.6 (27.10)
   for (const e of edits) {
     assert.ok(e.find || e.cellAfter, `правка без find: ${JSON.stringify(e)}`);
     assert.ok(e.replace !== undefined || e.insertBefore !== undefined, `правка без замены: ${JSON.stringify(e)}`);
