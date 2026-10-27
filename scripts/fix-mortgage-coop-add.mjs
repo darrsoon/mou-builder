@@ -1,6 +1,6 @@
-// №4 Ready cash-to-mortgage (и другие шаблоны с ипотекой Покупателя): абзац «The Seller shall cooperate with the
+// №4 и №6 (шаблоны с ипотекой Покупателя): абзац «The Seller shall cooperate with the
 // Buyer’s financing bank…» — в статье о документах (AML), после «…required for completion of the transaction.»,
-// как в эталоне №4 и в №2 (Алина, 21.10.2026; 05.10 его убирали). «Seller» жирным, остальное обычным.
+// как в эталонах №4, №6 и в №2 (Алина, 21.10 и 27.10.2026; 05.10 его убирали). «Seller» жирным, остальное обычным.
 //   node scripts/fix-mortgage-coop-add.mjs <documentId>
 // Повтор безопасен: если абзац уже есть — ничего не делает.
 import { getBotClients } from "./google-bot.mjs";

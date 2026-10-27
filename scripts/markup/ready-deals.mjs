@@ -360,13 +360,8 @@ export const READY_MORTGAGE_CLEAN = {
   pre: READY_MORTGAGE.pre.filter((e) => e.note !== "ст.8: к раскладке №2"),
 };
 
-// Абзац «The Seller shall cooperate with the Buyer’s financing bank…»: 05.10 (Даша) его убрали из №4 и №6;
-// 21.10 (Алина) в №4 — «как эталон», абзац остаётся; в №6 пока убирается — решить по эталону №6
-const REMOVE_COOPERATE = {
-  find: "The Seller shall cooperate with the Buyer’s financing bank and provide, in a timely manner, all documents "
-    + "required for mortgage approval and registration at the Abu Dhabi Real Estate Centre.\n\n",
-  replace: "", note: "убрать абзац о содействии банку Покупателя (решение 05.10)",
-};
+// Абзац «The Seller shall cooperate with the Buyer’s financing bank…»: 05.10 (Даша) его убирали из №4 и №6;
+// по эталонам №4 и №6 он остаётся (Алина 21.10 и 27.10) — в разметке не трогаем.
 
 // ═══ №6 Ready mortgage to mortgage — 20 статей (чистовик 03.10, разметки раньше не было)
 // Документ — №5 (ипотека Продавца в ст.10: Liability Letter, Personal Cheque, банк Продавца,
@@ -424,7 +419,6 @@ export const READY_MORTGAGE_MORTGAGE_CLEAN = {
       replace: "specified in Article {{article_reservation_period_number}} of this MOU", note: "ст.11 ссылка на ст.5" },
     // заголовок ст.11 приклеен к тексту мягким переносом — отдельным абзацем, как в №4
     { find: "Article 11\u000b", replace: "Article 11\n", note: "ст.11: заголовок отдельным абзацем" },
-    REMOVE_COOPERATE,
     // «agrees to purchase the Property» без запятой (Даша, 07.10.2026)
     { find: "agrees to purchase, the", replace: "agrees to purchase the", note: "WHEREAS B: без запятой" },
   ],

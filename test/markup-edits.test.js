@@ -192,11 +192,11 @@ test("правки чистовиков: в find/within нет «Agent», ста
   assert.ok(buildEdits(READY_MORTGAGE_CASH_CLEAN).some((e) => e.find === "—-"));
 });
 
-test("абзац о содействии банку Покупателя: в №2 и №4 остаётся (эталоны, 21.10), в №6 пока убирается", () => {
+test("абзац о содействии банку Покупателя: в №2, №4 и №6 остаётся (эталоны, 21.10 и 27.10)", () => {
   const removes = (D) => buildEdits(D).some((e) => e.find?.startsWith("The Seller shall cooperate with the Buyer’s financing bank") && e.replace === "");
   assert.ok(!removes(OFFPLAN_MORTGAGE_CLEAN));
   assert.ok(!removes(READY_MORTGAGE_CLEAN));
-  assert.ok(removes(READY_MORTGAGE_MORTGAGE_CLEAN));
+  assert.ok(!removes(READY_MORTGAGE_MORTGAGE_CLEAN));
 });
 
 test("№6: 20 статей, ипотека Продавца как в №5, ипотека Покупателя как в №4", () => {
