@@ -672,6 +672,12 @@ label span:first-child {
   color: var(--primary);
 }
 
+/* шаблон принят Алиной (accepted в реестре) — название зелёным */
+.acceptedLabel,
+.selectOption.acceptedLabel {
+  color: #1e8e4a;
+}
+
 .selectOption:hover,
 .selectOption:hover:not(:disabled),
 .selectOption:focus {
