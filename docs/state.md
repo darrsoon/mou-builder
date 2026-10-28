@@ -61,6 +61,12 @@ Commission Agreement — сколько угодно к одному MOU (Али
 через `commissionForm` (lib/mou/commission.js), в журнал — форма целиком. «Create MOU and Commission Agreement» создаёт
 MOU и все соглашения. Раздел общий для всех шаблонов. Проверено в браузере (локально, Google подменён).
 
+NOC (28.10): в PROJECTS добавлена колонка K «NOC Fee Ready» — Developer NOC Fee готовых объектов; Aldar — 2700
+(32 проекта), остальные пусто. Sea La Vie / C3 / Gate Towers и др. с подписью «NOC Fee» — если в K пусто, берётся
+Transfer Fee Ready. Умолчание Developer NOC в реестре №3–№6 — 2,700 (было 2,750). Вопрос «Gardenia Bay / Gate Towers
+2700 или 2,750» закрыт: 2,700. AlJurf Gardens, Maysan, Reem Hills: раньше в NOC шло их Transfer Fee Ready (5,250),
+теперь пусто — ждём от Алины суммы NOC для них.
+
 ## №6 Ready mortgage-to-mortgage — эталон (27.10)
 
 Эталон №6 — docx `1_4UtEmXwXtvikjlHmLu6t38X8Dp6mAlM` (чистовик 03.10). Комментарии: дата — дата составления;

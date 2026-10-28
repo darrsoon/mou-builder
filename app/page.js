@@ -290,7 +290,7 @@ const tips = {
   admAdminFee: "Административная часть ADM Fee (сбора Abu Dhabi Municipality). Обычно подставляется автоматически, но ее можно исправить вручную.",
   admFee: "ADM Fee для ипотечной сделки: 2% от Selling Price или по оценке ADM (что выше). По умолчанию считается 2%, после оценки можно вписать свою сумму.",
   admElectronicFee: "ADM Electronic Fee — электронный сбор ADREC. Сумма по умолчанию — из выбранного шаблона, можно поменять.",
-  developerNocFee: "Сбор застройщика за NOC. Подставляется по проекту (PROJECTS, колонка Transfer Fee Ready); если там пусто — 2,750 для Aldar, для других застройщиков вписать вручную.",
+  developerNocFee: "Сбор застройщика за NOC. Подставляется по проекту (PROJECTS, колонка NOC Fee Ready; у Sea La Vie и C3 — Transfer Fee Ready); если пусто — 2,700 для Aldar, для других застройщиков вписать вручную.",
   communityNocFee: "Сбор сообщества за NOC, платит Seller. Сумма по умолчанию — из выбранного шаблона, можно поменять.",
   unitVerificationFee: "Unit Verification / Search Certificate — справка Abu Dhabi Municipality, платит Seller. Сумма по умолчанию — из шаблона, можно поменять.",
   mortgageReleaseFee: "Mortgage Release Fee — сбор ADREC за снятие ипотеки с объекта, платит Seller. Сумма по умолчанию — из шаблона, можно поменять.",
@@ -679,14 +679,14 @@ export default function HomePage() {
   // или «готовый объект», — и шаблон, который одновременно и то и другое (№4),
   // получал бы чужой набор. При смене шаблона меняются только значения, которые
   // не трогали руками: пустые или равные умолчаниям предыдущего шаблона.
-  // Developer NOC Fee 2,750 — «остаётся неизменной для Aldar» (комментарий в эталоне №3, Алина 21.10.2026):
-  // для других застройщиков сумму не подставляем, её вписывают руками.
-  // Для готовых — по проекту (Алина, 21.10.2026): сумма из колонки «Transfer Fee Ready» в PROJECTS, если пусто —
-  // 2,750 для Aldar, иначе вписать руками.
+  // Developer NOC Fee у готовых — по проекту: колонка «NOC Fee Ready» в PROJECTS (Алина 28.10.2026, у Aldar 2,700).
+  // Sea La Vie, C3 и другие проекты с подписью «NOC Fee» — из «Transfer Fee Ready» (там и есть их NOC).
+  // Если пусто — 2,700 для Aldar (умолчание шаблона), для других застройщиков вписать руками.
   const isAldar = /aldar/i.test(form.developerName || "");
   const projectNocReady = useMemo(() => {
     const found = init.projects.find((p) => String(p.project_name || "").toLowerCase() === String(form.projectName || "").toLowerCase());
-    const raw = String(found?.transfer_fee_ready || "").replace(/,/g, "").trim();
+    const nocLabel = /noc/i.test(found?.transfer_fee_label || "");
+    const raw = String(found?.noc_fee_ready || (nocLabel ? found?.transfer_fee_ready : "") || "").replace(/,/g, "").trim();
     return raw && !Number.isNaN(Number(raw)) ? new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(Number(raw)) : "";
   }, [init.projects, form.projectName]);
   const templateDefaults = useMemo(() => {

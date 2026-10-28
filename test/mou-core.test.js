@@ -694,12 +694,12 @@ test("суммы сборов по умолчанию — свои у каждо
   assert.deepEqual(byLabel("2. Off-plan — mortgage").defaults,
     { admElectronicFee: "1,392", admValuationFee: "925.75", titleDeedNumber: "N/A" });
   assert.deepEqual(byLabel("3. Ready — cash to cash").defaults,
-    { admElectronicFee: "919", admValuationFee: "1,037", developerNocFee: "2,750", communityNocFee: "1,050" });
+    { admElectronicFee: "919", admValuationFee: "1,037", developerNocFee: "2,700", communityNocFee: "1,050" });
   const t4 = byLabel("4. Ready — cash to mortgage");
   assert.equal(t4.engine, "v2");
   assert.equal(t4.articles, "ready-mortgage-v2");
   assert.ok(t4.ready && t4.mortgage && t4.unitVerification);
-  assert.deepEqual(t4.defaults, { admElectronicFee: "1,392", admValuationFee: "1,037", developerNocFee: "2,750",
+  assert.deepEqual(t4.defaults, { admElectronicFee: "1,392", admValuationFee: "1,037", developerNocFee: "2,700",
     communityNocFee: "1,050", unitVerificationFee: "103.50" });
 });
 
