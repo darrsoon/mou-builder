@@ -1196,7 +1196,8 @@ export default function HomePage() {
                     { value: "business", label: "Business days" },
                   ]}
                 />
-                <DateField id="reservationDeadline" label="Reservation Deadline" tip={tips.reservationDeadline} value={form.reservationDeadline} onChange={patch} />
+                {/* дату можно поправить и здесь: правка руками переключает на «Specific date», иначе пересчёт по дням её затрёт (Алина, 28.10.2026) */}
+                <DateField id="reservationDeadline" label="Reservation Deadline" tip={tips.reservationDeadline} value={form.reservationDeadline} onChange={(id, value) => { setReservationMode("date"); patch(id, value); }} />
               </>
             )}
             {holidaysInRange.length > 0 ? (
