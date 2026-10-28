@@ -85,6 +85,9 @@
   Колонки Transfer Fee Label / Transfer Fee Off-Plan — только для Off-plan (№1, №2); у Sea La Vie, C3, Gate Towers
   подпись — «NOC Fee».
 
+- (28.10, Алина) Tasleem Fee — у всех готовых (№3–№6), строка в PAYMENT TABLE перед Security Deposit, платит Buyer,
+  сумма неизменная 1,315 (умолчание в реестре, поле в форме).
+
 ### Прочее
 - Ст. Effective Date: аннулирование MOU за 2 рабочих дня — фиксированный текст.
 - LPC-пункт (Late Payment Charges) не добавляем. ⚠️ В шаблоне 1.2 он присутствует — решить.

@@ -67,6 +67,11 @@ Sea La Vie — 5250. Подпись строки у Sea La Vie — «NOC Fee» (
 NOC Fee Ready; пусто — 2,700 для Aldar (умолчание №3–№6, было 2,750), иначе вписать руками. Transfer Fee Label /
 Transfer Fee Off-Plan — только для Off-plan (№1, №2). Вопрос «Gardenia Bay / Gate Towers 2700 или 2,750» закрыт: 2,700.
 
+Tasleem Fee (28.10, Алина): во всех готовых (№3–№6) в PAYMENT TABLE строка «Tasleem Fee: AED {{tasleem_fee}} / to be
+paid by the Buyer» — последней перед Security Deposit (`scripts/add-tasleem-row.mjs`, идемпотентный; после него —
+apply-layout-fixes). Сумма неизменная: 1,315 — умолчание в реестре (tasleemFee), поле в форме среди сборов готовых,
+обязательное. Проверки (check-combinations знает Tasleem) — 0. generate-sample теперь берёт суммы по умолчанию из реестра.
+
 ## №6 Ready mortgage-to-mortgage — эталон (27.10)
 
 Эталон №6 — docx `1_4UtEmXwXtvikjlHmLu6t38X8Dp6mAlM` (чистовик 03.10). Комментарии: дата — дата составления;

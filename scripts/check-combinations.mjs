@@ -37,6 +37,7 @@ const SELLER_BANK = "Dubai Islamic Bank";
 const ADM_VALUATION_READY = 1037;
 const DEVELOPER_NOC = 2750;
 const COMMUNITY_NOC = 1050;
+const TASLEEM = 1315;
 
 // ───────── условия сделки, общие для всех комбинаций
 const SELLING = 1670000;
@@ -151,7 +152,7 @@ function formFor(c) {
     ...(READY ? {
       unitStatus: "Ready",
       admAdminFee: "", admElectronicFee: String(ADM_ELECTRONIC_READY), admValuationFee: String(ADM_VALUATION_READY),
-      developerNocFee: String(DEVELOPER_NOC), communityNocFee: String(COMMUNITY_NOC),
+      developerNocFee: String(DEVELOPER_NOC), communityNocFee: String(COMMUNITY_NOC), tasleemFee: String(TASLEEM),
       ...(UNIT_VERIFICATION_ROW ? { unitVerificationFee: String(UNIT_VERIFICATION) } : {}),
       ...(SELLER_MORTGAGE ? { mortgageReleaseFee: String(MORTGAGE_RELEASE), sellerBankName: SELLER_BANK,
         buyerFunds: c.buyerFunds === "кредит" ? "financing" : "own_funds" } : {}),
@@ -200,7 +201,7 @@ function expected(c) {
 
   const admFee = MORTGAGE || READY ? SELLING * 0.02 : SELLING * 0.02 + ADM_ADMIN;
   const amounts = READY
-    ? [SELLING, toSeller, admFee, ADM_ELECTRONIC_READY, ADM_VALUATION_READY, DEVELOPER_NOC, COMMUNITY_NOC,
+    ? [SELLING, toSeller, admFee, ADM_ELECTRONIC_READY, ADM_VALUATION_READY, DEVELOPER_NOC, COMMUNITY_NOC, TASLEEM,
       buyerLd, sellerLd, buyerLd80, sellerLd80]
     : [
       ORIGINAL, SELLING, toSeller, remaining, TRANSFER_FEE, admFee,
@@ -362,6 +363,7 @@ for (const c of combos) {
   if (READY) {
     inRow("Developer NOC Fee", "Developer NOC Fee:", DEVELOPER_NOC);
     inRow("Community NOC Fee", "Community NOC Fee:", COMMUNITY_NOC);
+    inRow("Tasleem Fee", "Tasleem Fee:", TASLEEM);
     inRow("ADM Electronic Fee", "ADM Electronic Fee:", ADM_ELECTRONIC_READY);
     inRow("ADM Valuation Certificate", "ADM Valuation Certificate:", ADM_VALUATION_READY);
     if (UNIT_VERIFICATION_ROW) inRow("Unit Verification", "Unit Verification / Search Certificate:", UNIT_VERIFICATION);

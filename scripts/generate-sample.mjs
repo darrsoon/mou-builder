@@ -61,7 +61,8 @@ if (!templateId) throw new Error("укажи ID шаблона");
 if (!SCENARIOS[key]) throw new Error(`сценарии: ${Object.keys(SCENARIOS).join(", ")}`);
 
 const { docs, drive } = getBotClients();
-const form = { ...BASE, ...(MORTGAGE ? MORTGAGE_FIELDS : {}), ...SCENARIOS[key] };
+// суммы сборов по умолчанию из реестра — как их подставляет форма сайта (Tasleem, NOC, ADM…)
+const form = { ...(TEMPLATE.defaults || {}), ...BASE, ...(MORTGAGE ? MORTGAGE_FIELDS : {}), ...SCENARIOS[key] };
 const data = normalizeForm(formForTemplate(form, TEMPLATE));
 const calc = calculate(data);
 const flags = buildFlags(data, calc);

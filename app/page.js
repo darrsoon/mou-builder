@@ -94,6 +94,7 @@ const initialForm = {
   communityNocFee: "",
   unitVerificationFee: "",
   mortgageReleaseFee: "",
+  tasleemFee: "",
   sellerBankName: "",
   buyerFunds: "own_funds",
   projectNumber: "",
@@ -293,6 +294,7 @@ const tips = {
   developerNocFee: "Сбор застройщика за NOC. Подставляется по проекту (PROJECTS, колонка NOC Fee Ready); если пусто — 2,700 для Aldar, для других застройщиков вписать вручную.",
   communityNocFee: "Сбор сообщества за NOC, платит Seller. Сумма по умолчанию — из выбранного шаблона, можно поменять.",
   unitVerificationFee: "Unit Verification / Search Certificate — справка Abu Dhabi Municipality, платит Seller. Сумма по умолчанию — из шаблона, можно поменять.",
+  tasleemFee: "Tasleem Fee — у всех готовых объектов, платит Buyer. Сумма неизменная (1,315), подставляется сама.",
   mortgageReleaseFee: "Mortgage Release Fee — сбор ADREC за снятие ипотеки с объекта, платит Seller. Сумма по умолчанию — из шаблона, можно поменять.",
   sellerBankName: "Банк, в котором ипотека Продавца (Seller’s Bank). Выберите из списка или впишите свой.",
   buyerFunds: "Чем платит Buyer. Own funds — только своими деньгами, покупка не зависит от кредита. Второй вариант — свои деньги, Personal Loan или Equity Release (кредит под залог другой недвижимости); отказ банка не освобождает Buyer от сделки.",
@@ -545,6 +547,7 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
       ["admValuationFee", "ADM Valuation Certificate"],
       ["developerNocFee", "Developer NOC Fee"],
       ["communityNocFee", "Community NOC Fee"],
+      ["tasleemFee", "Tasleem Fee"],
     );
     if (hasUnitVerification) projectRequired.push(["unitVerificationFee", "Unit Verification / Search Certificate"]);
     if (hasSellerMortgage) projectRequired.push(["mortgageReleaseFee", "Mortgage Release Fee"]);
@@ -1239,6 +1242,7 @@ export default function HomePage() {
                 <AutoMoneyField id="communityNocFee" label="Community NOC Fee" tip={tips.communityNocFee} value={form.communityNocFee} onChange={patch} />
                 {hasUnitVerification && <AutoMoneyField id="unitVerificationFee" label="Unit Verification / Search Certificate" tip={tips.unitVerificationFee} value={form.unitVerificationFee} onChange={patch} />}
                 {hasSellerMortgage && <AutoMoneyField id="mortgageReleaseFee" label="Mortgage Release Fee" tip={tips.mortgageReleaseFee} value={form.mortgageReleaseFee} onChange={patch} />}
+                <AutoMoneyField id="tasleemFee" label="Tasleem Fee" tip={tips.tasleemFee} value={form.tasleemFee} onChange={patch} />
               </>
             ) : (
               <AutoMoneyField id="admAdminFee" label="ADM Admin Fee" tip={tips.admAdminFee} value={form.admAdminFee} onChange={patch} />
