@@ -79,10 +79,11 @@
   в PROJECTS: Sea La Vie (Nine Yards), C3 Garden Residence, Gate Towers. «Transfer Fee / NOC Fee» вместе не
   бывает: либо «Transfer Fee», либо «NOC Fee». Есть NOC → в определениях только «NOC fee is a fee charged…»,
   без «Transfer Fee – …»; нет NOC → только «Transfer Fee – …».
-- (28.10, Алина) Сумма Developer NOC Fee у готовых (№3–№6) — отдельная колонка **NOC Fee Ready** в PROJECTS;
-  у всех проектов Aldar — 2,700 (не 2,750 из комментария эталона). Sea La Vie и C3 (подпись «NOC Fee») в неё не
-  входят: их NOC — в колонках Transfer Fee Off-Plan / Ready. Пусто в обеих — для Aldar 2,700 (умолчание шаблона),
-  для других застройщиков вписать руками. Колонки Transfer Fee Label / Off-Plan — только для Off-plan (№1, №2).
+- (28.10, Алина) Сумма Developer NOC Fee у готовых (№3–№6) — колонка **NOC Fee Ready** в PROJECTS (одна;
+  прежняя «Transfer Fee Ready» влита в неё и удалена). У всех проектов Aldar — 2,700 (не 2,750 из комментария
+  эталона). Пусто — для Aldar 2,700 (умолчание шаблона), для других застройщиков вписать руками.
+  Колонки Transfer Fee Label / Transfer Fee Off-Plan — только для Off-plan (№1, №2); у Sea La Vie, C3, Gate Towers
+  подпись — «NOC Fee».
 
 ### Прочее
 - Ст. Effective Date: аннулирование MOU за 2 рабочих дня — фиксированный текст.
