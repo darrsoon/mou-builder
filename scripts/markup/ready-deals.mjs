@@ -305,7 +305,8 @@ export const READY_MORTGAGE_CASH = {
     { find: "The Buyer confirms that the purchase of the Property is made solely", insertBefore: "{{#if buyer_own_funds}}",
       note: "ст.10: открыть «свои средства»" },
     { find: "shall constitute Default under this MOU.\n___\nThe Buyer confirms that the purchase of the Property may be financed",
-      replace: "shall constitute Default under this MOU.{{/if}}\n{{#if !buyer_own_funds}}The Buyer confirms that the purchase of the Property may be financed",
+      // оба варианта — один абзац: два отдельных теряли пустую строку перед следующей статьёй (Алина 29.10)
+      replace: "shall constitute Default under this MOU.{{/if}}{{#if !buyer_own_funds}}The Buyer confirms that the purchase of the Property may be financed",
       note: "ст.10: закрыть «свои средства», открыть «с кредитом», убрать «___»" },
     { find: "constitute a valid reason for failure to complete the transfer.",
       replace: "constitute a valid reason for failure to complete the transfer.{{/if}}", note: "ст.10: закрыть «с кредитом»" },
