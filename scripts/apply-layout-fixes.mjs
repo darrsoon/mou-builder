@@ -28,6 +28,7 @@ const steps = [
   ["fix-mortgage-article-bold.mjs"],
   ["fix-the-developer-bold.mjs"],
   ["fix-terms-indent.mjs"],
+  ["fix-intro-indent.mjs"],
   ["fix-signature-headings.mjs"],
   ["fix-signature-layout.mjs"],
   ["fix-signature-style.mjs"],
