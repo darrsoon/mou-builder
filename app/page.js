@@ -610,7 +610,9 @@ export default function HomePage() {
   const [loadingInit, setLoadingInit] = useState(false);
   const [message, setMessage] = useState("");
   const [actionErrors, setActionErrors] = useState([]);
+  // созданные документы копятся: на каждый своя ссылка «Open …»; сброс — при загрузке черновика (Алина, 29.10.2026)
   const [result, setResult] = useState(null);
+  const addResults = (items) => setResult((current) => [...[].concat(current || []), ...[].concat(items)]);
   const [draftRow, setDraftRow] = useState("");
   const [templateId, setTemplateId] = useState("");
   const [reservationMode, setReservationMode] = useState("date");
@@ -829,7 +831,6 @@ export default function HomePage() {
   async function createBoth() {
     if (!mouPrecheck()) return;
     setBusy(true);
-    setResult(null);
     setActionErrors([]);
     const created = [];
     try {
@@ -840,11 +841,11 @@ export default function HomePage() {
         const ca = await api("/api/commission", { method: "POST", body: JSON.stringify(commissionBody(slot)) });
         created.push({ ...ca, kind: caKind(slot) });
       }
-      setResult(created);
+      addResults(created);
       setMessage(caSlots.length > 1 ? `MOU and ${caSlots.length} Commission Agreements created` : "MOU and Commission Agreement created");
       await loadInit();
     } catch (error) {
-      if (created.length) setResult(created);
+      if (created.length) addResults(created);
       setActionErrors(error.payload?.validation?.errors || [error.message]);
       setMessage(error.message);
     } finally {
@@ -855,12 +856,11 @@ export default function HomePage() {
   async function createMou() {
     if (!mouPrecheck()) return;
     setBusy(true);
-    setResult(null);
     setActionErrors([]);
     setMessage("Creating MOU...");
     try {
       const data = await api("/api/mou", { method: "POST", body: JSON.stringify({ ...form, templateId }) });
-      setResult(data);
+      addResults(data);
       setMessage("MOU created");
       await loadInit();
     } catch (error) {
@@ -929,12 +929,11 @@ export default function HomePage() {
 
   async function createCommission(slot = 1) {
     setBusy(true);
-    setResult(null);
     setActionErrors([]);
     setMessage(`Creating ${caKind(slot)}...`);
     try {
       const data = await api("/api/commission", { method: "POST", body: JSON.stringify(commissionBody(slot)) });
-      setResult({ ...data, kind: caKind(slot) });
+      addResults({ ...data, kind: caKind(slot) });
       setMessage(`${caKind(slot)} created`);
       await loadInit();
     } catch (error) {
@@ -1620,11 +1619,16 @@ function ActionBar({ missingTotal, sellingPrice, busy, disabled, onCreate, onCre
         {/* ссылки на созданные документы — рядом с кнопками, отдельно MOU и Commission Agreement */}
         {results.length ? (
           <span className="actionBarLinks">
-            {results.map((r) => (
-              <a key={r.url} className="openDoc" href={r.url} target="_blank" rel="noreferrer">
-                Open {r.kind || "MOU"} <ExternalLink size={14} />
-              </a>
-            ))}
+            {results.map((r, i) => {
+              // один и тот же документ создан ещё раз — «Open MOU (v2)»: не путать с «Commission Agreement 2»
+              const kind = r.kind || "MOU";
+              const repeat = results.slice(0, i).filter((x) => (x.kind || "MOU") === kind).length;
+              return (
+                <a key={r.url} className="openDoc" href={r.url} target="_blank" rel="noreferrer" title={r.title || undefined}>
+                  Open {kind}{repeat ? ` (v${repeat + 1})` : ""} <ExternalLink size={14} />
+                </a>
+              );
+            })}
           </span>
         ) : null}
       </div>
