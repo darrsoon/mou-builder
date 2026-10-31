@@ -607,7 +607,7 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
 export default function HomePage() {
   const { data: session, status } = useSession();
   const [form, setForm] = useState(initialForm);
-  const [init, setInit] = useState({ projects: [], lists: {}, drafts: [], rules: [], agents: [] });
+  const [init, setInit] = useState({ projects: [], lists: {}, drafts: [], rules: [], agents: [], units: {} });
   const [preview, setPreview] = useState(null);
   const [busy, setBusy] = useState(false);
   const [loadingInit, setLoadingInit] = useState(false);
@@ -679,6 +679,8 @@ export default function HomePage() {
   // C3 Garden Residence: свои строки сборов; Продавец закреплён шаблоном (LUCKY HOLDING) — разделов Seller
   // и депозита Продавца в форме нет (Алина, 31.10.2026)
   const isC3 = !!selectedTemplate?.c3;
+  // юниты проекта шаблона из таблицы объявлений (C3): выбор Unit Number подставляет Title Deed, Bedrooms, Area, Parking
+  const projectUnits = (init.units || {})[selectedTemplate?.project] || [];
   const fixedSeller = selectedTemplate?.fixedSeller || null;
   const sectionStatuses = useMemo(
     () => buildSectionStatuses(form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage, selectedTemplate?.defaults?.titleDeedNumber || "", isC3),
@@ -1149,7 +1151,7 @@ export default function HomePage() {
                     if (label.includes("off-plan") || label.includes("off plan")) {
                       patch("unitStatus", "Off-Plan");
                       applyProjectData(form.projectName, "Off-Plan");
-                    } else if (label.includes("ready") || label.includes("cash")) {
+                    } else if (selectedTemplate.ready || label.includes("ready") || label.includes("cash")) {
                       patch("unitStatus", "Ready");
                       // шаблон одного проекта (C3) — проект и его данные из PROJECTS подставляются сами (Алина, 31.10.2026)
                       if (selectedTemplate.project) {
@@ -1276,7 +1278,13 @@ export default function HomePage() {
             <Field id="bedrooms" label="Bedrooms" tip={tips.bedrooms} value={form.bedrooms} onChange={patch} list="bedroomsList" options={lists.bedroom || []} />
             <Field id="areaM2" label="Area, sq.m" tip={tips.areaM2} value={form.areaM2} onChange={patch} onBlur={(id, value) => patch(id, formatArea(value))} placeholder="Например 67.20" />
             <Field id="propertyType" label="Property Type" tip={tips.propertyType} value={form.propertyType} onChange={patch} list="propertyTypesList" options={lists.property_types || []} />
-            <Field id="unitNumber" label="Unit Number" tip={tips.unitNumber} value={form.unitNumber} onChange={patch} />
+            <Field id="unitNumber" label="Unit Number" tip={tips.unitNumber} value={form.unitNumber} onChange={(id, value) => {
+              patch(id, value);
+              const unit = projectUnits.find((u) => u.unit.toLowerCase() === String(value || "").trim().toLowerCase());
+              // выбран юнит из таблицы — его данные целиком; пусто в таблице (Title Deed ещё не выдан) — пустое поле,
+              // чтобы не остались данные прежнего юнита
+              if (unit) for (const field of ["titleDeedNumber", "bedrooms", "areaM2", "parkingSpaces"]) patch(field, unit[field] || "");
+            }} options={projectUnits.length ? projectUnits.map((u) => u.unit) : undefined} />
             {isReadyTemplate && <Field id="projectNumber" label="Project No." tip={tips.projectNumber} value={form.projectNumber} onChange={patch} />}
             <Field
               id="parkingSpaces"
