@@ -92,6 +92,11 @@ apply-layout-fixes; проверки №5/№6 — 0.
 перед следующей статьёй. Слиты в один абзац (шаблон `1UTrKS…` и разметка READY_MORTGAGE_CASH), строка есть в обоих
 вариантах. Перебор вариантов по всем шаблонам — других таких мест нет (статьи после таблиц и абзацев с интервалом 12 pt
 отделены интервалом, а не пустой строкой).
+Service charges (31.10, Алина: «для cash to mortgage, mortgage to cash, mortgage to mortgage под таблицу п.4 вставить
+этот текст»): в №4–№6 после «Any governmental…» — 4 абзаца («The Seller shall settle all outstanding service charges…»,
+«Any service charges paid in advance…», «The Buyer shall reimburse…», «Any future service charges…»), интервал 12 pt,
+жирным Seller/Buyer/Transfer date: `scripts/add-service-charges.mjs` (идемпотентный; при пересборке №4–№6 запускать).
+Tasleem Fee в №4–№6 уже есть (с 28.10).
 Ссылки на созданные документы (29.10): копятся, на каждый своя кнопка Open; повтор — «(v2)»; сброс при загрузке черновика.
 
 ## №6 Ready mortgage-to-mortgage — эталон (27.10)
