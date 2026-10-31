@@ -550,7 +550,8 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
       // C3 Garden Residence: «NOC Fee» и «Admin Fee» застройщику вместо Developer / Community NOC
       ...(isC3 ? [["developerNocFee", "NOC Fee"], ["developerAdminFee", "Admin Fee"]]
         : [["developerNocFee", "Developer NOC Fee"], ["communityNocFee", "Community NOC Fee"]]),
-      ["tasleemFee", "Tasleem Fee"],
+      // Tasleem Fee — во всех готовых, кроме C3 (Алина, 31.10.2026)
+      ...(isC3 ? [] : [["tasleemFee", "Tasleem Fee"]]),
     );
     if (hasUnitVerification) projectRequired.push(["unitVerificationFee", "Unit Verification / Search Certificate"]);
     if (hasSellerMortgage) projectRequired.push(["mortgageReleaseFee", "Mortgage Release Fee"]);
@@ -1260,7 +1261,7 @@ export default function HomePage() {
                   : <AutoMoneyField id="communityNocFee" label="Community NOC Fee" tip={tips.communityNocFee} value={form.communityNocFee} onChange={patch} />}
                 {hasUnitVerification && <AutoMoneyField id="unitVerificationFee" label="Unit Verification / Search Certificate" tip={tips.unitVerificationFee} value={form.unitVerificationFee} onChange={patch} />}
                 {hasSellerMortgage && <AutoMoneyField id="mortgageReleaseFee" label="Mortgage Release Fee" tip={tips.mortgageReleaseFee} value={form.mortgageReleaseFee} onChange={patch} />}
-                <AutoMoneyField id="tasleemFee" label="Tasleem Fee" tip={tips.tasleemFee} value={form.tasleemFee} onChange={patch} />
+                {!isC3 && <AutoMoneyField id="tasleemFee" label="Tasleem Fee" tip={tips.tasleemFee} value={form.tasleemFee} onChange={patch} />}
               </>
             ) : (
               <AutoMoneyField id="admAdminFee" label="ADM Admin Fee" tip={tips.admAdminFee} value={form.admAdminFee} onChange={patch} />

@@ -66,6 +66,10 @@ Project No. 2023/278930 и Property Type Apartment — умолчания C3 в 
 решений Алины 31.10: чек Покупателя держит агентство Покупателя (как в №1–№6, не как в эталоне C3); абзацы о
 service charges в C3 Mortgage остаются; «drawn by …» без «a third party, namely» — как во всех MOU.
 Попутно: formForTemplate считал «депозитов нет» по исходной форме — теперь по подправленной.
+Таблица п.4 C3 (Алина 31.10, по пунктам): Tasleem Fee в C3 нет (строка удалена, поля в форме нет); Agency — как в Off-plan;
+«Security Deposit» с заглавной; скобка ADM Fee как в эталоне C3 («…as per ADM valuation (whatever comes higher) to be paid»);
+суммы без «.00»; абзацы о service charges в C3 Mortgage убраны (как в эталоне). Всё — в make-c3.mjs.
+Апостроф: у готовых (№3–№6, C3) «Manager’s Cheque» в сумме Продавцу — типографский, как в эталонах; у Off-plan — прямой.
 
 ## Приёмка (Алина, 27.10)
 

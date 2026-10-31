@@ -4,7 +4,9 @@
 //   - Продавец — LUCKY HOLDING - F.Z.E текстом («данные по Продавцу остаются полностью»), лицензия — новая
 //     (выдана 13.10.2026, до 12.10.2027); в форме раздела Seller нет (fixedSeller в реестре);
 //   - в PAYMENT TABLE «NOC Fee» и «Admin Fee» застройщику (to Developer by Bank Transfer or Card) вместо
-//     Developer / Community NOC Fee; в Cash ADM Electronic Fee — «by Card».
+//     Developer / Community NOC Fee; в Cash ADM Electronic Fee — «by Card»;
+//   - решения Алины 31.10 по таблице п.4: строки Tasleem Fee в C3 нет; скобка ADM Fee — как в эталонах
+//     («…as per ADM valuation (whatever comes higher)»); абзацев о service charges под таблицей нет (как в эталоне).
 //   node scripts/make-c3.mjs <documentId> [--cash]
 // Повтор безопасен: уже сделанные правки не находятся и пропускаются.
 import { getBotClients } from "./google-bot.mjs";
@@ -72,9 +74,29 @@ const edits = [
     replace: "to be paid by the Buyer to Developer by Bank Transfer or Card", bold: false,
     runs: [[18, 23, true], [27, 36, true], [40, 61, true]], noHighlight: [[0, 61]], note: "Admin Fee: платит Покупатель застройщику" },
 ];
+edits.push({ find: "as per ADM valuation, whatever comes higher)", within: "{{adm_fee}}",
+  replace: "as per ADM valuation (whatever comes higher)", note: "ADM Fee: скобка как в эталоне C3" });
 if (cash) {
   edits.push({ find: "by Manager’s Cheque or Card", within: "{{adm_electronic_fee}}", replace: "by Card", bold: false,
     runs: [[3, 7, true]], noHighlight: [[0, 7]], note: "ADM Electronic Fee: by Card (эталон C3 Cash)" });
 }
 const res = await applyEdits(docs, documentId, edits);
 console.log(JSON.stringify(res));
+
+// 3. Без строки Tasleem Fee и без абзацев о service charges (в эталонах C3 их нет)
+const SERVICE = ["The Seller shall settle all outstanding service charges", "Any service charges paid in advance by the Seller",
+  "The Buyer shall reimburse the Seller only for the prorated portion", "Any future service charges not yet paid"];
+const after = (await docs.documents.get({ documentId })).data.body.content;
+const requests = [];
+const table = after.find((b) => b.table && JSON.stringify(b.table.tableRows[0]).includes("PAYMENT TABLE"));
+const tasleem = table.table.tableRows.findIndex((r) => JSON.stringify(r).includes("Tasleem Fee"));
+for (const b of after) {
+  if (SERVICE.some((t) => text(b).startsWith(t))) requests.push({ deleteContentRange: { range: { startIndex: b.startIndex, endIndex: b.endIndex } } });
+}
+// удаляем с конца документа: индексы впереди не сдвигаются
+requests.sort((x, y) => y.deleteContentRange.range.startIndex - x.deleteContentRange.range.startIndex);
+if (tasleem !== -1) {
+  requests.push({ deleteTableRow: { tableCellLocation: { tableStartLocation: { index: table.startIndex }, rowIndex: tasleem, columnIndex: 0 } } });
+}
+if (requests.length) await docs.documents.batchUpdate({ documentId, requestBody: { requests } });
+console.log(`Tasleem Fee: ${tasleem === -1 ? "нет" : "строка удалена"}; service charges: абзацев удалено ${requests.length - (tasleem === -1 ? 0 : 1)}`);
