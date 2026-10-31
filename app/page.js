@@ -1151,7 +1151,13 @@ export default function HomePage() {
                       applyProjectData(form.projectName, "Off-Plan");
                     } else if (label.includes("ready") || label.includes("cash")) {
                       patch("unitStatus", "Ready");
-                      applyProjectData(form.projectName, "Ready");
+                      // шаблон одного проекта (C3) — проект и его данные из PROJECTS подставляются сами (Алина, 31.10.2026)
+                      if (selectedTemplate.project) {
+                        patch("projectName", selectedTemplate.project);
+                        applyProjectData(selectedTemplate.project, "Ready", { syncLocation: true });
+                      } else {
+                        applyProjectData(form.projectName, "Ready");
+                      }
                     }
                   }
                 }}
