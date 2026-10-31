@@ -43,6 +43,24 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 берётся только из `lib/mou/config.js`. Не заводить их снова — старое значение в них
 молча вернуло бы сайт на старые копии шаблонов.
 
+## C3 Garden Residence — эталоны (31.10)
+
+Эталоны — чистовики Даши 03.10: Cash `1dNTgKE05qusjrDV_F4D3cPJY2oMcrLNy`, Mortgage `1bqVyqltQq00dHCBseQ9-uWoPdK7d4TsO`.
+Продавец всегда LUCKY HOLDING - F.Z.E (комментарий: «данные по Продавцу остаются полностью»); новая лицензия
+(`1q72pjhR…`, 31.10): №46879, выдана 13.10.2026, до 12.10.2027.
+Новые шаблоны собраны из копий принятых №3 / №4 (`scripts/make-c3.mjs`): C3-1 `1PNcXp0Z7Yeh4dJ9zBInpRD3AUhPGncBXJvyS0X6UVkw`,
+C3-2 `11wllgXsFKWn2eTnVic0KrW9iiwmdHmLw1JxakFmwrX0`. Отличия от №3/№4: блок Продавца LUCKY HOLDING текстом (без жёлтого,
+жирное как в эталоне); в таблице «NOC Fee» и «Admin Fee» (to Developer by Bank Transfer or Card) вместо Developer /
+Community NOC; в Cash ADM Electronic «by Card». Реестр: `fixedSeller` (форма без разделов Seller и депозита Продавца,
+подпись «LUCKY HOLDING - F.Z.E (shareholder – Marc Glotser)», чек «in favour of LUCKY HOLDING - F.Z.E» по умолчанию),
+`c3` (поля NOC Fee / Admin Fee), defaults: ADM Electronic 925.75 (Cash) / 1,392 (Mortgage), Valuation 1,037, NOC 5,250,
+Admin 525, Unit Verification 103.50 (Mortgage), Tasleem 1,315. PROJECTS: C3 NOC Fee Ready = 5250.
+Прежние C3 (старый движок) — «УСТАРЕЛО — …». Проверки: check-markup, check-scenarios, check-article-gaps — 0
+(check-combinations C3 не знает: строки NOC/Admin Fee). Сверка с эталонами — только данные и принятые правила, кроме
+вопросов к Алине: кто держит чек Покупателя (в эталонах C3 — Seller’s Agent, в №1–№6 — агентство Покупателя);
+абзацы о service charges в C3 Mortgage (перешли из №4, в эталоне их нет); «drawn by a third party, namely» (эталон Cash).
+Попутно: formForTemplate считал «депозитов нет» по исходной форме — теперь по подправленной.
+
 ## Приёмка (Алина, 27.10)
 
 №1–№4 — приняты («2 готово», «перед ним все mou тоже готовы»). №6 — принят (Алина 29.10: «6 готов»). №5 — принят (Алина 29.10: «5 готов»). Все №1–№6 приняты.

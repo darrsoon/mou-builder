@@ -95,6 +95,7 @@ const initialForm = {
   unitVerificationFee: "",
   mortgageReleaseFee: "",
   tasleemFee: "",
+  developerAdminFee: "",
   sellerBankName: "",
   buyerFunds: "own_funds",
   projectNumber: "",
@@ -294,6 +295,7 @@ const tips = {
   developerNocFee: "Сбор застройщика за NOC. Подставляется по проекту (PROJECTS, колонка NOC Fee Ready); если пусто — 2,700 для Aldar, для других застройщиков вписать вручную.",
   communityNocFee: "Сбор сообщества за NOC, платит Seller. Сумма по умолчанию — из выбранного шаблона, можно поменять.",
   unitVerificationFee: "Unit Verification / Search Certificate — справка Abu Dhabi Municipality, платит Seller. Сумма по умолчанию — из шаблона, можно поменять.",
+  developerAdminFee: "C3 Garden Residence: Admin Fee застройщику, платит Buyer. Сумма неизменная (525), подставляется сама.",
   tasleemFee: "Tasleem Fee — у всех готовых объектов, платит Buyer. Сумма неизменная (1,315), подставляется сама.",
   mortgageReleaseFee: "Mortgage Release Fee — сбор ADREC за снятие ипотеки с объекта, платит Seller. Сумма по умолчанию — из шаблона, можно поменять.",
   sellerBankName: "Банк, в котором ипотека Продавца (Seller’s Bank). Выберите из списка или впишите свой.",
@@ -494,7 +496,7 @@ function depositSectionStatus(form, side) {
   return makeSectionStatus(missing);
 }
 
-function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage = false, isReadyTemplate = false, hasUnitVerification = false, hasSellerMortgage = false, titleDeedDefault = "") {
+function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage = false, isReadyTemplate = false, hasUnitVerification = false, hasSellerMortgage = false, titleDeedDefault = "", isC3 = false) {
   const isReady = String(form.unitStatus || "").toLowerCase() === "ready";
   const agreementMissing = missingFields(form, [
     ["agreementDate", "Agreement Date"],
@@ -545,8 +547,9 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
     projectRequired.push(
       ["admElectronicFee", "ADM Electronic Fee"],
       ["admValuationFee", "ADM Valuation Certificate"],
-      ["developerNocFee", "Developer NOC Fee"],
-      ["communityNocFee", "Community NOC Fee"],
+      // C3 Garden Residence: «NOC Fee» и «Admin Fee» застройщику вместо Developer / Community NOC
+      ...(isC3 ? [["developerNocFee", "NOC Fee"], ["developerAdminFee", "Admin Fee"]]
+        : [["developerNocFee", "Developer NOC Fee"], ["communityNocFee", "Community NOC Fee"]]),
       ["tasleemFee", "Tasleem Fee"],
     );
     if (hasUnitVerification) projectRequired.push(["unitVerificationFee", "Unit Verification / Search Certificate"]);
@@ -673,9 +676,13 @@ export default function HomePage() {
   const hasUnitVerification = !!selectedTemplate?.unitVerification;
   // квартира в ипотеке у Продавца (№5): сбор за снятие ипотеки, банк и деньги Покупателя
   const hasSellerMortgage = !!selectedTemplate?.sellerMortgage;
+  // C3 Garden Residence: свои строки сборов; Продавец закреплён шаблоном (LUCKY HOLDING) — разделов Seller
+  // и депозита Продавца в форме нет (Алина, 31.10.2026)
+  const isC3 = !!selectedTemplate?.c3;
+  const fixedSeller = selectedTemplate?.fixedSeller || null;
   const sectionStatuses = useMemo(
-    () => buildSectionStatuses(form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage, selectedTemplate?.defaults?.titleDeedNumber || ""),
-    [form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage, selectedTemplate],
+    () => buildSectionStatuses(form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage, selectedTemplate?.defaults?.titleDeedNumber || "", isC3),
+    [form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage, selectedTemplate, isC3],
   );
 
   // Суммы сборов по умолчанию — свои у каждого шаблона, взяты из его исходника
@@ -733,10 +740,11 @@ export default function HomePage() {
       ["Articles", sectionStatuses.articles],
     ];
     for (const [title, status] of order) {
+      if (fixedSeller && (title === "Seller" || title === "Security Deposit - Seller")) continue;
       items.push({ title, state: status?.state || "optional", missingCount: status?.missingCount || 0, missing: status?.missing || [] });
     }
     return items;
-  }, [sectionStatuses, templateId, hasTemplateChoice]);
+  }, [sectionStatuses, templateId, hasTemplateChoice, fixedSeller]);
   const missingTotal = navItems.reduce((sum, item) => sum + item.missingCount, 0);
 
   const isCashToCash = String(form.unitStatus || "").toLowerCase() === "ready";
@@ -1238,8 +1246,10 @@ export default function HomePage() {
                 <AutoMoneyField id="admFee" label="ADM Fee (2% or ADM valuation)" tip={tips.admFee} value={form.admFee} autoValue={preview?.summary?.admFee} onChange={patch} placeholder="Посчитается автоматически" />
                 <AutoMoneyField id="admElectronicFee" label="ADM Electronic Fee" tip={tips.admElectronicFee} value={form.admElectronicFee} onChange={patch} />
                 <AutoMoneyField id="admValuationFee" label="ADM Valuation Certificate" tip={tips.admValuationFee} value={form.admValuationFee} onChange={patch} />
-                <AutoMoneyField id="developerNocFee" label="Developer NOC Fee" tip={tips.developerNocFee} value={form.developerNocFee} onChange={patch} />
-                <AutoMoneyField id="communityNocFee" label="Community NOC Fee" tip={tips.communityNocFee} value={form.communityNocFee} onChange={patch} />
+                <AutoMoneyField id="developerNocFee" label={isC3 ? "NOC Fee" : "Developer NOC Fee"} tip={tips.developerNocFee} value={form.developerNocFee} onChange={patch} />
+                {isC3
+                  ? <AutoMoneyField id="developerAdminFee" label="Admin Fee" tip={tips.developerAdminFee} value={form.developerAdminFee} onChange={patch} />
+                  : <AutoMoneyField id="communityNocFee" label="Community NOC Fee" tip={tips.communityNocFee} value={form.communityNocFee} onChange={patch} />}
                 {hasUnitVerification && <AutoMoneyField id="unitVerificationFee" label="Unit Verification / Search Certificate" tip={tips.unitVerificationFee} value={form.unitVerificationFee} onChange={patch} />}
                 {hasSellerMortgage && <AutoMoneyField id="mortgageReleaseFee" label="Mortgage Release Fee" tip={tips.mortgageReleaseFee} value={form.mortgageReleaseFee} onChange={patch} />}
                 <AutoMoneyField id="tasleemFee" label="Tasleem Fee" tip={tips.tasleemFee} value={form.tasleemFee} onChange={patch} />
@@ -1283,7 +1293,7 @@ export default function HomePage() {
             )}
           </Section>
 
-          <PartySection title="Seller" type="sellers" parties={form.sellers} setForm={setForm} lists={lists} status={sectionStatuses.sellers} />
+          {fixedSeller ? null : <PartySection title="Seller" type="sellers" parties={form.sellers} setForm={setForm} lists={lists} status={sectionStatuses.sellers} />}
           <PartySection title="Buyer" type="buyers" parties={form.buyers} setForm={setForm} lists={lists} status={sectionStatuses.buyers} />
 
           <Section title="Payments" status={sectionStatuses.payments}>
@@ -1376,7 +1386,7 @@ export default function HomePage() {
             </div>
           </Section>
 
-          <DepositSection side="seller" title="Security Deposit - Seller" form={form} patch={patch} lists={lists} status={sectionStatuses.sellerDeposit} preview={preview} />
+          {fixedSeller ? null : <DepositSection side="seller" title="Security Deposit - Seller" form={form} patch={patch} lists={lists} status={sectionStatuses.sellerDeposit} preview={preview} />}
           <DepositSection side="buyer" title="Security Deposit - Buyer" form={form} patch={patch} lists={lists} status={sectionStatuses.buyerDeposit} preview={preview} />
 
           <Section title="Articles" status={sectionStatuses.articles} defaultOpen={false}>

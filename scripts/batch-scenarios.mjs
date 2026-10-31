@@ -58,7 +58,7 @@ export const MORTGAGE_FIELDS = { admAdminFee: "", admElectronicFee: "1,392", adm
 export const READY_FIELDS = {
   unitStatus: "Ready",
   admAdminFee: "", admElectronicFee: "919", admValuationFee: "1,037",
-  developerNocFee: "2,750", communityNocFee: "1,050", tasleemFee: "1,315",
+  developerNocFee: "2,750", communityNocFee: "1,050", tasleemFee: "1,315", developerAdminFee: "525",
   projectNumber: "2023/278930", titleDeedNumber: "2026/0000", parkingSpaces: "B27",
   propertyRented: "No", annualRent: "150,000", tenancyEndDate: "12/12/2027",
   transferFeeLabel: "NOC Fee",

@@ -25,7 +25,7 @@ const BASE = {
     admAdminFee: "", admElectronicFee: MORTGAGE ? "1,392" : "919", admValuationFee: "1,037",
     ...(MORTGAGE && !SELLER_MORTGAGE ? { unitVerificationFee: "103.50" } : {}),
     ...(SELLER_MORTGAGE ? { mortgageReleaseFee: "960", sellerBankName: "Dubai Islamic Bank" } : {}),
-    developerNocFee: "2,750", communityNocFee: "1,050", tasleemFee: "1,315", projectNumber: "2023/278930",
+    developerNocFee: "2,750", communityNocFee: "1,050", tasleemFee: "1,315", developerAdminFee: "525", projectNumber: "2023/278930",
     propertyRented: "No", annualRent: "150,000", tenancyEndDate: "12/12/2027",
     titleDeedNumber: "2026/0000", parkingSpaces: "B27",
   } : {}),
