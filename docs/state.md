@@ -57,8 +57,8 @@ Community NOC; в Cash ADM Electronic «by Card». Реестр: `fixedSeller` (
 Admin 525, Unit Verification 103.50 (Mortgage), Tasleem 1,315. PROJECTS: C3 NOC Fee Ready = 5250.
 Прежние C3 (старый движок) — «УСТАРЕЛО — …». Проверки: check-markup, check-scenarios, check-article-gaps — 0
 (check-combinations C3 не знает: строки NOC/Admin Fee). Сверка с эталонами — только данные и принятые правила, кроме
-вопросов к Алине: кто держит чек Покупателя (в эталонах C3 — Seller’s Agent, в №1–№6 — агентство Покупателя);
-абзацы о service charges в C3 Mortgage (перешли из №4, в эталоне их нет); «drawn by a third party, namely» (эталон Cash).
+решений Алины 31.10: чек Покупателя держит агентство Покупателя (как в №1–№6, не как в эталоне C3); абзацы о
+service charges в C3 Mortgage остаются; «drawn by …» без «a third party, namely» — как во всех MOU.
 Попутно: formForTemplate считал «депозитов нет» по исходной форме — теперь по подправленной.
 
 ## Приёмка (Алина, 27.10)
