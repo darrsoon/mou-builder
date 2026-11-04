@@ -123,6 +123,15 @@ test("agency fees default to 2.1 percent but can be manually overridden", () => 
   assert.equal(overridden.agencyFeeBuyer, 54000);
 });
 
+test("комиссия по проценту: 1,5% или 2% считается сама, сумма руками важнее процента", () => {
+  const pct = calculate(base({ sellingPrice: "1,670,000", agencyFeeSellerPercent: "1,5", agencyFeeBuyerPercent: "2%" }));
+  assert.equal(pct.agencyFeeSeller, 25050);
+  assert.equal(pct.agencyFeeBuyer, 33400);
+  const manual = calculate(base({ sellingPrice: "1,670,000", agencyFeeSellerPercent: "1.5", agencyFeeSeller: "30,000" }));
+  assert.equal(manual.agencyFeeSeller, 30000);
+  assert.equal(calculate(base({ sellingPrice: "1,670,000" })).agencyFeeSeller, 35070); // пусто — 2,1%
+});
+
 test("article numbering closes gaps when optional articles are disabled", () => {
   const numbers = buildArticleNumbers(base({ includeArticle6: "No", includeArticle7: "No" }));
   assert.equal(numbers.article_payment_table_number, "5");

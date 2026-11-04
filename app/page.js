@@ -154,6 +154,9 @@ const initialForm = {
   sellerChequeThirdParty: "No",
   agencyFeeSeller: "",
   agencyFeeBuyer: "",
+  // процент комиссии агентства: пусто — 2,1% от Selling Price (Алина, 04.11.2026)
+  agencyFeeSellerPercent: "",
+  agencyFeeBuyerPercent: "",
   buyerDepositEnabled: "Yes",
   buyerDepositCalcType: "% of Selling Price",
   buyerDepositPercent: "",
@@ -328,8 +331,9 @@ const tips = {
   transferFee: "Сумма Transfer/NOC Fee (сбор за передачу/NOC). Обычно подтягивается из PROJECTS, но можно изменить.",
   sellerAgentName: "Agency name (название агентства) со стороны Seller. По умолчанию PRIME BRIDGE.",
   buyerAgentName: "Agency name (название агентства) со стороны Buyer. По умолчанию PRIME BRIDGE.",
-  agencyFeeSeller: "Agency Fee Seller (комиссия агентству со стороны Seller). Если пусто, софт считает auto 2.1% от Selling Price. Если в сделке другая сумма, введите ее вручную. Если комиссии Seller нет, введите 0.",
-  agencyFeeBuyer: "Agency Fee Buyer (комиссия агентству со стороны Buyer). Если пусто, софт считает auto 2.1% от Selling Price. Если в сделке другая сумма, введите ее вручную. Для примера The Row нужно вручную 54,000, потому что это 1% от 5,400,000.",
+  agencyFeeSeller: "Agency Fee Seller (комиссия агентству со стороны Seller). Если пусто, считается от Selling Price по проценту из поля «%» (по умолчанию 2.1%). Можно ввести сумму вручную. Если комиссии Seller нет, введите 0.",
+  agencyFeePercent: "Процент комиссии от Selling Price. Пусто — 2.1%. Впишите, например, 1.5 или 2 — сумма посчитается сама. Если сумма вписана вручную, процент не используется.",
+  agencyFeeBuyer: "Agency Fee Buyer (комиссия агентству со стороны Buyer). Если пусто, считается от Selling Price по проценту из поля «%» (по умолчанию 2.1%). Можно ввести сумму вручную.",
   depositEnabled: "Yes (да): deposit и cheque details попадут в MOU. No (нет): строки по депозиту будут пустыми/исключенными.",
   depositCalcType: "% of Selling Price (процент от цены сделки) считает депозит от цены сделки. Fixed Amount (фиксированная сумма) берет введенную сумму.",
   depositPercent: "Процент deposit (депозита) от Selling Price, например 10.",
@@ -413,7 +417,7 @@ function orderedOptions(options, priority = []) {
 const agencyOptions = (agents, extra) => orderedOptions((agents || []).map((a) => a.name).concat(extra || []), ["PRIME BRIDGE"]);
 
 function emptyCaAgency(name = "") {
-  return { name, position: "", representative: "", license: "", address: "", fee: "" };
+  return { name, position: "", representative: "", license: "", address: "", fee: "", feePercent: "" };
 }
 
 // поля дополнительного Commission Agreement (form.caExtra); обычно его платит другая сторона — Покупатель
@@ -1377,7 +1381,10 @@ export default function HomePage() {
                   <Field id="sellerAgentAddress" label="Address" tip="Адрес агентства" value={form.sellerAgentAddress} onChange={patch} placeholder="Авто из справочника" />
                   <CheckboxField id="sellerAgentFeeEnabled" label="Include Seller's Agency fee in MOU" tip="Есть ли комиссия у агентства продавца? Если снять — строка комиссии уйдет из договора (шаблон v2)" checked={form.sellerAgentFeeEnabled !== "No"} onChange={(_, checked) => patch("sellerAgentFeeEnabled", checked ? "Yes" : "No")} />
                   {form.sellerAgentFeeEnabled !== "No" ? (
-                    <AutoMoneyField id="agencyFeeSeller" label="Agency Fee Seller" tip={tips.agencyFeeSeller} value={form.agencyFeeSeller} autoValue={preview?.summary?.agencyFeeSeller} onChange={patch} placeholder="Пусто = auto 2.1%, 0 = нет комиссии" />
+                    <>
+                      <Field id="agencyFeeSellerPercent" label="Agency Fee Seller, %" tip={tips.agencyFeePercent} value={form.agencyFeeSellerPercent} onChange={patch} placeholder="2.1" />
+                      <AutoMoneyField id="agencyFeeSeller" label="Agency Fee Seller" tip={tips.agencyFeeSeller} value={form.agencyFeeSeller} autoValue={preview?.summary?.agencyFeeSeller} onChange={patch} placeholder="Пусто = по %, 0 = нет комиссии" />
+                    </>
                   ) : null}
                 </>
               ) : null}
@@ -1394,7 +1401,10 @@ export default function HomePage() {
                   <Field id="buyerAgentAddress" label="Address" tip="Адрес агентства" value={form.buyerAgentAddress} onChange={patch} placeholder="Авто из справочника" />
                   <CheckboxField id="buyerAgentFeeEnabled" label="Include Buyer's Agency fee in MOU" tip="Есть ли комиссия у агентства покупателя? Если снять — строка комиссии уйдет из договора (шаблон v2)" checked={form.buyerAgentFeeEnabled !== "No"} onChange={(_, checked) => patch("buyerAgentFeeEnabled", checked ? "Yes" : "No")} />
                   {form.buyerAgentFeeEnabled !== "No" ? (
-                    <AutoMoneyField id="agencyFeeBuyer" label="Agency Fee Buyer" tip={tips.agencyFeeBuyer} value={form.agencyFeeBuyer} autoValue={preview?.summary?.agencyFeeBuyer} onChange={patch} placeholder="Пусто = auto 2.1%, можно вручную" />
+                    <>
+                      <Field id="agencyFeeBuyerPercent" label="Agency Fee Buyer, %" tip={tips.agencyFeePercent} value={form.agencyFeeBuyerPercent} onChange={patch} placeholder="2.1" />
+                      <AutoMoneyField id="agencyFeeBuyer" label="Agency Fee Buyer" tip={tips.agencyFeeBuyer} value={form.agencyFeeBuyer} autoValue={preview?.summary?.agencyFeeBuyer} onChange={patch} placeholder="Пусто = по %, можно вручную" />
+                    </>
                   ) : null}
                 </>
               ) : null}
@@ -1499,7 +1509,12 @@ function CommissionSection({ slot = 1, title, ca, sellingPrice, agentOptions, pa
   const agencies = form.caAgencies?.length ? form.caAgencies : [emptyCaAgency(DEFAULT_AGENT)];
   const isCompany = form.caPayer === "Company";
   const price = Number(String(sellingPrice || "").replace(/,/g, ""));
-  const autoFee = price ? String(Math.round(price * 0.021 * 100) / 100) : "";
+  // комиссия по проценту агентства: пусто — 2,1% (Алина, 04.11.2026); как feeByPercent в lib/mou/helpers.js
+  const autoFee = (a) => {
+    const pct = Number(String(a.feePercent || "").replace(/[%\s]/g, "").replace(",", "."));
+    const rate = String(a.feePercent || "").trim() && Number.isFinite(pct) ? pct : 2.1;
+    return price ? String(Math.round(price * rate) / 100) : "";
+  };
   const company = form.caPayerCompany || emptyCaAgency("");
   const maxAgencies = isCompany ? 1 : 2;
 
@@ -1511,7 +1526,10 @@ function CommissionSection({ slot = 1, title, ca, sellingPrice, agentOptions, pa
       <Field id={`${prefix}License`} label="License" tip="Номер лицензии без #" value={a.license} onChange={(_, v) => onField("license", v)} placeholder="Авто из справочника" />
       <Field id={`${prefix}Address`} label="Address" tip="Адрес агентства" value={a.address} onChange={(_, v) => onField("address", v)} placeholder="Авто из справочника" />
       {withFee ? (
-        <AutoMoneyField id={`${prefix}Fee`} label="Commission (VAT inclusive)" tip="По умолчанию 2,1% от Selling Price, можно изменить" value={a.fee} autoValue={autoFee} onChange={(_, v) => onField("fee", v)} placeholder="Пусто = auto 2.1%" />
+        <>
+          <Field id={`${prefix}FeePercent`} label="Commission, %" tip="Процент от Selling Price. Пусто — 2.1%. Впишите, например, 1.5 или 2 — сумма посчитается сама." value={a.feePercent} onChange={(_, v) => onField("feePercent", v)} placeholder="2.1" />
+          <AutoMoneyField id={`${prefix}Fee`} label="Commission (VAT inclusive)" tip="Считается от Selling Price по проценту выше (по умолчанию 2.1%), можно вписать сумму вручную" value={a.fee} autoValue={autoFee(a)} onChange={(_, v) => onField("fee", v)} placeholder="Пусто = по %" />
+        </>
       ) : null}
     </>
   );

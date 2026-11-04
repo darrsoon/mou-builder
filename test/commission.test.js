@@ -90,3 +90,10 @@ test("Commission: ещё соглашения к тому же MOU берут п
   assert.equal(commissionForm({ ...form, caSlot: 3 }).caPayer, "Company");
   assert.equal(commissionForm({ ...form, caSlot: 4 }).caPayer, "Seller"); // такого нет — форма как есть
 });
+
+test("Commission: процент комиссии вместо 2,1%", () => {
+  const b = buildCommission({ ...base, caAgencies: [{ ...PB, feePercent: "1,5" }] });
+  assert.equal(b.replacements.agency1_fee, "15,000");
+  const manual = buildCommission({ ...base, caAgencies: [{ ...PB, feePercent: "1.5", fee: "12,000" }] });
+  assert.equal(manual.replacements.agency1_fee, "12,000");
+});
