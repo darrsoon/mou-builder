@@ -110,3 +110,10 @@ test("Commission для C3: Продавец из MOU — LUCKY HOLDING (бло�
   // платит Покупатель — как обычно, из формы
   assert.equal(buildCommission({ ...form, caPayer: "Buyer" }).replacements.payer_name, "Anna Ivanova");
 });
+
+test("Commission: объект в первом абзаце — у C3 «C3 Garden - Unit N», у остальных номер юнита", async () => {
+  const { MOU_TEMPLATES } = await import("../lib/mou/config.js");
+  const c3 = MOU_TEMPLATES.find((t) => t.fixedSeller);
+  assert.equal(buildCommission({ ...base, caAgencies: [PB] }).replacements.property_ref, "Manarat-B1-01-00");
+  assert.equal(buildCommission({ ...base, unitNumber: "113", templateId: c3.id, caAgencies: [PB] }).replacements.property_ref, "C3 Garden - Unit 113");
+});
