@@ -12,7 +12,9 @@ if (!documentId) throw new Error("укажи ID документа");
 const { docs } = getBotClients();
 
 const res = await applyEdits(docs, documentId, [
-  { find: "in relation to the property {{unit_number}}", replace: "in relation to the property {{property_ref}}", note: "объект в первом абзаце" },
+  { find: "in relation to the property {{unit_number}}", replace: "in relation to the property {{property_ref}}",
+    runs: [[27, 43, true]], note: "объект в первом абзаце (жирным, как номер юнита)" },
+  { find: "{{property_ref}}", bold: true, note: "объект жирным" },
 ]);
 console.log(JSON.stringify(res.failed.length ? res : { done: res.done }));
 
