@@ -43,6 +43,11 @@ E2E-TEST) убраны в корзину Диска a.tsokur, их строки 
 берётся только из `lib/mou/config.js`. Не заводить их снова — старое значение в них
 молча вернуло бы сайт на старые копии шаблонов.
 
+Load Draft (04.11, Алина): повторно созданный договор — «(v2)», «(v3)»…, как ссылки после создания. В DRAFTS_LOG новая
+колонка J «Document» (MOU / Commission Agreement / Commission Agreement N); версии считаются по сделке (проект, юнит,
+Seller, Buyer) отдельно для каждого вида документа. Старые строки без «Document» считаются MOU — соглашения до 04.11
+попадают в версии MOU.
+
 ## C3 Garden Residence — эталоны (31.10)
 
 Эталоны — чистовики Даши 03.10: Cash `1dNTgKE05qusjrDV_F4D3cPJY2oMcrLNy`, Mortgage `1bqVyqltQq00dHCBseQ9-uWoPdK7d4TsO`.

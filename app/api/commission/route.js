@@ -42,6 +42,7 @@ export async function POST(request) {
       sellingPrice: money(built.data.sellingPrice),
       docUrl: document.url,
       formJson: JSON.stringify(raw || {}),
+      kind: Number(raw.caSlot) > 1 ? `Commission Agreement ${Number(raw.caSlot)}` : "Commission Agreement",
     });
 
     // новые агентства / представители (и компания-плательщик) — в AGENTS; сбой договор не отменяет
