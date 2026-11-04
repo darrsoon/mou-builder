@@ -97,3 +97,16 @@ test("Commission: процент комиссии вместо 2,1%", () => {
   const manual = buildCommission({ ...base, caAgencies: [{ ...PB, feePercent: "1.5", fee: "12,000" }] });
   assert.equal(manual.replacements.agency1_fee, "12,000");
 });
+
+test("Commission для C3: Продавец из MOU — LUCKY HOLDING (блок, имя, подпись), без раздела Seller в форме", async () => {
+  const { MOU_TEMPLATES } = await import("../lib/mou/config.js");
+  const c3 = MOU_TEMPLATES.find((t) => t.fixedSeller);
+  const form = { ...base, sellers: [], templateId: c3.id, caPayer: "Seller", caAgencies: [PB] };
+  assert.ok(validateCommission(form).ok, validateCommission(form).errors.join("; "));
+  const b = buildCommission(form);
+  assert.equal(b.replacements.payer_name, "LUCKY HOLDING - F.Z.E");
+  assert.match(b.replacements.payer_party_block, /^<<LUCKY HOLDING - F\.Z\.E>>, Trade License <<#46879>>/);
+  assert.match(stripValueMarks(b.replacements.first_party_signature), /LUCKY HOLDING - F\.Z\.E \(shareholder – Marc Glotser\)/);
+  // платит Покупатель — как обычно, из формы
+  assert.equal(buildCommission({ ...form, caPayer: "Buyer" }).replacements.payer_name, "Anna Ivanova");
+});
