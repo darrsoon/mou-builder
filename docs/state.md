@@ -54,7 +54,7 @@ C3-2 `11wllgXsFKWn2eTnVic0KrW9iiwmdHmLw1JxakFmwrX0`. Отличия от №3/�
 Community NOC; в Cash ADM Electronic «by Card». Реестр: `fixedSeller` (форма без разделов Seller и депозита Продавца,
 подпись «LUCKY HOLDING - F.Z.E (shareholder – Marc Glotser)», чек «in favour of LUCKY HOLDING - F.Z.E» по умолчанию),
 `c3` (поля NOC Fee / Admin Fee), `project` (при выборе шаблона подставляется C3 Garden Residence и данные из PROJECTS), defaults: ADM Electronic 925.75 (Cash) / 1,392 (Mortgage), Valuation 1,037, NOC 5,250,
-Admin 525, Unit Verification 103.50 (Mortgage), Tasleem 1,315. PROJECTS: C3 NOC Fee Ready = 5250.
+Admin 2,500 (было 525 по эталону; Алина 04.11: «админ фи 2,500 аед»), Unit Verification 103.50 (Mortgage), Tasleem 1,315. PROJECTS: C3 NOC Fee Ready = 5250.
 Юниты C3 (31.10, Алина: «с этого листа может подтягивать информацию»): лист «C3 Garden Res» в «Объявления Абу-Даби»
 (`1hgpIbNJVsfPN6RwFks_ACy643EeZr-0_w7KpIfLpiG8`), lib/mou/units.js + readProjectUnits (init → units). В C3 поле Unit Number —
 список юнитов; выбор подставляет Title Deed, Bedrooms (как в LISTS), Area, Parking (пустое в таблице — пустое поле).

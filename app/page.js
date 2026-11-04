@@ -295,7 +295,7 @@ const tips = {
   developerNocFee: "Сбор застройщика за NOC. Подставляется по проекту (PROJECTS, колонка NOC Fee Ready); если пусто — 2,700 для Aldar, для других застройщиков вписать вручную.",
   communityNocFee: "Сбор сообщества за NOC, платит Seller. Сумма по умолчанию — из выбранного шаблона, можно поменять.",
   unitVerificationFee: "Unit Verification / Search Certificate — справка Abu Dhabi Municipality, платит Seller. Сумма по умолчанию — из шаблона, можно поменять.",
-  developerAdminFee: "C3 Garden Residence: Admin Fee застройщику, платит Buyer. Сумма неизменная (525), подставляется сама.",
+  developerAdminFee: "C3 Garden Residence: Admin Fee застройщику, платит Buyer. Сумма по умолчанию 2,500 (Алина, 04.11.2026), подставляется сама.",
   tasleemFee: "Tasleem Fee — у всех готовых объектов, платит Buyer. Сумма неизменная (1,315), подставляется сама.",
   mortgageReleaseFee: "Mortgage Release Fee — сбор ADREC за снятие ипотеки с объекта, платит Seller. Сумма по умолчанию — из шаблона, можно поменять.",
   sellerBankName: "Банк, в котором ипотека Продавца (Seller’s Bank). Выберите из списка или впишите свой.",
