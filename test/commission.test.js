@@ -60,12 +60,14 @@ test("Commission: проверка обязательных полей", () => {
   assert.ok(bad.errors.some((e) => e.includes("Unit Number")));
 });
 
-test("Имена файлов: «<договор> <юнит>»", async () => {
+test("Имена файлов: «<договор> <проект> Unit <юнит>», без проекта — только юнит", async () => {
   const { buildDraftTitle, normalizeForm } = await import("../lib/mou/core.js");
   const { MOU_TEMPLATES } = await import("../lib/mou/config.js");
   const data = normalizeForm({ unitNumber: "Manarat-B1-01-00" });
   assert.equal(buildDraftTitle(data, MOU_TEMPLATES[0]), "Off-plan Memorandum of Understanding (MOU) Manarat-B1-01-00");
-  assert.equal(buildCommission({ ...base, caAgencies: [PB] }).title, "Commission Agreement Manarat-B1-01-00");
+  assert.equal(buildDraftTitle(normalizeForm({ unitNumber: "GB-1204", projectName: "Gardenia Bay" }), MOU_TEMPLATES[0]),
+    "Off-plan Memorandum of Understanding (MOU) Gardenia Bay Unit GB-1204");
+  assert.equal(buildCommission({ ...base, caAgencies: [PB] }).title, "Commission Agreement Manarat Living Unit Manarat-B1-01-00");
 });
 
 test("Commission: значения в блоке компании и подписях помечены для жёлтой подсветки", () => {
@@ -118,7 +120,7 @@ test("Commission: объект в первом абзаце — у C3 «C3 Garde
   const c3ca = buildCommission({ ...base, unitNumber: "113", templateId: c3.id, caAgencies: [PB] });
   assert.equal(c3ca.replacements.property_ref, "C3 Garden - Unit 113");
   assert.equal(c3ca.title, "Commission Agreement C3 Unit 113");
-  assert.equal(buildCommission({ ...base, caAgencies: [PB] }).title, "Commission Agreement Manarat-B1-01-00");
+  assert.equal(buildCommission({ ...base, caAgencies: [PB] }).title, "Commission Agreement Manarat Living Unit Manarat-B1-01-00");
   const { buildDraftTitle } = await import("../lib/mou/core.js");
   assert.equal(buildDraftTitle({ unitNumber: "113" }, c3), "Cash Memorandum of Understanding (MOU) C3 Unit 113");
 });

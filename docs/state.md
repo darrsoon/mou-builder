@@ -49,7 +49,8 @@ LUCKY HOLDING (как в соглашениях C3), имя и подпись и
 Commission Agreement по образцу Даши (04.11, «возьми как эталон» — соглашение C3 Unit 113 `1vszzT9U…`): в шаблонах 7 и 8
 пустая строка между сторонами (`scripts/fix-commission-c3.mjs`), в первом абзаце объект — {{property_ref}}: у C3
 «C3 Garden - Unit N» (caPropertyLabel в реестре), у остальных — номер юнита. Код выложен раньше правки шаблонов.
-Имена файлов C3 (04.11): «… (MOU) C3 Unit 113», «Commission Agreement C3 Unit 113» (fileUnitLabel в реестре).
+Имена файлов (04.11): «<договор> <проект> Unit <юнит>» — «Off-plan … (MOU) Gardenia Bay Unit GB-1204», «Commission Agreement
+Gardenia Bay Unit GB-1204»; у C3 — «C3 Unit 113» (fileUnitLabel в реестре); без проекта — только юнит (core.fileUnitName).
 Load Draft (04.11, Алина): повторно созданный договор — «(v2)», «(v3)»…, как ссылки после создания. В DRAFTS_LOG новая
 колонка J «Document» (MOU / Commission Agreement / Commission Agreement N); версии считаются по сделке (проект, юнит,
 Seller, Buyer) отдельно для каждого вида документа. Старые строки без «Document» считаются MOU — соглашения до 04.11
