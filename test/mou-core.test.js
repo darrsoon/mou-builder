@@ -123,10 +123,11 @@ test("agency fees default to 2.1 percent but can be manually overridden", () => 
   assert.equal(overridden.agencyFeeBuyer, 54000);
 });
 
-test("комиссия по проценту: 1,5% или 2% считается сама, сумма руками важнее процента", () => {
-  const pct = calculate(base({ sellingPrice: "1,670,000", agencyFeeSellerPercent: "1,5", agencyFeeBuyerPercent: "2%" }));
-  assert.equal(pct.agencyFeeSeller, 25050);
-  assert.equal(pct.agencyFeeBuyer, 33400);
+test("комиссия по проценту без VAT + VAT 5%: считается сама, сумма руками важнее процента", () => {
+  // процент без VAT, сумма с VAT 5% (11.11.2026): 3% от 2,700,000 + VAT = 85,050
+  const pct = calculate(base({ sellingPrice: "2,700,000", agencyFeeSellerPercent: "3%", agencyFeeBuyerPercent: "1,5" }));
+  assert.equal(pct.agencyFeeSeller, 85050);
+  assert.equal(pct.agencyFeeBuyer, 42525);
   const manual = calculate(base({ sellingPrice: "1,670,000", agencyFeeSellerPercent: "1.5", agencyFeeSeller: "30,000" }));
   assert.equal(manual.agencyFeeSeller, 30000);
   assert.equal(calculate(base({ sellingPrice: "1,670,000" })).agencyFeeSeller, 35070); // пусто — 2,1%

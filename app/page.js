@@ -154,7 +154,7 @@ const initialForm = {
   sellerChequeThirdParty: "No",
   agencyFeeSeller: "",
   agencyFeeBuyer: "",
-  // процент комиссии агентства: пусто — 2,1% от Selling Price (Алина, 04.11.2026)
+  // процент комиссии агентства без VAT: пусто — 2% (+5% VAT = 2,1% от Selling Price; Алина, 04.11 и 11.11.2026)
   agencyFeeSellerPercent: "",
   agencyFeeBuyerPercent: "",
   buyerDepositEnabled: "Yes",
@@ -331,9 +331,9 @@ const tips = {
   transferFee: "Сумма Transfer/NOC Fee (сбор за передачу/NOC). Обычно подтягивается из PROJECTS, но можно изменить.",
   sellerAgentName: "Agency name (название агентства) со стороны Seller. По умолчанию PRIME BRIDGE.",
   buyerAgentName: "Agency name (название агентства) со стороны Buyer. По умолчанию PRIME BRIDGE.",
-  agencyFeeSeller: "Agency Fee Seller (комиссия агентству со стороны Seller). Если пусто, считается от Selling Price по проценту из поля «%» (по умолчанию 2.1%). Можно ввести сумму вручную. Если комиссии Seller нет, введите 0.",
-  agencyFeePercent: "Процент комиссии от Selling Price. Пусто — 2.1%. Впишите, например, 1.5 или 2 — сумма посчитается сама. Если сумма вписана вручную, процент не используется.",
-  agencyFeeBuyer: "Agency Fee Buyer (комиссия агентству со стороны Buyer). Если пусто, считается от Selling Price по проценту из поля «%» (по умолчанию 2.1%). Можно ввести сумму вручную.",
+  agencyFeeSeller: "Agency Fee Seller (комиссия агентству со стороны Seller). Если пусто, считается от Selling Price по проценту из поля «%» + VAT 5% (по умолчанию 2% + VAT). Можно ввести сумму вручную. Если комиссии Seller нет, введите 0.",
+  agencyFeePercent: "Процент комиссии от Selling Price без VAT; к сумме добавляется VAT 5%. Пусто — 2% (с VAT 2.1%). Впишите, например, 1.5 или 3 — сумма с VAT посчитается сама. Если сумма вписана вручную, процент не используется.",
+  agencyFeeBuyer: "Agency Fee Buyer (комиссия агентству со стороны Buyer). Если пусто, считается от Selling Price по проценту из поля «%» + VAT 5% (по умолчанию 2% + VAT). Можно ввести сумму вручную.",
   depositEnabled: "Yes (да): deposit и cheque details попадут в MOU. No (нет): строки по депозиту будут пустыми/исключенными.",
   depositCalcType: "% of Selling Price (процент от цены сделки) считает депозит от цены сделки. Fixed Amount (фиксированная сумма) берет введенную сумму.",
   depositPercent: "Процент deposit (депозита) от Selling Price, например 10.",
@@ -1382,7 +1382,7 @@ export default function HomePage() {
                   <CheckboxField id="sellerAgentFeeEnabled" label="Include Seller's Agency fee in MOU" tip="Есть ли комиссия у агентства продавца? Если снять — строка комиссии уйдет из договора (шаблон v2)" checked={form.sellerAgentFeeEnabled !== "No"} onChange={(_, checked) => patch("sellerAgentFeeEnabled", checked ? "Yes" : "No")} />
                   {form.sellerAgentFeeEnabled !== "No" ? (
                     <>
-                      <Field id="agencyFeeSellerPercent" label="Agency Fee Seller, %" tip={tips.agencyFeePercent} value={form.agencyFeeSellerPercent} onChange={patch} placeholder="2.1" />
+                      <Field id="agencyFeeSellerPercent" label="Agency Fee Seller, % (+ VAT)" tip={tips.agencyFeePercent} value={form.agencyFeeSellerPercent} onChange={patch} placeholder="2" />
                       <AutoMoneyField id="agencyFeeSeller" label="Agency Fee Seller" tip={tips.agencyFeeSeller} value={form.agencyFeeSeller} autoValue={preview?.summary?.agencyFeeSeller} onChange={patch} placeholder="Пусто = по %, 0 = нет комиссии" />
                     </>
                   ) : null}
@@ -1402,7 +1402,7 @@ export default function HomePage() {
                   <CheckboxField id="buyerAgentFeeEnabled" label="Include Buyer's Agency fee in MOU" tip="Есть ли комиссия у агентства покупателя? Если снять — строка комиссии уйдет из договора (шаблон v2)" checked={form.buyerAgentFeeEnabled !== "No"} onChange={(_, checked) => patch("buyerAgentFeeEnabled", checked ? "Yes" : "No")} />
                   {form.buyerAgentFeeEnabled !== "No" ? (
                     <>
-                      <Field id="agencyFeeBuyerPercent" label="Agency Fee Buyer, %" tip={tips.agencyFeePercent} value={form.agencyFeeBuyerPercent} onChange={patch} placeholder="2.1" />
+                      <Field id="agencyFeeBuyerPercent" label="Agency Fee Buyer, % (+ VAT)" tip={tips.agencyFeePercent} value={form.agencyFeeBuyerPercent} onChange={patch} placeholder="2" />
                       <AutoMoneyField id="agencyFeeBuyer" label="Agency Fee Buyer" tip={tips.agencyFeeBuyer} value={form.agencyFeeBuyer} autoValue={preview?.summary?.agencyFeeBuyer} onChange={patch} placeholder="Пусто = по %, можно вручную" />
                     </>
                   ) : null}
@@ -1509,11 +1509,11 @@ function CommissionSection({ slot = 1, title, ca, sellingPrice, agentOptions, pa
   const agencies = form.caAgencies?.length ? form.caAgencies : [emptyCaAgency(DEFAULT_AGENT)];
   const isCompany = form.caPayer === "Company";
   const price = Number(String(sellingPrice || "").replace(/,/g, ""));
-  // комиссия по проценту агентства: пусто — 2,1% (Алина, 04.11.2026); как feeByPercent в lib/mou/helpers.js
+  // комиссия по проценту агентства без VAT + VAT 5%: пусто — 2% (Алина, 04.11 и 11.11.2026); как feeByPercent в lib/mou/helpers.js
   const autoFee = (a) => {
     const pct = Number(String(a.feePercent || "").replace(/[%\s]/g, "").replace(",", "."));
-    const rate = String(a.feePercent || "").trim() && Number.isFinite(pct) ? pct : 2.1;
-    return price ? String(Math.round(price * rate) / 100) : "";
+    const rate = String(a.feePercent || "").trim() && Number.isFinite(pct) ? pct : 2;
+    return price ? String(Math.round(price * rate * 1.05) / 100) : "";
   };
   const company = form.caPayerCompany || emptyCaAgency("");
   const maxAgencies = isCompany ? 1 : 2;
@@ -1527,8 +1527,8 @@ function CommissionSection({ slot = 1, title, ca, sellingPrice, agentOptions, pa
       <Field id={`${prefix}Address`} label="Address" tip="Адрес агентства" value={a.address} onChange={(_, v) => onField("address", v)} placeholder="Авто из справочника" />
       {withFee ? (
         <>
-          <Field id={`${prefix}FeePercent`} label="Commission, %" tip="Процент от Selling Price. Пусто — 2.1%. Впишите, например, 1.5 или 2 — сумма посчитается сама." value={a.feePercent} onChange={(_, v) => onField("feePercent", v)} placeholder="2.1" />
-          <AutoMoneyField id={`${prefix}Fee`} label="Commission (VAT inclusive)" tip="Считается от Selling Price по проценту выше (по умолчанию 2.1%), можно вписать сумму вручную" value={a.fee} autoValue={autoFee(a)} onChange={(_, v) => onField("fee", v)} placeholder="Пусто = по %" />
+          <Field id={`${prefix}FeePercent`} label="Commission, % (+ VAT)" tip="Процент от Selling Price без VAT; к сумме добавляется VAT 5%. Пусто — 2% (с VAT 2.1%). Впишите, например, 3 — сумма с VAT посчитается сама." value={a.feePercent} onChange={(_, v) => onField("feePercent", v)} placeholder="2" />
+          <AutoMoneyField id={`${prefix}Fee`} label="Commission (VAT inclusive)" tip="Считается от Selling Price по проценту выше + VAT 5% (по умолчанию 2% + VAT = 2.1%), можно вписать сумму вручную" value={a.fee} autoValue={autoFee(a)} onChange={(_, v) => onField("fee", v)} placeholder="Пусто = по %" />
         </>
       ) : null}
     </>
