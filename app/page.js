@@ -1513,7 +1513,8 @@ function CommissionSection({ slot = 1, title, ca, sellingPrice, agentOptions, pa
   const autoFee = (a) => {
     const pct = Number(String(a.feePercent || "").replace(/[%\s]/g, "").replace(",", "."));
     const rate = String(a.feePercent || "").trim() && Number.isFinite(pct) ? pct : 2;
-    return price ? String(Math.round(price * rate * 1.05) / 100) : "";
+    // с фильсами — «17,839.50», а не «17,839.5»
+    return price ? (Math.round(price * rate * 1.05) / 100).toFixed(2).replace(/\.00$/, "") : "";
   };
   const company = form.caPayerCompany || emptyCaAgency("");
   const maxAgencies = isCompany ? 1 : 2;
@@ -1558,7 +1559,8 @@ function CommissionSection({ slot = 1, title, ca, sellingPrice, agentOptions, pa
         <div key={i} style={{ display: "grid", gap: "10px", alignContent: "start" }}>
           <strong>{i === 0 ? "Second Party" : "Third Party"} — receives commission</strong>
           {agencyFields(a, (field, v) => patchCaAgency(i, field, v), `${p}Agency${i}`, true)}
-          {i > 0 ? (
+          {/* удалить можно любое агентство, если их два; последнее остаётся — соглашению нужен получатель (Алина, 17.11.2026) */}
+          {agencies.length > 1 ? (
             <button type="button" className="secondary iconText" onClick={() => patchCa("caAgencies", agencies.filter((_, k) => k !== i))}>
               <Trash2 size={16} /> Remove agency
             </button>
