@@ -65,7 +65,7 @@ done»; строка «ADM Valuation Fee: AED … / to be paid by the Buyer on t
 строк ADM Electronic Fee и ADM Verification Certificate нет. Реестр: «7. Off-plan ready — mortgage», как №2 + admValuationLabel,
 noAdmElectronic (поля ADM Electronic в форме нет). Комментарии эталона — про депозиты (движок уже умеет) и Transfer Fee 4,000
 «не меняется» (из PROJECTS). Текст вне таблицы = эталон, отличия те же, что у №2. Проверки: check-markup, check-scenarios,
-check-article-gaps, check-combinations (--mortgage --offplan-ready, 9216) — 0.
+check-article-gaps, check-combinations (--mortgage --offplan-ready, 9216) — 0. Принят (Алина 20.11: «7 готов»), в списке зелёным.
 
 ## C3 Garden Residence — эталоны (31.10)
 
