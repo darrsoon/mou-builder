@@ -15,7 +15,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { getArticleDefsForTemplate } from "@/lib/mou/articles";
-import { formatArea, partyHasEid, EID_PATTERN } from "@/lib/mou/helpers";
+import { formatArea, partyHasEid, poaHasEid, EID_PATTERN } from "@/lib/mou/helpers";
 import Holidays from "date-holidays";
 import { IMaskInput } from "react-imask";
 
@@ -70,9 +70,11 @@ const initialParty = () => ({
   eid: "",
   ownershipPercent: "100",
   hasPoa: false,
+  poaSalutation: "",
   poaName: "",
   poaNationality: "",
   poaPassport: "",
+  poaHasEid: false,
   poaEid: "",
 });
 
@@ -348,6 +350,7 @@ const tips = {
   nationality: "Nationality (гражданство) на английском, как в passport.",
   passport: "Passport number (номер паспорта). Если пусто, не попадет в party block.",
   eid: "Emirates ID (ID в ОАЭ) полностью: 784-XXXX-XXXXXXX-X. Обязателен, если отмечено «Has Emirates ID»; у представителя по POA — всегда.",
+  poaHasEid: "Есть ли у представителя по доверенности (POA) Emirates ID. Отмечено — номер обязателен и попадёт в договор; нет — EID POA в договоре не будет.",
   hasEid: "Есть ли у стороны Emirates ID. Отмечено — номер обязателен и попадёт в договор; нет — EID в договоре не будет.",
   ownershipPercent: "Ownership % (доля владения). Для Seller и Buyer отдельно сумма должна быть 100%.",
   poa: "Yes (да), если вместо стороны подписывает представитель по POA / Power of Attorney (доверенности).",
@@ -381,10 +384,11 @@ function partyMissingFields(party) {
   if (partyHasEid(party) && !EID_PATTERN.test(String(party.eid || ""))) missing.eid = "EID";
   if (!hasValue(party.ownershipPercent)) missing.ownershipPercent = "Ownership %";
   if (party.hasPoa) {
+    if (!hasValue(party.poaSalutation)) missing.poaSalutation = "POA Title";
     if (!hasValue(party.poaName)) missing.poaName = "POA Name";
     if (!hasValue(party.poaNationality)) missing.poaNationality = "POA Nationality";
     if (!hasValue(party.poaPassport)) missing.poaPassport = "POA Passport";
-    if (!EID_PATTERN.test(String(party.poaEid || ""))) missing.poaEid = "POA EID";
+    if (poaHasEid(party) && !EID_PATTERN.test(String(party.poaEid || ""))) missing.poaEid = "POA EID";
   }
   return missing;
 }
@@ -2082,10 +2086,12 @@ function PartySection({ title, type, parties, setForm, lists, status }) {
           </div>
           {party.hasPoa && (
             <div className="grid poaGrid">
+              <SelectField id={`${type}-${index}-poaSalutation`} label="POA Title" tip={tips.salutation} value={party.poaSalutation || ""} onChange={(_, v) => setParty(index, "poaSalutation", v)} invalid={Boolean(gaps.poaSalutation)} options={[{ value: "", label: "Select..." }, "Mr.", "Mrs.", "Ms."]} />
               <Field id={`${type}-${index}-poaName`} label="POA Name Surname" tip="Имя представителя по Power of Attorney (доверенности)." value={party.poaName} onChange={(_, v) => setParty(index, "poaName", v)} invalid={Boolean(gaps.poaName)} />
               <Field id={`${type}-${index}-poaNationality`} label="POA Nationality" tip={tips.nationality} value={party.poaNationality} onChange={(_, v) => setParty(index, "poaNationality", v)} invalid={Boolean(gaps.poaNationality)} list={`${type}-${index}-poa-nationalities`} options={orderedOptions(lists.nationalities, PRIORITY_NATIONALITIES)} />
               <Field id={`${type}-${index}-poaPassport`} label="POA Passport" tip={tips.passport} value={party.poaPassport} onChange={(_, v) => setParty(index, "poaPassport", v)} invalid={Boolean(gaps.poaPassport)} />
-              <EidField id={`${type}-${index}-poaEid`} label="POA EID" tip={tips.eid} value={party.poaEid} onChange={(_, v) => setParty(index, "poaEid", v)} invalid={Boolean(gaps.poaEid)} />
+              <CheckboxField id={`${type}-${index}-poaHasEid`} label="POA has Emirates ID" tip={tips.poaHasEid} checked={poaHasEid(party)} onChange={(_, v) => setParty(index, "poaHasEid", v)} />
+              {poaHasEid(party) && <EidField id={`${type}-${index}-poaEid`} label="POA EID" tip={tips.eid} value={party.poaEid} onChange={(_, v) => setParty(index, "poaEid", v)} invalid={Boolean(gaps.poaEid)} />}
             </div>
           )}
         </div>

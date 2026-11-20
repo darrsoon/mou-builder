@@ -54,3 +54,20 @@ test("подсветка вставленного: жёлтый между ме�
   // без подсветки — только удаление меток
   assert.ok(buildValueHighlightRequests(doc, false).every((r) => r.deleteContentRange));
 });
+
+test("POA: EID по галочке, обращение из формы (Mr. / Mrs. / Ms.)", () => {
+  const poa = { ...person, hasPoa: true, poaName: "Anna Ivanova", poaNationality: "Russian Federation", poaPassport: "755" };
+  const [noEid] = normalizePartyList([{ ...poa, poaSalutation: "Mrs.", poaHasEid: false, poaEid: "784-1990-7654321-2" }]);
+  const block = stripValueMarks(buildPartyBlock([noEid]));
+  assert.ok(block.includes("has designated Mrs. <<Anna Ivanova>>"), block);
+  assert.ok(!block.includes("784-1990-7654321-2"));
+  const [withEid] = normalizePartyList([{ ...poa, poaSalutation: "Ms.", poaHasEid: true, poaEid: "784-1990-7654321-2" }]);
+  assert.ok(stripValueMarks(buildPartyBlock([withEid])).includes("holder of EID Number <<784-1990-7654321-2>>"));
+  // старый черновик: обращения нет — «Mr(s).», EID есть, если номер введён
+  const [old] = normalizePartyList([{ ...poa, poaEid: "784-1990-7654321-2" }]);
+  assert.ok(stripValueMarks(buildPartyBlock([old])).includes("has designated Mr(s). <<Anna Ivanova>>"));
+  assert.ok(stripValueMarks(buildPartyBlock([old])).includes("784-1990-7654321-2"));
+  // галочка без полного номера — ошибка
+  const bad = validateMou({ sellers: normalizePartyList([{ ...poa, poaHasEid: true, poaEid: "784" }]), buyers: normalizePartyList([person]) });
+  assert.ok(bad.errors.some((e) => e.includes("у POA отмечен Emirates ID")), bad.errors.join("\n"));
+});
