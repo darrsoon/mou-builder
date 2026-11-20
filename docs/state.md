@@ -69,6 +69,8 @@ check-article-gaps, check-combinations (--mortgage --offplan-ready, 9216) — 0.
 
 ## C3 Garden Residence — эталоны (31.10)
 
+C3 Cash и C3 Mortgage приняты (Алина 20.11: «C3 готовы»), в списке зелёным. Все шаблоны MOU приняты.
+
 Эталоны — чистовики Даши 03.10: Cash `1dNTgKE05qusjrDV_F4D3cPJY2oMcrLNy`, Mortgage `1bqVyqltQq00dHCBseQ9-uWoPdK7d4TsO`.
 Продавец всегда LUCKY HOLDING - F.Z.E (комментарий: «данные по Продавцу остаются полностью»); новая лицензия
 (`1q72pjhR…`, 31.10): №46879, выдана 13.10.2026, до 12.10.2027.
