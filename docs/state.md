@@ -56,6 +56,14 @@ Load Draft (04.11, Алина): повторно созданный догово
 Seller, Buyer) отдельно для каждого вида документа. Старые строки без «Document» считаются MOU — соглашения до 04.11
 попадают в версии MOU.
 
+## №8 Off-plan Ready to Cash (20.11)
+
+Эталон — docx «19. DRAFT Off-plan ready to Cash» `1MGSsXdqVtonABR9e1H-RNFIruB8ADbYP`. Шаблон `1F8YSRoF2CaMg-Xkc_qOl0tpul-Cmuj6EBh7ZIIVL-_A`
+— копия принятого №1 + `scripts/make-offplan-ready-cash.mjs`: строка ADM (2% + AED 575) — «… to <payee> after valuation by bank or
+online transfer». В эталоне две строки «ADM Electronic Fee» (новая и как в №1) — оставлена одна новая, без «by by» и «to ALDAR»;
+Алина на вопрос не ответила — уточнить. Комментарии эталона — те же правила, что в №1. Реестр «8. Off-plan ready — cash».
+Проверки: check-markup, check-scenarios, check-article-gaps, check-combinations (9216) — 0.
+
 ## №7 Off-plan Ready to Mortgage (20.11)
 
 Эталон — docx «18. DRAFT Off-plan ready to Mortgage» `1UsU9DeDV8GPqrcegeZj7rHKVERSSE4su` (Алина: «начинка договора вся как
