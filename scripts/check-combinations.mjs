@@ -68,7 +68,7 @@ const BASE = {
   agreementDate: "28/01/2026", reservationDeadline: "28/02/2026",
   sellingPrice: String(SELLING), originalPrice: String(ORIGINAL),
   transferThresholdPercent: String(THRESHOLD_PCT),
-  ...(MORTGAGE
+  ...(MORTGAGE || OFFPLAN_READY
     ? { admAdminFee: "", admElectronicFee: String(ADM_ELECTRONIC), admValuationFee: String(ADM_VALUATION) }
     : { admAdminFee: String(ADM_ADMIN) }),
   transferFee: String(TRANSFER_FEE), transferFeeLabel: "Transfer Fee",
@@ -201,7 +201,7 @@ function expected(c) {
   const sellerLd80 = c.buyerAgent ? sellerLd * 0.8 : sellerLd;
   const sellerLd20 = c.buyerAgent ? sellerLd * 0.2 : null;
 
-  const admFee = MORTGAGE || READY ? SELLING * 0.02 : SELLING * 0.02 + ADM_ADMIN;
+  const admFee = MORTGAGE || READY || OFFPLAN_READY ? SELLING * 0.02 : SELLING * 0.02 + ADM_ADMIN;
   const amounts = READY
     ? [SELLING, toSeller, admFee, ADM_ELECTRONIC_READY, ADM_VALUATION_READY, DEVELOPER_NOC, COMMUNITY_NOC, TASLEEM,
       buyerLd, sellerLd, buyerLd80, sellerLd80]

@@ -815,3 +815,13 @@ test("готовый объект: без предупреждения про п
   const off = normalizeForm({ unitStatus: "Off-Plan", sellingPrice: "1,000,000" });
   assert.ok(validateMou(off, {}).warnings.some((w) => w.startsWith("Original Price")));
 });
+
+test("№8 Off-plan ready — cash: ADM Fee 2% без ADM Admin Fee, как в №7", async () => {
+  const { MOU_TEMPLATES } = await import("../lib/mou/config.js");
+  const t8 = MOU_TEMPLATES.find((t) => t.label.startsWith("8."));
+  assert.ok(t8.offplanReadyFees && !t8.mortgage);
+  const data = normalizeForm(formForTemplate({ sellingPrice: "5,700,000", admAdminFee: "575", unitStatus: "Off-Plan" }, t8));
+  assert.equal(calculate(data).admFee, 114000);
+  const t1 = MOU_TEMPLATES.find((t) => t.label === "1. Off-plan");
+  assert.equal(calculate(normalizeForm(formForTemplate({ sellingPrice: "5,700,000", admAdminFee: "575" }, t1))).admFee, 114575);
+});

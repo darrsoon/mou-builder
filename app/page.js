@@ -504,7 +504,7 @@ function depositSectionStatus(form, side) {
   return makeSectionStatus(missing);
 }
 
-function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage = false, isReadyTemplate = false, hasUnitVerification = false, hasSellerMortgage = false, titleDeedDefault = "", isC3 = false, noAdmElectronic = false, admValuationLabel = "ADM Valuation Certificate") {
+function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage = false, isReadyTemplate = false, hasUnitVerification = false, hasSellerMortgage = false, titleDeedDefault = "", isC3 = false, noAdmElectronic = false, admValuationLabel = "ADM Valuation Certificate", offplanReadyFees = false) {
   const isReady = String(form.unitStatus || "").toLowerCase() === "ready";
   const agreementMissing = missingFields(form, [
     ["agreementDate", "Agreement Date"],
@@ -543,7 +543,7 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
   ];
   if (!isReady) projectRequired.push(["escrowAccountName", "Escrow Account Name"]);
   // ипотечный off-plan: вместо админ-части — три отдельные суммы ADM
-  if (isMortgage && !isReadyTemplate) {
+  if ((isMortgage || offplanReadyFees) && !isReadyTemplate) {
     // admFee не требуем: он считается сам (2% от Selling Price), вручную его
     // вписывают только после оценки ADM
     projectRequired.push(
@@ -694,7 +694,7 @@ export default function HomePage() {
   const fixedSeller = selectedTemplate?.fixedSeller || null;
   const sectionStatuses = useMemo(
     () => buildSectionStatuses(form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage, selectedTemplate?.defaults?.titleDeedNumber || "", isC3,
-      !!selectedTemplate?.noAdmElectronic, selectedTemplate?.admValuationLabel || "ADM Valuation Certificate"),
+      !!selectedTemplate?.noAdmElectronic, selectedTemplate?.admValuationLabel || "ADM Valuation Certificate", !!selectedTemplate?.offplanReadyFees),
     [form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage, selectedTemplate, isC3],
   );
 
@@ -1254,7 +1254,7 @@ export default function HomePage() {
             <Field id="developerName" label="Developer Name" tip={tips.developerName} value={form.developerName} onChange={patch} />
             <Field id="developerLegalName" label="Developer Legal Name" tip={tips.developerLegalName} value={form.developerLegalName} onChange={patch} />
             {!isCashToCash && <Field id="escrowAccountName" label="Escrow Account Name" tip={tips.escrowAccountName} value={form.escrowAccountName} onChange={patch} />}
-            {isMortgage && !isReadyTemplate ? (
+            {(isMortgage || selectedTemplate?.offplanReadyFees) && !isReadyTemplate ? (
               <>
                 <AutoMoneyField id="admFee" label="ADM Fee (2% or ADM valuation)" tip={tips.admFee} value={form.admFee} autoValue={preview?.summary?.admFee} onChange={patch} placeholder="Посчитается автоматически" />
                 {!selectedTemplate?.noAdmElectronic && <AutoMoneyField id="admElectronicFee" label="ADM Electronic Fee" tip={tips.admElectronicFee} value={form.admElectronicFee} onChange={patch} />}

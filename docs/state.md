@@ -59,10 +59,11 @@ Seller, Buyer) отдельно для каждого вида документ�
 ## №8 Off-plan Ready to Cash (20.11)
 
 Эталон — docx «19. DRAFT Off-plan ready to Cash» `1MGSsXdqVtonABR9e1H-RNFIruB8ADbYP`. Шаблон `1F8YSRoF2CaMg-Xkc_qOl0tpul-Cmuj6EBh7ZIIVL-_A`
-— копия принятого №1 + `scripts/make-offplan-ready-cash.mjs`: строка ADM (2% + AED 575) — «… to <payee> after valuation by bank or
-online transfer». В эталоне две строки «ADM Electronic Fee» (новая и как в №1) — оставлена одна новая, без «by by» и «to ALDAR»;
-Алина на вопрос не ответила — уточнить. Комментарии эталона — те же правила, что в №1. Реестр «8. Off-plan ready — cash».
-Проверки: check-markup, check-scenarios, check-article-gaps, check-combinations (9216) — 0.
+— копия принятого №1 + `scripts/make-offplan-ready-cash.mjs`. Строки ADM — как в №7 (Алина 20.11: «в 8 adm fee такая
+формулировка и adm valuation fee»): ADM Fee «2% … or as per ADM valuation … by online / bank transfer after the valuation is done»
+(сумма 2% без ADM Admin Fee — offplanReadyFees в реестре, у №7 тоже) и ADM Valuation Fee 1,043.75 «on the Transfer Date by Card».
+Форма: поля ADM Fee и ADM Valuation Fee вместо ADM Admin Fee. Реестр «8. Off-plan ready — cash». Проверки: check-markup,
+check-scenarios (--offplan-ready), check-article-gaps, check-combinations (--offplan-ready, 9216) — 0; №7 перепроверен — 0.
 
 ## №7 Off-plan Ready to Mortgage (20.11)
 

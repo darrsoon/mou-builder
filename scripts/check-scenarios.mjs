@@ -18,7 +18,9 @@ const DEFS = getArticleDefsForTemplate(TEMPLATE);
 const BASE = {
   agreementDate: "28/01/2026", sellingPrice: "1,670,000", originalPrice: "1,494,050",
   paidAmountToDeveloper: "300,000", transferThresholdPercent: "30",
-  ...(MORTGAGE ? { admAdminFee: "", admElectronicFee: "1,392", admValuationFee: "925.75" } : { admAdminFee: "575" }),
+  // --offplan-ready (№7, №8): ADM Fee без ADM Admin Fee, строка ADM Valuation Fee
+  ...(MORTGAGE || process.argv.includes("--offplan-ready")
+    ? { admAdminFee: "", admElectronicFee: "1,392", admValuationFee: "925.75" } : { admAdminFee: "575" }),
   transferFee: "4,000", transferFeeLabel: "Transfer Fee", unitStatus: READY ? "Ready" : "Off-plan",
   // готовый объект: два NOC-сбора, свои ADM-суммы, номер проекта и аренда
   ...(READY ? {
