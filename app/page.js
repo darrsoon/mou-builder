@@ -504,7 +504,7 @@ function depositSectionStatus(form, side) {
   return makeSectionStatus(missing);
 }
 
-function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage = false, isReadyTemplate = false, hasUnitVerification = false, hasSellerMortgage = false, titleDeedDefault = "", isC3 = false) {
+function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage = false, isReadyTemplate = false, hasUnitVerification = false, hasSellerMortgage = false, titleDeedDefault = "", isC3 = false, noAdmElectronic = false, admValuationLabel = "ADM Valuation Certificate") {
   const isReady = String(form.unitStatus || "").toLowerCase() === "ready";
   const agreementMissing = missingFields(form, [
     ["agreementDate", "Agreement Date"],
@@ -547,8 +547,9 @@ function buildSectionStatuses(form, reservationMode, reservationDays, isMortgage
     // admFee не требуем: он считается сам (2% от Selling Price), вручную его
     // вписывают только после оценки ADM
     projectRequired.push(
-      ["admElectronicFee", "ADM Electronic Fee"],
-      ["admValuationFee", "ADM Valuation Certificate"],
+      // №7: строки ADM Electronic Fee в таблице нет
+      ...(noAdmElectronic ? [] : [["admElectronicFee", "ADM Electronic Fee"]]),
+      ["admValuationFee", admValuationLabel],
     );
   } else if (isReadyTemplate) {
     // суммы фиксированные и подставляются сами, но должны быть заполнены
@@ -692,7 +693,8 @@ export default function HomePage() {
   const projectUnits = (init.units || {})[selectedTemplate?.project] || [];
   const fixedSeller = selectedTemplate?.fixedSeller || null;
   const sectionStatuses = useMemo(
-    () => buildSectionStatuses(form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage, selectedTemplate?.defaults?.titleDeedNumber || "", isC3),
+    () => buildSectionStatuses(form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage, selectedTemplate?.defaults?.titleDeedNumber || "", isC3,
+      !!selectedTemplate?.noAdmElectronic, selectedTemplate?.admValuationLabel || "ADM Valuation Certificate"),
     [form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage, selectedTemplate, isC3],
   );
 
@@ -1255,8 +1257,9 @@ export default function HomePage() {
             {isMortgage && !isReadyTemplate ? (
               <>
                 <AutoMoneyField id="admFee" label="ADM Fee (2% or ADM valuation)" tip={tips.admFee} value={form.admFee} autoValue={preview?.summary?.admFee} onChange={patch} placeholder="Посчитается автоматически" />
-                <AutoMoneyField id="admElectronicFee" label="ADM Electronic Fee" tip={tips.admElectronicFee} value={form.admElectronicFee} onChange={patch} />
-                <AutoMoneyField id="admValuationFee" label="ADM Valuation Certificate" tip={tips.admValuationFee} value={form.admValuationFee} onChange={patch} />
+                {!selectedTemplate?.noAdmElectronic && <AutoMoneyField id="admElectronicFee" label="ADM Electronic Fee" tip={tips.admElectronicFee} value={form.admElectronicFee} onChange={patch} />}
+                {/* подпись — как строка таблицы шаблона: в №7 «ADM Valuation Fee» (admValuationLabel в реестре) */}
+                <AutoMoneyField id="admValuationFee" label={selectedTemplate?.admValuationLabel || "ADM Valuation Certificate"} tip={tips.admValuationFee} value={form.admValuationFee} onChange={patch} />
               </>
             ) : isReadyTemplate ? (
               <>

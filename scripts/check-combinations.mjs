@@ -21,6 +21,8 @@ const READY = process.argv.includes("--ready");
 // --ready --seller-mortgage — №5, ипотека Продавца: строка Mortgage Release Fee, банк
 // Продавца и два варианта денег Покупателя в ст.10
 const SELLER_MORTGAGE = process.argv.includes("--seller-mortgage");
+// №7 Off-plan Ready to Mortgage: строка «ADM Valuation Fee», строк ADM Electronic и ADM Verification нет
+const OFFPLAN_READY = process.argv.includes("--offplan-ready");
 // --ready --mortgage --seller-mortgage — №6, ипотека у обеих сторон: ст.10 как в №5, но без
 // вариантов денег Покупателя; ст.11–12 как в №4, но без строки Unit Verification и без
 // абзаца об отказе банка в статье о депозите
@@ -205,7 +207,7 @@ function expected(c) {
       buyerLd, sellerLd, buyerLd80, sellerLd80]
     : [
       ORIGINAL, SELLING, toSeller, remaining, TRANSFER_FEE, admFee,
-      ...(MORTGAGE ? [ADM_ELECTRONIC, ADM_VALUATION] : [ADM_ADMIN]),
+      ...(OFFPLAN_READY ? [ADM_VALUATION] : MORTGAGE ? [ADM_ELECTRONIC, ADM_VALUATION] : [ADM_ADMIN]),
       buyerLd, sellerLd, buyerLd80, sellerLd80,
     ];
   if (READY && c.rented) amounts.push(150000);
@@ -355,7 +357,9 @@ for (const c of combos) {
   inRow("Amount to Seller", "to be paid by the Buyer to the Seller on the Transfer Date", e.toSeller);
   if (!READY) inRow("остаток застройщику", "of the Original Price to be paid to the Developer", e.remaining);
   inRow("ADM Fee", "2% from the Selling Price", e.admFee);
-  if (MORTGAGE && !READY) {
+  if (OFFPLAN_READY) {
+    inRow("ADM Valuation Fee", "ADM Valuation Fee:", ADM_VALUATION);
+  } else if (MORTGAGE && !READY) {
     inRow("ADM Electronic Fee", "ADM Electronic Fee:", ADM_ELECTRONIC);
     // в №2 строка называется «ADM Verification Certificate» (Даша, 07.10.2026)
     inRow("ADM Verification Certificate", "ADM Verification Certificate:", ADM_VALUATION);

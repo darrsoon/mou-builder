@@ -56,6 +56,17 @@ Load Draft (04.11, Алина): повторно созданный догово
 Seller, Buyer) отдельно для каждого вида документа. Старые строки без «Document» считаются MOU — соглашения до 04.11
 попадают в версии MOU.
 
+## №7 Off-plan Ready to Mortgage (20.11)
+
+Эталон — docx «18. DRAFT Off-plan ready to Mortgage» `1UsU9DeDV8GPqrcegeZj7rHKVERSSE4su` (Алина: «начинка договора вся как
+off-plan mortgage, по таблице смотри новые значения; есть некоторые, которые убрали»). Шаблон `1lMSmtSr-4tQDX6ki7z8FPBHExwr6VbE0FbWI9sO4nuA`
+— копия принятого №2 + `scripts/make-offplan-ready-mortgage.mjs`: ADM Fee «by online / bank transfer after the valuation is
+done»; строка «ADM Valuation Fee: AED … / to be paid by the Buyer on the Transfer Date by Card» (1,043.75 по умолчанию);
+строк ADM Electronic Fee и ADM Verification Certificate нет. Реестр: «7. Off-plan ready — mortgage», как №2 + admValuationLabel,
+noAdmElectronic (поля ADM Electronic в форме нет). Комментарии эталона — про депозиты (движок уже умеет) и Transfer Fee 4,000
+«не меняется» (из PROJECTS). Текст вне таблицы = эталон, отличия те же, что у №2. Проверки: check-markup, check-scenarios,
+check-article-gaps, check-combinations (--mortgage --offplan-ready, 9216) — 0.
+
 ## C3 Garden Residence — эталоны (31.10)
 
 Эталоны — чистовики Даши 03.10: Cash `1dNTgKE05qusjrDV_F4D3cPJY2oMcrLNy`, Mortgage `1bqVyqltQq00dHCBseQ9-uWoPdK7d4TsO`.
