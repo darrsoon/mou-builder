@@ -63,7 +63,7 @@ Seller, Buyer) отдельно для каждого вида документ�
 формулировка и adm valuation fee»): ADM Fee «2% … or as per ADM valuation … by online / bank transfer after the valuation is done»
 (сумма 2% без ADM Admin Fee — offplanReadyFees в реестре, у №7 тоже) и ADM Valuation Fee 1,043.75 «on the Transfer Date by Card».
 Форма: поля ADM Fee и ADM Valuation Fee вместо ADM Admin Fee. Реестр «8. Off-plan ready — cash». Проверки: check-markup,
-check-scenarios (--offplan-ready), check-article-gaps, check-combinations (--offplan-ready, 9216) — 0; №7 перепроверен — 0.
+check-scenarios (--offplan-ready), check-article-gaps, check-combinations (--offplan-ready, 9216) — 0; №7 перепроверен — 0. Принят (Алина 20.11: «8 готов»), в списке зелёным.
 
 ## №7 Off-plan Ready to Mortgage (20.11)
 
