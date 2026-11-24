@@ -316,7 +316,7 @@ const tips = {
   bedrooms: "Как должно быть в договоре: Studio, 1 Bedroom, 2 Bedrooms и т.д.",
   areaM2: "Площадь в квадратных метрах, всегда с точкой и двумя знаками: 67.20. Можно ввести 67,2 или 67 — формат поправится сам.",
   propertyType: "Apartment, Villa, Townhouse и т.д.",
-  unitNumber: "Unit number (номер объекта) из SPA или developer documents (документов застройщика).",
+  unitNumber: "Unit number (номер объекта) из SPA или developer documents (документов застройщика). У C3 Garden Residence — выберите из списка: Title Deed, Bedrooms, Area и Parking подставятся сами.",
   additionalInformation: "Любая дополнительная информация по unit, если ее надо видеть в property details.",
   parkingSpaces: "Количество парковочных мест или текст из документа.",
   originalPrice: "Есть в MOU. Original Price (цена по SPA с застройщиком). Нужна для расчета developer balance (остатка застройщику).",
@@ -1281,6 +1281,13 @@ export default function HomePage() {
           </Section>
 
           <Section title="Property" status={sectionStatuses.property}>
+            {/* C3 (и другие проекты с таблицей юнитов): подсказка — сначала Unit Number (Алина, 24.11.2026) */}
+            {projectUnits.length > 0 ? (
+              <div style={{ gridColumn: "1 / -1" }}>
+                <Notice title="Выберите Unit Number — остальное подтянется само" type="info"
+                  items={["Title Deed, Bedrooms, Area и Parking берутся из таблицы юнитов C3 Garden Residence. Если в таблице чего-то нет (например, Title Deed), впишите вручную."]} />
+              </div>
+            ) : null}
             {/* Title Deed (Даша, 07.10.2026): в №1–№2 (Off-plan) всегда «N/A», поле не правится;
                 в готовых объектах — номер обязателен */}
             {!selectedTemplate?.defaults?.titleDeedNumber

@@ -798,6 +798,8 @@ label span:first-child {
 .notice.error { background: var(--danger-bg); color: var(--danger); }
 .notice.warning { background: var(--warning-bg); color: var(--warning); }
 .notice.ok { background: var(--ok-bg); color: var(--ok); }
+/* подсказка (C3: сначала Unit Number) — спокойная, не предупреждение */
+.notice.info { background: var(--primary-soft); color: var(--text); }
 
 .previewCard h3 {
   margin: 0 0 8px;
