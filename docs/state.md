@@ -320,10 +320,12 @@ READY ONLY транзакция (lib/units-db/units.ts → listProjectUnitsForMo
 (Authorization: Bearer), путь открыт в middleware. Влито в main AutoPost 24.11 (2e5df28, «вливай»); MOU_UNITS_TOKEN Алина
 внесла в Vercel обоих проектов.
 MOU Builder: lib/mou/units.js (fetchPlatformUnits, bedroomsFromUnitType), /api/units?project= (только вошедшим), форма:
-при выборе проекта без листа юнитов (не C3) Unit Number — список с платформы, выбор подставляет Bedrooms, Area, Property Type;
-Title Deed и Parking на платформе нет — вручную. Без MOU_UNITS_TOKEN / при сбое AutoPost — пустой список, всё как раньше.
-Нужно от Алины: один и тот же длинный случайный секрет `MOU_UNITS_TOKEN` в Vercel → real-estate-autopost (Production и
-Preview) и mou-builder; затем влить ветку AutoPost в main и проверить на реальном юните (Al Sidr-SL3-V-335).
+при выборе проекта без листа юнитов (не C3) Unit Number — список с платформы, выбор или вставка номера подставляет Bedrooms,
+Area, Property Type и Parking (parking_spaces из карточки юнита, через to_jsonb — запрос не падает без колонки; пустую не
+подставляем). Title Deed на платформе нет — вручную. Без MOU_UNITS_TOKEN / при сбое AutoPost — пустой список, всё как раньше.
+Работает с 24.11 (проверено Алиной на Sea La Vie). Первый раз был 401: значения секрета в проектах не совпадали — Алина
+перевнесла в оба, оба передеплоены. Обе стороны теперь делают trim секрета; при 401 AutoPost пишет в лог только длины.
+Секрет после правки в Vercel действует только после Redeploy.
 
 ## Данные юнита с платформы — снова в работе (08.10)
 
