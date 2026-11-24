@@ -27,6 +27,9 @@ test("юниты с платформы через AutoPost: спальни ка�
   assert.equal(bedroomsFromUnitType(""), "");
   assert.deepEqual(mapPlatformUnits([{ unit: " SL3-V-335 ", unitType: "4 Bedroom", areaSqm: "312.4", propertyType: "Villa" }, { unit: "" }]),
     [{ unit: "SL3-V-335", bedrooms: "4BHK", areaM2: "312.4", propertyType: "Villa" }]);
+  // парковка с платформы; пустая не подставляется
+  assert.equal(mapPlatformUnits([{ unit: "T2-1501", parking: " 1 " }])[0].parkingSpaces, "1");
+  assert.equal("parkingSpaces" in mapPlatformUnits([{ unit: "T2-1501", parking: "" }])[0], false);
   delete process.env.MOU_UNITS_TOKEN;
   assert.deepEqual(await fetchPlatformUnits("Saadiyat Lagoons", { fetchImpl: () => { throw new Error("не должен звать"); }, log: () => {} }), []);
   process.env.MOU_UNITS_TOKEN = "t";

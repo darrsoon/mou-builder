@@ -1301,10 +1301,10 @@ export default function HomePage() {
             {/* юниты известны (C3 — из таблицы, остальные — с платформы): подсказка — сначала Unit Number (24.11.2026) */}
             {projectUnits.length > 0 ? (
               <div style={{ gridColumn: "1 / -1" }}>
-                <Notice title="Выберите Unit Number — остальное подтянется само" type="info"
+                <Notice title="Выберите Unit Number или вставьте — остальное подтянется само" type="info"
                   items={[fromSheet
                     ? "Title Deed, Bedrooms, Area и Parking берутся из таблицы юнитов C3 Garden Residence. Если в таблице чего-то нет (например, Title Deed), впишите вручную."
-                    : "Bedrooms, Area и Property Type берутся с платформы. Title Deed и Parking на платформе нет — впишите вручную."]} />
+                    : "Bedrooms, Area, Property Type и Parking берутся с платформы. Title Deed на платформе нет — впишите вручную; если в карточке юнита нет парковки — тоже."]} />
               </div>
             ) : null}
             {/* Title Deed (Даша, 07.10.2026): в №1–№2 (Off-plan) всегда «N/A», поле не правится;
