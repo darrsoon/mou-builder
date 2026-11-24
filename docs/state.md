@@ -317,7 +317,8 @@ NOC, «Pre-Approval» без суммы) — абзац о банке стоял
 Алина: не через Neon, ключ владельца в mou-builder не переносим, на платформе (repo abu-dhabi-platform) ничего не делаем.
 Сделано через AutoPost (repo darrsoon/real-estate-autopost): ветка `mou-units-api` — `/api/mou-units` (?projects=1, ?project=<имя>),
 READY ONLY транзакция (lib/units-db/units.ts → listProjectUnitsForMou), доступ по общему секрету `MOU_UNITS_TOKEN`
-(Authorization: Bearer), путь открыт в middleware. В main AutoPost НЕ влито — ждём «да» Алины и проверку на превью.
+(Authorization: Bearer), путь открыт в middleware. Влито в main AutoPost 24.11 (2e5df28, «вливай»); MOU_UNITS_TOKEN Алина
+внесла в Vercel обоих проектов.
 MOU Builder: lib/mou/units.js (fetchPlatformUnits, bedroomsFromUnitType), /api/units?project= (только вошедшим), форма:
 при выборе проекта без листа юнитов (не C3) Unit Number — список с платформы, выбор подставляет Bedrooms, Area, Property Type;
 Title Deed и Parking на платформе нет — вручную. Без MOU_UNITS_TOKEN / при сбое AutoPost — пустой список, всё как раньше.
