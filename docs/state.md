@@ -312,6 +312,18 @@ NOC, «Pre-Approval» без суммы) — абзац о банке стоял
 Алина: «нужно округлять» (69.87% → 70%, в драфтах «75%»). Посчитанный процент округляется до целого
 (`Math.round` в calculate); вписанный в форме вручную — как есть. Тесты обновлены (78.43 → 78, 69.87 → 70).
 
+## Данные юнита с платформы через AutoPost (24.11)
+
+Алина: не через Neon, ключ владельца в mou-builder не переносим, на платформе (repo abu-dhabi-platform) ничего не делаем.
+Сделано через AutoPost (repo darrsoon/real-estate-autopost): ветка `mou-units-api` — `/api/mou-units` (?projects=1, ?project=<имя>),
+READY ONLY транзакция (lib/units-db/units.ts → listProjectUnitsForMou), доступ по общему секрету `MOU_UNITS_TOKEN`
+(Authorization: Bearer), путь открыт в middleware. В main AutoPost НЕ влито — ждём «да» Алины и проверку на превью.
+MOU Builder: lib/mou/units.js (fetchPlatformUnits, bedroomsFromUnitType), /api/units?project= (только вошедшим), форма:
+при выборе проекта без листа юнитов (не C3) Unit Number — список с платформы, выбор подставляет Bedrooms, Area, Property Type;
+Title Deed и Parking на платформе нет — вручную. Без MOU_UNITS_TOKEN / при сбое AutoPost — пустой список, всё как раньше.
+Нужно от Алины: один и тот же длинный случайный секрет `MOU_UNITS_TOKEN` в Vercel → real-estate-autopost (Production и
+Preview) и mou-builder; затем влить ветку AutoPost в main и проверить на реальном юните (Al Sidr-SL3-V-335).
+
 ## Данные юнита с платформы — снова в работе (08.10)
 
 Алина: подтягивать Bedrooms, Area sq.m, Property Type, Unit Number, Parking Spaces (остальное уже из таблицы

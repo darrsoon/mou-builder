@@ -690,7 +690,24 @@ export default function HomePage() {
   // и депозита Продавца в форме нет (Алина, 31.10.2026)
   const isC3 = !!selectedTemplate?.c3;
   // юниты проекта шаблона из таблицы объявлений (C3): выбор Unit Number подставляет Title Deed, Bedrooms, Area, Parking
-  const projectUnits = (init.units || {})[selectedTemplate?.project] || [];
+  const sheetUnits = (init.units || {})[selectedTemplate?.project] || [];
+  // остальные проекты — юниты с платформы через AutoPost (только чтение, Алина 24.11.2026); грузятся по проекту
+  const [platformUnits, setPlatformUnits] = useState({ project: "", units: [] });
+  useEffect(() => {
+    const project = String(form.projectName || "").trim();
+    if (sheetUnits.length || !project || status !== "authenticated") return undefined;
+    let cancelled = false;
+    const handle = setTimeout(() => {
+      fetch(`/api/units?project=${encodeURIComponent(project)}`)
+        .then((res) => res.json())
+        .then((data) => { if (!cancelled) setPlatformUnits({ project, units: data?.units || [] }); })
+        .catch(() => { if (!cancelled) setPlatformUnits({ project, units: [] }); });
+    }, 400);
+    return () => { cancelled = true; clearTimeout(handle); };
+  }, [form.projectName, sheetUnits.length, status]);
+  const fromSheet = sheetUnits.length > 0;
+  const projectUnits = fromSheet ? sheetUnits
+    : platformUnits.project === String(form.projectName || "").trim() ? platformUnits.units : [];
   const fixedSeller = selectedTemplate?.fixedSeller || null;
   const sectionStatuses = useMemo(
     () => buildSectionStatuses(form, reservationMode, reservationDays, isMortgage, isReadyTemplate, hasUnitVerification, hasSellerMortgage, selectedTemplate?.defaults?.titleDeedNumber || "", isC3,
@@ -1281,11 +1298,13 @@ export default function HomePage() {
           </Section>
 
           <Section title="Property" status={sectionStatuses.property}>
-            {/* C3 (и другие проекты с таблицей юнитов): подсказка — сначала Unit Number (Алина, 24.11.2026) */}
+            {/* юниты известны (C3 — из таблицы, остальные — с платформы): подсказка — сначала Unit Number (24.11.2026) */}
             {projectUnits.length > 0 ? (
               <div style={{ gridColumn: "1 / -1" }}>
                 <Notice title="Выберите Unit Number — остальное подтянется само" type="info"
-                  items={["Title Deed, Bedrooms, Area и Parking берутся из таблицы юнитов C3 Garden Residence. Если в таблице чего-то нет (например, Title Deed), впишите вручную."]} />
+                  items={[fromSheet
+                    ? "Title Deed, Bedrooms, Area и Parking берутся из таблицы юнитов C3 Garden Residence. Если в таблице чего-то нет (например, Title Deed), впишите вручную."
+                    : "Bedrooms, Area и Property Type берутся с платформы. Title Deed и Parking на платформе нет — впишите вручную."]} />
               </div>
             ) : null}
             {/* Title Deed (Даша, 07.10.2026): в №1–№2 (Off-plan) всегда «N/A», поле не правится;
@@ -1300,9 +1319,11 @@ export default function HomePage() {
             <Field id="unitNumber" label="Unit Number" tip={tips.unitNumber} value={form.unitNumber} onChange={(id, value) => {
               patch(id, value);
               const unit = projectUnits.find((u) => u.unit.toLowerCase() === String(value || "").trim().toLowerCase());
-              // выбран юнит из таблицы — его данные целиком; пусто в таблице (Title Deed ещё не выдан) — пустое поле,
-              // чтобы не остались данные прежнего юнита
-              if (unit) for (const field of ["titleDeedNumber", "bedrooms", "areaM2", "parkingSpaces"]) patch(field, unit[field] || "");
+              // выбран известный юнит — его данные целиком; пусто в источнике (Title Deed ещё не выдан) — пустое поле,
+              // чтобы не остались данные прежнего юнита. Поля — какие есть у источника (таблица C3 / платформа)
+              if (unit) for (const field of Object.keys(unit).filter((k) => k !== "unit")) {
+                patch(field, field === "areaM2" ? formatArea(unit[field] || "") : unit[field] || "");
+              }
             }} options={projectUnits.length ? projectUnits.map((u) => u.unit) : undefined} />
             {isReadyTemplate && <Field id="projectNumber" label="Project No." tip={tips.projectNumber} value={form.projectNumber} onChange={patch} />}
             <Field

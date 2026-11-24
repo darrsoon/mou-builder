@@ -18,3 +18,23 @@ test("юниты C3 из таблицы объявлений: номер без 
   assert.deepEqual(parseUnits([]), []);
   assert.deepEqual(parseUnits([["Name"], ["x"]]), []); // нет колонки Unit
 });
+
+test("юниты с платформы через AutoPost: спальни как в LISTS, без секрета — пусто", async () => {
+  const { bedroomsFromUnitType, mapPlatformUnits, fetchPlatformUnits } = await import("../lib/mou/units.js");
+  assert.equal(bedroomsFromUnitType("2 BR"), "2BHK");
+  assert.equal(bedroomsFromUnitType("3BR + Maid"), "3BHK + Maid");
+  assert.equal(bedroomsFromUnitType("Studio"), "Studio");
+  assert.equal(bedroomsFromUnitType(""), "");
+  assert.deepEqual(mapPlatformUnits([{ unit: " SL3-V-335 ", unitType: "4 Bedroom", areaSqm: "312.4", propertyType: "Villa" }, { unit: "" }]),
+    [{ unit: "SL3-V-335", bedrooms: "4BHK", areaM2: "312.4", propertyType: "Villa" }]);
+  delete process.env.MOU_UNITS_TOKEN;
+  assert.deepEqual(await fetchPlatformUnits("Saadiyat Lagoons", { fetchImpl: () => { throw new Error("не должен звать"); } }), []);
+  process.env.MOU_UNITS_TOKEN = "t";
+  let sent;
+  const units = await fetchPlatformUnits("Saadiyat Lagoons", { fetchImpl: async (url, opts) => { sent = { url, opts };
+    return { ok: true, json: async () => ({ units: [{ unit: "A1", unitType: "1 BR", areaSqm: "70", propertyType: "Apartment" }] }) }; } });
+  assert.equal(units[0].bedrooms, "1BHK");
+  assert.match(sent.url, /\/api\/mou-units\?project=Saadiyat%20Lagoons$/);
+  assert.equal(sent.opts.headers.authorization, "Bearer t");
+  delete process.env.MOU_UNITS_TOKEN;
+});
