@@ -7,7 +7,10 @@ export async function GET(request) {
   try {
     await getGoogleClients();
     const project = new URL(request.url).searchParams.get("project") || "";
-    const units = await fetchPlatformUnits(project).catch(() => []);
+    const units = await fetchPlatformUnits(project).catch((error) => {
+      console.error(`[units] ${project}: ${error.message}`);
+      return [];
+    });
     return Response.json({ ok: true, units });
   } catch (error) {
     return jsonError(error);
