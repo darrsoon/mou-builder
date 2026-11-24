@@ -57,6 +57,12 @@ Load Draft (04.11, Алина): повторно созданный догово
 Seller, Buyer) отдельно для каждого вида документа. Старые строки без «Document» считаются MOU — соглашения до 04.11
 попадают в версии MOU.
 
+## Список шаблонов (24.11, Алина)
+
+Порядок и номера в списке: 1. Off-plan — cash, 2. Off-plan — mortgage, 3. Off-plan ready — cash (в заметках ниже — «№8»),
+4. Off-plan ready — mortgage («№7»), 5–8. Ready (в заметках — «№3–№6»), затем C3 1, C3 2. Все названия чёрные (зелёный для
+принятых убран, accepted в реестре остался как отметка).
+
 ## №8 Off-plan Ready to Cash (20.11)
 
 Эталон — docx «19. DRAFT Off-plan ready to Cash» `1MGSsXdqVtonABR9e1H-RNFIruB8ADbYP`. Шаблон `1F8YSRoF2CaMg-Xkc_qOl0tpul-Cmuj6EBh7ZIIVL-_A`

@@ -1176,7 +1176,7 @@ export default function HomePage() {
                 }}
                 options={[
                   { value: "", label: "Select template..." },
-                  ...(init.config?.templates || []).map((t) => ({ value: t.id, label: t.label, accepted: t.accepted })),
+                  ...(init.config?.templates || []).map((t) => ({ value: t.id, label: t.label })),
                 ]}
               />
               <SelectField
@@ -1907,7 +1907,6 @@ function normalizeSelectOption(option) {
   return {
     value: option.value,
     label: option.label || option.value || "Select...",
-    accepted: Boolean(option.accepted),
   };
 }
 
@@ -1942,7 +1941,7 @@ function CustomSelect({ id, value, options, onChange, disabled }) {
           }
         }}
       >
-        <span className={selected?.accepted ? "acceptedLabel" : undefined}>{selected?.label || "Select..."}</span>
+        <span>{selected?.label || "Select..."}</span>
         <ChevronDown size={16} />
       </button>
 
@@ -1954,7 +1953,7 @@ function CustomSelect({ id, value, options, onChange, disabled }) {
             return (
               <button
                 key={`${id}-${option.value}`}
-                className={`selectOption ${isSelected ? "selected" : ""} ${option.accepted ? "acceptedLabel" : ""}`}
+                className={`selectOption ${isSelected ? "selected" : ""}`}
                 type="button"
                 role="option"
                 aria-selected={isSelected}
