@@ -931,3 +931,11 @@ OAuth Playground со своими credentials. Клиент `MOU App` в том
 Порядок работы с новым шаблоном: прочитать документ с комментариями → задать Алине
 вопросы по расхождениям → разметить черновик → проверки → пакет договоров →
 по «да» Алины разметить оригинал → вписать в реестр `lib/mou/config.js`.
+
+## Имя файла: проект + юнит для части проектов (28.11)
+
+Алина: «название проекта+юнит, но не для всех проектов» — отметила список. lib/mou/core.js → PROJECTS_NAMED_IN_FILE:
+Al Naseem, Fahid Beach House/Residences/Terraces, Mamsha Gardens, Manarat Living, Mandarin Oriental Residences,
+NOBU Residences, Nouran Living, The Arthouse, The Row Saadiyat, The Source, Vida Residences, Yas Golf Collection, Yas Living.
+У них MOU и Commission — «<договор> <проект> <юнит>» («… The Arthouse R21-0504»), у остальных (и C3) — «<договор> Unit <юнит>».
+Добавить проект — дописать в список.
