@@ -121,8 +121,8 @@ test("Commission: объект в первом абзаце — у C3 «C3 Garde
   assert.equal(buildCommission({ ...base, caAgencies: [PB] }).replacements.property_ref, "Manarat-B1-01-00");
   const c3ca = buildCommission({ ...base, unitNumber: "113", projectName: "C3 Garden Residence", templateId: c3.id, caAgencies: [PB] });
   assert.equal(c3ca.replacements.property_ref, "C3 Garden - Unit 113");
-  assert.equal(c3ca.title, "Commission Agreement Unit 113");
+  assert.equal(c3ca.title, "Commission Agreement C3 Garden Residence Unit 113");
   assert.equal(buildCommission({ ...base, caAgencies: [PB] }).title, "Commission Agreement Manarat Living Manarat-B1-01-00");
   const { buildDraftTitle } = await import("../lib/mou/core.js");
-  assert.equal(buildDraftTitle({ unitNumber: "113", projectName: "C3 Garden Residence" }, c3), "Cash Memorandum of Understanding (MOU) Unit 113");
+  assert.equal(buildDraftTitle({ unitNumber: "113", projectName: "C3 Garden Residence" }, c3), "Cash Memorandum of Understanding (MOU) C3 Garden Residence Unit 113");
 });
